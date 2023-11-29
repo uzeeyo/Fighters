@@ -7,31 +7,30 @@ namespace Fighters.Match
     public class HealthBar : MonoBehaviour
     {
         private Image _image;
-        private float _maxHealth = 100;
-        private float _currentHealth;
+        private bool _isUpdating = false;
+        private float _targetPercent;
 
         private void Awake()
         {
             _image = GetComponent<Image>();
-            _currentHealth = _maxHealth;
         }
 
-        public IEnumerator UpdateHealthBar(float delta = -5)
+        public IEnumerator UpdateHealthBar(float percentHealth)
         {
-            _currentHealth += delta;
-            var fill = _currentHealth / _maxHealth;
-            if (_currentHealth <= 0)
+            _targetPercent = percentHealth;
+            if (_isUpdating)
             {
-                fill = 0;
-                Debug.Log("DEAD");
+                yield break;
             }
 
-            while (_image.fillAmount > fill)
+            _isUpdating = true;
+            while ((_targetPercent / _image.fillAmount) > 0.05f)
             {
-                _image.fillAmount = Mathf.Lerp(_image.fillAmount, fill, Time.deltaTime * 10);
+                _image.fillAmount = Mathf.Lerp(_image.fillAmount, _targetPercent, Time.deltaTime * 15);
                 yield return null;
             }
-
+            _image.fillAmount = _targetPercent;
+            _isUpdating = false;
         }
     }
 }
