@@ -2,6 +2,6 @@ namespace Fighters.Match
 {
     public interface ISpell
     {
-        float Cooldown { get; }
+        public float Cooldown { get; }
     }
 }
