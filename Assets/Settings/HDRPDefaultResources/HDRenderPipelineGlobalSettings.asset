@@ -18,7 +18,7 @@ MonoBehaviour:
     type: 2}
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
-      data1: 73324160532610893
+      data1: 73324160524222285
       data2: 13799031439032811544
     lodBias: 1
     lodBiasMode: 0
@@ -119,9 +119,16 @@ MonoBehaviour:
   autoRegisterDiffusionProfiles: 0
   apvScenesData:
     m_ObsoleteSerializedBakingSets: []
-    serializedBounds: []
-    serializedHasVolumes: []
-    bakingSets: []
+    serializedBounds:
+    - sceneGUID: 8124e5870f4fd4c779e7a5f994e84ad1
+      bounds:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 81, y: 81, z: 81}
+    serializedHasVolumes:
+    - sceneGUID: 8124e5870f4fd4c779e7a5f994e84ad1
+      hasProbeVolumes: 1
+    bakingSets:
+    - {fileID: 11400000, guid: c749e2c7089c167419215c3e1e87f275, type: 2}
     m_LightingScenario: Default
   m_Version: 8
   m_ShaderVariantLogLevel: 0

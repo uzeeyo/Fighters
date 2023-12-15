@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef613b73f9cfe924a95c9e8ac965deb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _coolDown: 0.3
+  _coolDown: 1
   _spellSpeed: 50
   _damage: 3
   _hitEffectPrefab: {fileID: 387128793003410709, guid: e6db52c652d5404448ff573d9aa735c2,
@@ -263,7 +263,7 @@ Transform:
   m_GameObject: {fileID: 8495160423802762437}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.29, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -281,8 +281,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.18312705, g: 1, b: 0, a: 1}
-  m_Intensity: 3183.0989
-  m_Range: 2.22
+  m_Intensity: 7.957747
+  m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 40000
+  m_Intensity: 100
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -395,7 +395,7 @@ MonoBehaviour:
   m_EvsmBlurPasses: 0
   m_LightlayersMask: 1
   m_LinkShadowLayers: 1
-  m_ShadowNearPlane: 2
+  m_ShadowNearPlane: 0.1
   m_BlockerSampleCount: 24
   m_FilterSampleCount: 16
   m_MinFilterSize: 0.1
