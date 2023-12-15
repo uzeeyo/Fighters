@@ -16,7 +16,7 @@ namespace Fighters.Match
             {
                 var position = transform.position;
                 position.x += _spellDistance;
-                position.y += 1;
+                position.y += 3;
                 var spell = Instantiate(_spellPrefab, position, Quaternion.identity);
                 var spellObj = spell.GetComponent<BasicSpell>();
                 spell.GetComponent<Rigidbody>().velocity = new Vector3(spellObj.SpellSpeed, 0, 0);
