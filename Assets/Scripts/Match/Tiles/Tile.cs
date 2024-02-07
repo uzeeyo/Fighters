@@ -9,20 +9,22 @@ namespace Fighters.Match
             None,
             Slow,
             Root,
-            Blocked
+            Blocked,
+            Burned,
+            Poisoned
         }
 
-
-        [SerializeField] private Vector3 _fighterPosition;
-
         public TileState State { get; set; }
-
-        public Vector3 FighterPosition { get => _fighterPosition; }
+        public GameObject TileObject { get; set; }
 
         private void Start()
         {
             State = TileState.None;
         }
 
+        public void SetState(TileState state)
+        {
+            State = state;
+        }
     }
 }

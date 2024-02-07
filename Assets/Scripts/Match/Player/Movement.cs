@@ -1,88 +1,100 @@
-using Fighters.Match;
 using System.Collections;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+namespace Fighters.Match.Player
 {
-    private GridPosition _currentPosition;
-    private Player _player;
-    private bool _isMoving = false;
-
-    [SerializeField] private float _moveSpeed = 20;
-
-    void Start()
+    public class Movement : MonoBehaviour
     {
-        _currentPosition = new GridPosition(1, 1);
-        _player = GetComponent<Player>();
-        StartCoroutine(ListenForMovement());
-    }
+        const float TILE_DISTANCE = 1.8f;
 
-    private IEnumerator ListenForMovement()
-    {
-        while (true)
+        private Vector2 _currentPosition;
+        private Player _player;
+        private bool _isMoving = false;
+
+
+        void Start()
         {
-            if (!MatchManager.MatchStarted) yield return null;
+            _currentPosition = new Vector2(1, 1);
+            _player = GetComponent<Player>();
+            StartCoroutine(ListenForMovement());
+        }
 
-            if (Input.GetKeyDown(KeyCode.W))
+        private IEnumerator ListenForMovement()
+        {
+            while (true)
             {
-                var delta = new GridPosition(-1, 0);
-                TryMove(delta);
+                if (!MatchManager.MatchStarted) yield return null;
+
+                var delta = Vector2.zero;
+
+                if (Input.anyKeyDown)
+                {
+
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        //delta = new Vector2(-1, 0);
+                        GetComponentInChildren<Animator>().SetTrigger("JumpLeft");
+                    }
+                    else if (Input.GetKeyDown(KeyCode.S))
+                    {
+                        //delta = new Vector2(1, 0);
+                        GetComponentInChildren<Animator>().SetTrigger("JumpRight");
+                    }
+                    else if (Input.GetKeyDown(KeyCode.D))
+                    {
+                        //delta = new Vector2(0, 1);
+                        GetComponentInChildren<Animator>().SetTrigger("JumpForward");
+                        continue;
+                    }
+                    else if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        //delta = new Vector2(0, -1);
+                        GetComponentInChildren<Animator>().SetTrigger("JumpBackward");
+                        continue;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    TryMove(delta);
+                }
+            }
+        }
+
+        private IEnumerator Move(Vector3 targetPosition)
+        {
+            _isMoving = true;
+            float duration = 0.8f;
+            float timeElapsed = 0;
+            Vector3 currentPosition = transform.position;
+
+            while (Vector3.Distance(currentPosition, targetPosition) > 0.1f)
+            {
+                timeElapsed += Time.deltaTime;
+                currentPosition = Vector3.Lerp(currentPosition, targetPosition, timeElapsed / duration);
+                transform.position = currentPosition;
                 yield return null;
             }
-            if (Input.GetKeyDown(KeyCode.S))
+            transform.position = targetPosition;
+            _isMoving = false;
+        }
+
+        private void TryMove(Vector2 delta)
+        {
+            if (_isMoving)
             {
-                var delta = new GridPosition(1, 0);
-                TryMove(delta);
-                yield return null;
+                return;
             }
-            if (Input.GetKeyDown(KeyCode.D))
+
+            var targetTile = _player.Grid.GetTile(_currentPosition, delta);
+
+            if (targetTile == null) return;
+
+            if (targetTile.State == Tile.TileState.None)
             {
-                var delta = new GridPosition(0, 1);
-                TryMove(delta);
-                yield return null;
+                _currentPosition += delta;
             }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                var delta = new GridPosition(0, -1);
-                TryMove(delta);
-                yield return null;
-            }
-        }
-    }
-
-    private IEnumerator Move(Vector3 targetPosition)
-    {
-        _isMoving = true;
-        while (Vector3.Distance(transform.position, targetPosition) > 0.1)
-        {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * _moveSpeed);
-            yield return null;
-        }
-        _isMoving = false;
-    }
-
-    private void TryMove(GridPosition delta)
-    {
-        if (_isMoving)
-        {
-            return;
-        }
-
-        var targetTile = _player.TileGrid.GetTile(_currentPosition, delta);
-
-        if (targetTile == null)
-        {
-            return;
-        }
-        {
-
-        }
-        if (targetTile.State == Tile.TileState.None)
-        {
-            _currentPosition.X += delta.X;
-            _currentPosition.Y += delta.Y;
-
-            StartCoroutine(Move(targetTile.transform.position));
         }
     }
 }
+

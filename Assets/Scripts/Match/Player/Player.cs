@@ -1,45 +1,25 @@
 using UnityEngine;
 
-namespace Fighters.Match
+namespace Fighters.Match.Player
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] private TileGrid _tileGrid;
-        [SerializeField] private HealthBar _healthBar;
+        private PlayerStats _stats;
 
-        private float _currentHealth;
-        private float _maxHealth = 100;
+        [SerializeField] private TileGrid _grid;
 
-        private void Awake()
+        public PlayerStats Stats => _stats;
+        public TileGrid Grid => _grid;
+
+
+        private void Start()
         {
-            _currentHealth = _maxHealth;
+            _stats = GetComponent<PlayerStats>();
         }
 
-        public TileGrid TileGrid { get => _tileGrid; }
-
-        private void OnCollisionEnter(Collision collision)
+        public void SetGrid(TileGrid grid)
         {
-            if (collision.gameObject.TryGetComponent(out IDamageSpell spell))
-            {
-                TakeDamage(spell.Damage);
-            }
-        }
-
-        private void TakeDamage(float damage)
-        {
-            if (_currentHealth == 0)
-            {
-                return;
-            }
-
-            _currentHealth -= damage;
-            if (_currentHealth <= 0)
-            {
-                _currentHealth = 0;
-                Debug.Log("Player died");
-            }
-
-            StartCoroutine(_healthBar.UpdateHealthBar(_currentHealth / _maxHealth));
+            _grid = grid;
         }
     }
 }
