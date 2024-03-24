@@ -5,7 +5,10 @@ namespace Fighters.Match
         None,
         Self,
         Single,
-        All,
+        AllEnemies,
         AllForward,
+        AllFrindly,
+        AllTargets,
+        AllTiles,
     }
 }

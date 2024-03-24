@@ -1,4 +1,5 @@
 using Fighters.Match;
+using Fighters.Match.Spells;
 using UnityEngine;
 
 namespace Fighters.Utilities
@@ -22,7 +23,7 @@ namespace Fighters.Utilities
             position.y += 3;
             var spell = Instantiate(_spellPrefab, position, Quaternion.identity);
             var spellObj = spell.GetComponent<BasicSpell>();
-            spell.GetComponent<Rigidbody>().velocity = new Vector3(spellObj.SpellSpeed, 0, 0);
+            //spell.GetComponent<Rigidbody>().velocity = new Vector3(spellObj.SpellSpeed, 0, 0);
             //StartCoroutine(StartCooldown(spellObj.Cooldown));
         }
 

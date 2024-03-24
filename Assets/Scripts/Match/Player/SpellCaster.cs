@@ -3,17 +3,24 @@ using UnityEngine;
 
 namespace Fighters.Match
 {
+    [RequireComponent(typeof(SpellBank))]
     public class SpellCaster : MonoBehaviour
     {
-        private bool _onCooldown;
+        private bool _onCooldown = false;
+        private SpellBank _spellBank;
+
+        private void Awake()
+        {
+            _spellBank = GetComponent<SpellBank>();
+        }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                var ani = GetComponentInChildren<IAttackPlayerAnimation>();
-                ani.Play();
+                _spellBank.ActiveSpells[Vector2.up].Cast();
             }
+
         }
 
         private IEnumerator StartCooldown(float seconds)

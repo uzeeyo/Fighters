@@ -1,3 +1,4 @@
+using Fighters.Match.Spells;
 using UnityEngine;
 
 namespace Fighters.Match.Player
@@ -13,9 +14,9 @@ namespace Fighters.Match.Player
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.TryGetComponent(out IDamageSpell spell))
+            if (collision.gameObject.TryGetComponent(out IDamageData spellData))
             {
-                _stats.TakeDamage(spell.Damage);
+                _stats.TakeDamage(spellData.Damage);
             }
         }
     }

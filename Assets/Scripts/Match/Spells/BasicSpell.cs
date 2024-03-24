@@ -1,22 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Fighters.Match
+namespace Fighters.Match.Spells
 {
-    public class BasicSpell : MonoBehaviour, IDamageSpell
+    [RequireComponent(typeof(Rigidbody), typeof(BasicSpellData))]
+    public class BasicSpell : MonoBehaviour, ISpell
     {
-        [SerializeField] private float _coolDown = 0.3f;
-        [SerializeField] private float _spellSpeed = 20;
-        [SerializeField] private float _damage = 5;
         [SerializeField] private GameObject _hitEffectPrefab;
 
-        public float Cooldown { get => _coolDown; }
+        private BasicSpellData _data;
 
-        public float SpellSpeed { get => _spellSpeed; }
-        public float Damage { get => _damage; }
+        public ISpellData Data => _data;
 
         private void Awake()
         {
+            _data = GetComponent<BasicSpellData>();
             StartCoroutine(DestroyAfterSeconds(2));
         }
 
@@ -31,6 +29,11 @@ namespace Fighters.Match
             var hitEffect = Instantiate(_hitEffectPrefab, transform.position, Quaternion.identity);
             hitEffect.GetComponent<IHitEffect>().Play();
             Destroy(gameObject);
+        }
+
+        public void Cast()
+        {
+
         }
     }
 }
