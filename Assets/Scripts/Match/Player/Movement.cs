@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-namespace Fighters.Match.Player
+namespace Fighters.Match.Players
 {
     public class Movement : MonoBehaviour
     {
@@ -12,59 +13,40 @@ namespace Fighters.Match.Player
         private bool _isMoving = false;
 
 
-        void Start()
+        void Awake()
         {
             _currentPosition = new Vector2(1, 1);
             _player = GetComponent<Player>();
-            StartCoroutine(ListenForMovement());
+            _player.CurrentTile = _player.Grid.GetTile(_currentPosition, Vector2.zero);
         }
 
-        private IEnumerator ListenForMovement()
+        private void OnMove(InputValue value)
         {
-            while (true)
+            //if (!MatchManager.MatchStarted) return;
+            var direction = value.Get<Vector2>();
+
+
+            if (_isMoving)
             {
-                if (!MatchManager.MatchStarted) yield return null;
+                return;
+            }
 
-                var delta = Vector2.zero;
+            var targetTile = _player.Grid.GetTile(_currentPosition, direction);
 
-                if (Input.anyKeyDown)
-                {
+            if (targetTile == null) return;
 
-                    if (Input.GetKeyDown(KeyCode.W))
-                    {
-                        //delta = new Vector2(-1, 0);
-                        GetComponentInChildren<Animator>().SetTrigger("JumpLeft");
-                    }
-                    else if (Input.GetKeyDown(KeyCode.S))
-                    {
-                        //delta = new Vector2(1, 0);
-                        GetComponentInChildren<Animator>().SetTrigger("JumpRight");
-                    }
-                    else if (Input.GetKeyDown(KeyCode.D))
-                    {
-                        //delta = new Vector2(0, 1);
-                        GetComponentInChildren<Animator>().SetTrigger("JumpForward");
-                        continue;
-                    }
-                    else if (Input.GetKeyDown(KeyCode.A))
-                    {
-                        //delta = new Vector2(0, -1);
-                        GetComponentInChildren<Animator>().SetTrigger("JumpBackward");
-                        continue;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                    TryMove(delta);
-                }
+            if (targetTile.State == Tile.TileState.None)
+            {
+                _currentPosition = targetTile.Location;
+                _player.CurrentTile = targetTile;
+                StartCoroutine(Move(targetTile.transform.position));
             }
         }
 
         private IEnumerator Move(Vector3 targetPosition)
         {
             _isMoving = true;
-            float duration = 0.8f;
+            float duration = 0.6f;
             float timeElapsed = 0;
             Vector3 currentPosition = transform.position;
 
@@ -77,23 +59,6 @@ namespace Fighters.Match.Player
             }
             transform.position = targetPosition;
             _isMoving = false;
-        }
-
-        private void TryMove(Vector2 delta)
-        {
-            if (_isMoving)
-            {
-                return;
-            }
-
-            var targetTile = _player.Grid.GetTile(_currentPosition, delta);
-
-            if (targetTile == null) return;
-
-            if (targetTile.State == Tile.TileState.None)
-            {
-                _currentPosition += delta;
-            }
         }
     }
 }

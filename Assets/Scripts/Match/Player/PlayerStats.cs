@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Fighters.Match.Player
+namespace Fighters.Match.Players
 {
     public class PlayerStats : MonoBehaviour
     {

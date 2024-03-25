@@ -1,15 +1,15 @@
 using UnityEngine;
 
-namespace Fighters.Match.Player
+namespace Fighters.Match.Players
 {
     public class Player : MonoBehaviour
     {
         private PlayerStats _stats;
-
         [SerializeField] private TileGrid _grid;
 
         public PlayerStats Stats => _stats;
         public TileGrid Grid => _grid;
+        public Tile CurrentTile { get; set; }
 
 
         private void Start()
@@ -17,9 +17,9 @@ namespace Fighters.Match.Player
             _stats = GetComponent<PlayerStats>();
         }
 
-        public void SetGrid(TileGrid grid)
+        public void SetLocation(Vector2 location)
         {
-            _grid = grid;
+            //_location = location;
         }
     }
 }

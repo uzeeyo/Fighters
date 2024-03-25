@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Fighters.Match
 {
@@ -9,29 +11,38 @@ namespace Fighters.Match
 
         [SerializeField] private GameObject _tileParentObject;
 
-        private GameObject[] _tileObjects;
         private Tile[,] _tilesTwoD = new Tile[gridXSize, gridYSize];
+        private TileGrid _opponentGrid;
 
         private void Awake()
         {
-            _tileObjects = new GameObject[gridXSize * gridYSize];
+            var tileObjects = new GameObject[gridXSize * gridYSize];
             for (int i = 0; i < gridXSize * gridYSize; i++)
             {
-                _tileObjects[i] = _tileParentObject.transform.GetChild(i).gameObject;
+                tileObjects[i] = _tileParentObject.transform.GetChild(i).gameObject;
             }
 
+            // [ 0 1 2 ]   [ (0,0) (1,0) (2,0) ] 
+            // [ 3 4 5 ]   [ (0,1) (1,1) (2,1) ] 
+            // [ 6 7 8 ]   [ (0,2) (1,2) (2,2) ]
+            // UP   (0,1) -> (0,-1)
+            // Left (1,0) -> (-1, 0)
+
             int index = 0;
-            for (int x = 0; x < gridXSize; x++)
+            for (int y = gridYSize - 1; y >= 0; y--)
             {
-                for (int y = 0; y < gridYSize; y++)
+                for (int x = 0; x < gridYSize; x++)
                 {
                     var tile = transform.GetChild(index).GetComponent<Tile>();
-                    tile.transform.position = _tileObjects[index].transform.position;
-                    tile.TileObject = _tileObjects[index];
+                    tile.transform.position = tileObjects[index].transform.position;
+                    tile.TileObject = tileObjects[index];
+                    tile.Init(new Vector2(x, y));
                     _tilesTwoD[x, y] = tile;
                     index++;
                 }
             }
+
+            _opponentGrid = FindObjectsByType<TileGrid>(FindObjectsSortMode.InstanceID).ToList().Where(t => t != this).FirstOrDefault();
         }
 
 
@@ -40,8 +51,30 @@ namespace Fighters.Match
             int x = (int)start.x + (int)delta.x;
             int y = (int)start.y + (int)delta.y;
 
-            if (x < 0 || x > 2 || y < 0 || y > 2) return null;
+            if (x < 0 || y < 0 || y > 2) return null;
+
+            if (x > 2)
+            {
+                return _opponentGrid.GetTile(new Vector2(0, y), new Vector2(delta.x - 3, 0));
+            }
+
             return _tilesTwoD[x, y];
         }
+
+        public List<Tile> GetTileStraightRange(Vector2 origin, Vector2 range)
+        {
+            List<Tile> tiles = new List<Tile>();
+            var currentTile = GetTile(origin, Vector2.right);
+            int tileIndex = 1;
+
+            while (currentTile != null && tileIndex < range.x)
+            {
+                tiles.Add(currentTile);
+                tileIndex++;
+                currentTile = GetTile(origin, new Vector2(tileIndex, 0));
+            }
+            return tiles;
+        }
+
     }
 }
