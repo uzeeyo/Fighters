@@ -1,7 +1,7 @@
 using Fighters.Match.Spells;
 using UnityEngine;
 
-namespace Fighters.Match.Player
+namespace Fighters.Match.Players
 {
     public class DamageReceiver : MonoBehaviour
     {

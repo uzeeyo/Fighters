@@ -1,4 +1,4 @@
-namespace Fighters.Match.Player
+namespace Fighters.Match.Players
 {
     public class Buff
     {
