@@ -3,18 +3,13 @@ using UnityEngine;
 
 namespace Fighters.Match.Spells
 {
-    [RequireComponent(typeof(Rigidbody), typeof(BasicSpellData))]
-    public class BasicSpell : MonoBehaviour, ISpell
+    [RequireComponent(typeof(Rigidbody))]
+    public class BasicSpell : Spell
     {
         [SerializeField] private GameObject _hitEffectPrefab;
 
-        private BasicSpellData _data;
-
-        public ISpellData Data => _data;
-
         private void Awake()
         {
-            _data = GetComponent<BasicSpellData>();
             StartCoroutine(DestroyAfterSeconds(2));
         }
 
@@ -31,9 +26,13 @@ namespace Fighters.Match.Spells
             Destroy(gameObject);
         }
 
-        public void Cast()
+        public override void Cast(Tile origin)
         {
+            var startPosition = origin.transform.position;
+            startPosition.y = 1f;
+            transform.position = startPosition;
 
+            CastForward();
         }
     }
 }
