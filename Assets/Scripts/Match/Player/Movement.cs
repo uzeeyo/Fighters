@@ -6,8 +6,6 @@ namespace Fighters.Match.Players
 {
     public class Movement : MonoBehaviour
     {
-        const float TILE_DISTANCE = 1.8f;
-
         private Vector2 _currentPosition;
         private Player _player;
         private bool _isMoving = false;

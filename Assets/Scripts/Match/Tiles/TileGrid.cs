@@ -22,12 +22,6 @@ namespace Fighters.Match
                 tileObjects[i] = _tileParentObject.transform.GetChild(i).gameObject;
             }
 
-            // [ 0 1 2 ]   [ (0,0) (1,0) (2,0) ] 
-            // [ 3 4 5 ]   [ (0,1) (1,1) (2,1) ] 
-            // [ 6 7 8 ]   [ (0,2) (1,2) (2,2) ]
-            // UP   (0,1) -> (0,-1)
-            // Left (1,0) -> (-1, 0)
-
             int index = 0;
             for (int y = gridYSize - 1; y >= 0; y--)
             {

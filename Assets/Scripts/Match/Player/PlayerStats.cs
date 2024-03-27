@@ -1,3 +1,4 @@
+using Fighters.Contestants;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,10 +17,12 @@ namespace Fighters.Match.Players
 
         public List<Buff> Buffs => _buffs;
 
-        private void Awake()
+        public void Init(StatData statData)
         {
-            _currentHealth = _maxHealth;
-            _currentMana = _maxMana;
+            _maxHealth = statData.Health;
+            _currentHealth = statData.Health;
+            _maxMana = statData.Mana;
+            _currentMana = statData.Mana;
         }
 
         public void SetStatusBars(StatusBar health, StatusBar mana)

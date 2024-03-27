@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Fighters.Match
 {
@@ -17,12 +18,14 @@ namespace Fighters.Match
 
         private TileGrid _grid;
         private Vector2 _location;
+        private VisualEffect _vfx;
 
         public TileState State { get; set; }
         public Vector2 Location => _location;
         public bool HasPlayer => GetComponentInChildren<Players.Player>() != null;
         public GameObject TileObject { get; set; }
         public TileGrid Grid => GetComponentInParent<TileGrid>();
+        public VisualEffect Vfx => _vfx;
 
         private void Awake()
         {
