@@ -33,7 +33,7 @@ namespace Fighters.Match.Players
 
             if (targetTile == null) return;
 
-            if (targetTile.State == Tile.TileState.None)
+            if (targetTile.State == Tile.TileState.None && targetTile.Grid.Owner != Owner.PlayerB)
             {
                 _currentPosition = targetTile.Location;
                 _player.CurrentTile = targetTile;

@@ -10,9 +10,12 @@ namespace Fighters.Match
         const int gridYSize = 3;
 
         [SerializeField] private GameObject _tileParentObject;
+        [SerializeField] private Owner _owner;
 
         private Tile[,] _tilesTwoD = new Tile[gridXSize, gridYSize];
         private TileGrid _opponentGrid;
+
+        public Owner Owner => _owner;
 
         private void Awake()
         {
@@ -45,11 +48,13 @@ namespace Fighters.Match
             int x = (int)start.x + (int)delta.x;
             int y = (int)start.y + (int)delta.y;
 
+            //(2, 1) -> (2, 1)
+
             if (x < 0 || y < 0 || y > 2) return null;
 
             if (x > 2)
             {
-                return _opponentGrid.GetTile(new Vector2(0, y), new Vector2(delta.x - 3, 0));
+                return _opponentGrid.GetTile(new Vector2(0, y), new Vector2(x - 3, 0));
             }
 
             return _tilesTwoD[x, y];

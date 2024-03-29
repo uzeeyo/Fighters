@@ -30,9 +30,11 @@ namespace Fighters.Match
         {
             if (_onCooldown) return;
 
-            var basicSpell = Instantiate(_spellBank.BasicSpell, transform);
-            basicSpell.Cast(_player.CurrentTile);
-            StartCoroutine(StartCooldown(basicSpell.Cooldown));
+            var spellData = _spellBank.GetBasic();
+            var spell = SpellFactory.Instance.Get(spellData);
+            spell.transform.rotation = _player.transform.rotation;
+            StartCoroutine(spell.Cast(_player.CurrentTile));
+            StartCoroutine(StartCooldown(spell.Cooldown));
         }
 
         private void OnCast(InputValue value)
@@ -44,6 +46,8 @@ namespace Fighters.Match
 
             var spellData = _spellBank.GetSpellInRotation(direction);
             var spell = SpellFactory.Instance.Get(spellData);
+            spell.transform.rotation = _player.transform.rotation;
+            StartCoroutine(spell.Cast(_player.CurrentTile));
             StartCoroutine(StartCooldown(spell.Cooldown));
         }
     }

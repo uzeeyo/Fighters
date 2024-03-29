@@ -8,14 +8,7 @@ namespace Fighters.Utils
     {
         public static IEnumerator CallAfterSeconds(float seconds, Action action)
         {
-            var timeElapsed = 0f;
-            var duration = seconds;
-
-            while (timeElapsed < duration)
-            {
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
+            yield return new WaitForSeconds(seconds);
             action();
         }
     }

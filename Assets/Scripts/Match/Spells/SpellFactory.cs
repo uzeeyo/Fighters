@@ -5,11 +5,7 @@ namespace Fighters.Match.Spells
 {
     public class SpellFactory : MonoBehaviour
     {
-        [SerializeField] private DamageSpell _damageSpellPrefab;
-        [SerializeField] private Spell _healSpellPrefab;
-        [SerializeField] private Spell _buffSpellPrefab;
-
-        private Dictionary<SpellType, Spell> _prefabs = new();
+        private Dictionary<SpellType, SpellTypeComponent> _spellTypes;
 
         private static SpellFactory _instance;
 
@@ -25,18 +21,13 @@ namespace Fighters.Match.Spells
             {
                 Destroy(gameObject);
             }
-
-            _prefabs = new()
-            {
-                { SpellType.Damage, _damageSpellPrefab },
-
-            };
         }
 
         public Spell Get(SpellData data)
         {
-            var spell = Instantiate(_prefabs[data.SpellType]);
+            var spell = Instantiate(data.Prefab);
             spell.Init(data);
+
             return spell;
         }
     }

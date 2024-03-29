@@ -20,6 +20,7 @@ namespace Fighters.Match
         private Vector2 _location;
         private VisualEffect _vfx;
 
+
         public TileState State { get; set; }
         public Vector2 Location => _location;
         public bool HasPlayer => GetComponentInChildren<Players.Player>() != null;

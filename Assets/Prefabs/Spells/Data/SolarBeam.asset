@@ -17,10 +17,10 @@ MonoBehaviour:
   _manaCost: 0
   _icon: {fileID: 0}
   _spellType: 0
-  _cooldown: 20
+  _cooldown: 2
   _castTime: 0.8
   _targetType: 7
-  _vfx: {fileID: 0}
+  _vfx: {fileID: 8926484042661614526, guid: 52bf92b328d3569409b84474eba4abbe, type: 3}
   _spellPrefab: {fileID: 0}
   _damage: 0
   _travelSpeed: 0

@@ -9,10 +9,14 @@ namespace Fighters.Match.Spells
     {
         private List<SpellData> _spells;
         private Dictionary<Vector2, SpellData> _activeSpells;
-        [SerializeField] private Spell _basicSpell;
+        [SerializeField] private SpellData _basicSpell;
 
         public Dictionary<Vector2, SpellData> ActiveSpells => _activeSpells;
-        public Spell BasicSpell => _basicSpell;
+
+        public SpellData GetBasic()
+        {
+            return _basicSpell;
+        }
 
         public SpellData GetSpellInRotation(Vector2 direction)
         {

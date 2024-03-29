@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
 {
@@ -14,11 +13,12 @@ namespace Fighters.Match.Spells
         [SerializeField] private float _cooldown;
         [SerializeField] private float _castTime;
         [SerializeField] private TargetType _targetType;
-        [SerializeField] private VisualEffectAsset _vfx;
-        [SerializeField] private GameObject _spellPrefab;
+        [SerializeField] private Spell _prefab;
         [SerializeField] private float _damage;
-        [SerializeField] private float _travelSpeed;
+        [SerializeField] private float _travelTime;
         [SerializeField] private int _range;
+        [SerializeField] private AnimationCurve _horizantalCurve;
+        [SerializeField] private AnimationCurve _verticalCurve;
 
         public string Name => _name;
         public string Description => _description;
@@ -28,10 +28,11 @@ namespace Fighters.Match.Spells
         public float CastTime => _castTime;
         public SpellType SpellType => _spellType;
         public TargetType TargetType => _targetType;
-        public VisualEffectAsset Vfx => _vfx;
-        public GameObject SpellPrefab => _spellPrefab;
+        public Spell Prefab => _prefab;
         public float Damage => _damage;
-        public float TravelSpeed => _travelSpeed;
+        public float TravelTime => _travelTime;
         public int Range => _range;
+        public AnimationCurve HorizantalCurve => _horizantalCurve;
+        public AnimationCurve VerticalCurve => _verticalCurve;
     }
 }
