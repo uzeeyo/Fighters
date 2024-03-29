@@ -8,7 +8,7 @@ namespace Fighters.Match.Spells
 
         public float Damage => _damage;
 
-        public override void SetData(SpellData data)
+        public override void Init(SpellData data)
         {
             _damage = data.ModifierAmount;
         }

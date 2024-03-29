@@ -8,7 +8,7 @@ namespace Fighters.Match.Spells
 
         public float HealAmount => _healAmount;
 
-        public override void SetData(SpellData data)
+        public override void Init(SpellData data)
         {
             _healAmount = data.ModifierAmount;
         }
