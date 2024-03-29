@@ -16,7 +16,6 @@ namespace Fighters.Match.Spells
         public override void Init(SpellData data)
         {
             base.Init(data);
-            _damage = data.ModifierAmount;
             _travelTime = data.TravelTime;
             _travelCurve = data.HorizantalCurve;
         }
