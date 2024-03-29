@@ -47,6 +47,21 @@ namespace Fighters.Match.Players
             StartCoroutine(_healthBar.UpdateBar(_currentHealth / _maxHealth));
         }
 
+        public void Heal(float amount)
+        {
+
+            if (_currentHealth + amount > _maxHealth)
+            {
+                _currentHealth = _maxHealth;
+            }
+            else
+            {
+                _currentHealth += amount;
+            }
+
+            StartCoroutine(_healthBar.UpdateBar(_currentHealth / _maxHealth));
+        }
+
         public void UseMana(float mana)
         {
             _currentMana -= mana;

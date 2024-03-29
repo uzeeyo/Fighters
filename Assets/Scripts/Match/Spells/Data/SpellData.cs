@@ -14,7 +14,7 @@ namespace Fighters.Match.Spells
         [SerializeField] private float _castTime;
         [SerializeField] private TargetType _targetType;
         [SerializeField] private Spell _prefab;
-        [SerializeField] private float _damage;
+        [SerializeField] private float _modifierAmount;
         [SerializeField] private float _travelTime;
         [SerializeField] private int _range;
         [SerializeField] private AnimationCurve _horizantalCurve;
@@ -29,7 +29,7 @@ namespace Fighters.Match.Spells
         public SpellType SpellType => _spellType;
         public TargetType TargetType => _targetType;
         public Spell Prefab => _prefab;
-        public float Damage => _damage;
+        public float ModifierAmount => _modifierAmount;
         public float TravelTime => _travelTime;
         public int Range => _range;
         public AnimationCurve HorizantalCurve => _horizantalCurve;

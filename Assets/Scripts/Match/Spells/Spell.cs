@@ -1,6 +1,7 @@
 using Fighters.Match.Spells;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Fighters.Match
 {
@@ -15,6 +16,7 @@ namespace Fighters.Match
         private Sprite _icon;
         private float _cooldown;
         private float _castTime;
+        protected VisualEffect _vfx;
 
         public string Name => _name;
         public string Description => _description;
@@ -38,6 +40,7 @@ namespace Fighters.Match
             _icon = data.Icon;
             _cooldown = data.Cooldown;
             _castTime = data.CastTime;
+            _vfx = GetComponent<VisualEffect>();
         }
 
         public abstract IEnumerator Cast(Tile origin);

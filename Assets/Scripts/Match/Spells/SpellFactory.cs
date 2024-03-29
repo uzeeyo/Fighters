@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace Fighters.Match.Spells
 {
     public class SpellFactory : MonoBehaviour
     {
-        private Dictionary<SpellType, SpellTypeComponent> _spellTypes;
+        private Dictionary<SpellType, Type> _spellTypes;
 
         private static SpellFactory _instance;
 
@@ -21,12 +22,19 @@ namespace Fighters.Match.Spells
             {
                 Destroy(gameObject);
             }
+
+            _spellTypes = new()
+            {
+                { SpellType.Damage, typeof(DamageEffect) },
+            };
         }
 
         public Spell Get(SpellData data)
         {
             var spell = Instantiate(data.Prefab);
             spell.Init(data);
+            spell.gameObject.AddComponent(_spellTypes[data.SpellType]);
+            spell.GetComponent<SpellEffect>().SetData(data);
 
             return spell;
         }

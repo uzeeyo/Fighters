@@ -14,6 +14,7 @@ namespace Fighters.Match
         //4. Start match
 
         [SerializeField] private Player _playerA;
+        [SerializeField] private Player _playerB;
         [SerializeField] private StatData _testStatData;
         [SerializeField] private List<SpellData> _testSpells;
 
@@ -25,6 +26,7 @@ namespace Fighters.Match
         private void LoadTestData()
         {
             _playerA.Init(_testStatData, _testSpells);
+            _playerB.Init(_testStatData, _testSpells);
             Destroy(gameObject);
         }
     }

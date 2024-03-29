@@ -1,8 +1,9 @@
+using Fighters.Match.Spells;
 using UnityEngine;
 
 namespace Fighters.Match.Players
 {
-    public class DamageReceiver : MonoBehaviour
+    public class EffectReceiver : MonoBehaviour
     {
         private PlayerStats _stats;
 
@@ -11,11 +12,11 @@ namespace Fighters.Match.Players
             _stats = GetComponent<PlayerStats>();
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
         {
-            if (collision.gameObject.TryGetComponent(out Spell spellData))
+            if (other.gameObject.TryGetComponent(out SpellEffect effect))
             {
-                //_stats.TakeDamage(spellData.);
+                effect.Apply(_stats);
             }
         }
     }

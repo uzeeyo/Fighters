@@ -13,6 +13,7 @@ namespace Fighters.Match.Players
         private PlayerStats _stats;
         private SpellBank _spellBank;
 
+        public bool CanInteract { get; set; } = true;
         public PlayerStats Stats => _stats;
         public SpellBank SpellBank => _spellBank;
         public TileGrid Grid => _grid;
@@ -28,7 +29,7 @@ namespace Fighters.Match.Players
         public void Init(StatData statData, List<SpellData> spells)
         {
             _stats.Init(statData);
-            _spellBank.LoadSpells(spells);
+            _spellBank?.LoadSpells(spells);
         }
 
         public void SetLocation(Vector2 location)

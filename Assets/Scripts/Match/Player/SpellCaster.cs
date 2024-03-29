@@ -28,18 +28,20 @@ namespace Fighters.Match
 
         private void OnBasicCast()
         {
-            if (_onCooldown) return;
+            if (_onCooldown || !_player.CanInteract) return;
 
             var spellData = _spellBank.GetBasic();
             var spell = SpellFactory.Instance.Get(spellData);
             spell.transform.rotation = _player.transform.rotation;
             StartCoroutine(spell.Cast(_player.CurrentTile));
+            _player.Stats.UseMana(spell.ManaCost);
+            StartCoroutine(DisableInteractionsWhileCasting(spell.CastTime));
             StartCoroutine(StartCooldown(spell.Cooldown));
         }
 
         private void OnCast(InputValue value)
         {
-            if (_onCooldown) return;
+            if (_onCooldown || !_player.CanInteract) return;
 
             var direction = value.Get<Vector2>();
             if (direction == Vector2.zero) return;
@@ -47,8 +49,15 @@ namespace Fighters.Match
             var spellData = _spellBank.GetSpellInRotation(direction);
             var spell = SpellFactory.Instance.Get(spellData);
             spell.transform.rotation = _player.transform.rotation;
+            _player.Stats.UseMana(spell.ManaCost);
             StartCoroutine(spell.Cast(_player.CurrentTile));
             StartCoroutine(StartCooldown(spell.Cooldown));
+        }
+        private IEnumerator DisableInteractionsWhileCasting(float seconds)
+        {
+            _player.CanInteract = false;
+            yield return new WaitForSeconds(seconds);
+            _player.CanInteract = true;
         }
     }
 }

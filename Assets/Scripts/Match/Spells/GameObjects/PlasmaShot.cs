@@ -16,7 +16,7 @@ namespace Fighters.Match.Spells
         public override void Init(SpellData data)
         {
             base.Init(data);
-            _damage = data.Damage;
+            _damage = data.ModifierAmount;
             _travelTime = data.TravelTime;
             _travelCurve = data.HorizantalCurve;
         }
@@ -26,7 +26,7 @@ namespace Fighters.Match.Spells
             //play cast animation
             _originalPosition = origin.transform.position;
             _originalPosition.y = 1;
-            _originalPosition.x = _originalPosition.x + 1f;
+            _originalPosition.x = _originalPosition.x + 1.5f;
 
             transform.position = _originalPosition;
             yield return new WaitForSeconds(CastTime);
@@ -51,6 +51,11 @@ namespace Fighters.Match.Spells
                 yield return null;
             }
 
+            Destroy(gameObject);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
             Destroy(gameObject);
         }
 

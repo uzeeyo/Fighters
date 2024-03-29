@@ -24,7 +24,7 @@ namespace Fighters.Match.Players
             var direction = value.Get<Vector2>();
 
 
-            if (_isMoving)
+            if (_isMoving || !_player.CanInteract)
             {
                 return;
             }
