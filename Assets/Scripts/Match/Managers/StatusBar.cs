@@ -16,7 +16,12 @@ namespace Fighters.Match
             _barImage = GetComponent<Image>();
         }
 
-        public IEnumerator UpdateBar(float percent)
+        public void OnValueChanged(float value)
+        {
+            StartCoroutine(UpdateBar(value));
+        }
+
+        private IEnumerator UpdateBar(float percent)
         {
             _targetPercent = percent;
             if (_isUpdating)
