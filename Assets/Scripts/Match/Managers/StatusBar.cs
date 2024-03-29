@@ -9,7 +9,12 @@ namespace Fighters.Match
         private bool _isUpdating = false;
         private float _targetPercent;
 
-        [SerializeField] private Image _barImage;
+        private Image _barImage;
+
+        private void Awake()
+        {
+            _barImage = GetComponent<Image>();
+        }
 
         public IEnumerator UpdateBar(float percent)
         {

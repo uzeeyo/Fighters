@@ -1,4 +1,6 @@
 using Fighters.Contestants;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +8,8 @@ namespace Fighters.Match.Players
 {
     public class PlayerStats : MonoBehaviour
     {
+        const float TIME_BEFORE_MANA_REGEN = 1f;
+
         [SerializeField] private StatusBar _healthBar;
         [SerializeField] private StatusBar _manaBar;
 
@@ -14,6 +18,8 @@ namespace Fighters.Match.Players
         private float _currentMana;
         private float _maxMana = 50;
         private List<Buff> _buffs = new();
+
+        public event Action<float> ManaUsed;
 
         public List<Buff> Buffs => _buffs;
 
@@ -65,7 +71,18 @@ namespace Fighters.Match.Players
         public void UseMana(float mana)
         {
             _currentMana -= mana;
+            OnManaUsed?.
             StartCoroutine(_manaBar.UpdateBar(_currentMana / _maxMana));
+        }
+
+        private void OnManaUsed()
+        {
+
+        }
+
+        private IEnumerator RegenMana()
+        {
+            yield return new WaitForSeconds(TIME_BEFORE_MANA_REGEN);
         }
 
         public void AddBuff(Buff newBuff)

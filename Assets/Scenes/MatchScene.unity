@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0034462032, g: 0.0045427983, b: 0.0090051005, a: 1}
+  m_IndirectSpecularColor: {r: 0.003441336, g: 0.004537583, b: 0.008998782, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1144,7 +1144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4402570f07de7714e90a7355d5ea8584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _barImage: {fileID: 444794129}
 --- !u!114 &444794129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2120,11 +2119,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: da0c003b3838dc24f899264e0960537c, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -2150,7 +2149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4402570f07de7714e90a7355d5ea8584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _barImage: {fileID: 770662453}
 --- !u!1 &818187886
 GameObject:
   m_ObjectHideFlags: 0
@@ -3628,6 +3626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerA: {fileID: 1314577765}
+  _playerB: {fileID: 513560868}
   _testStatData: {fileID: 11400000, guid: 12240b1aa995128448fcce0ca0265750, type: 2}
   _testSpells:
   - {fileID: 11400000, guid: 73a52c6a46cc30b46a114e2aa93c1016, type: 2}
@@ -4485,7 +4484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4402570f07de7714e90a7355d5ea8584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _barImage: {fileID: 1537056313}
 --- !u!114 &1537056313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4506,11 +4504,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: da0c003b3838dc24f899264e0960537c, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -5619,8 +5617,8 @@ RectTransform:
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1170223353}
   - {fileID: 842815892}
+  - {fileID: 1170223353}
   m_Father: {fileID: 357367372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5915,7 +5913,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4402570f07de7714e90a7355d5ea8584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _barImage: {fileID: 1962044623}
 --- !u!1 &1979956889
 GameObject:
   m_ObjectHideFlags: 0
@@ -6456,8 +6453,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 442813381}
   - {fileID: 2047027250}
+  - {fileID: 442813381}
   m_Father: {fileID: 357367372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
