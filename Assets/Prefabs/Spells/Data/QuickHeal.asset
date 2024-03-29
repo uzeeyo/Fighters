@@ -10,20 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 029404d37fe0a9144bc34bd0eacfdc45, type: 3}
-  m_Name: SolarBeam
+  m_Name: QuickHeal
   m_EditorClassIdentifier: 
-  _name: Solar Beam
-  _description: 'Fires down a beam of light. '
+  _name: Quick Heal
+  _description: Instantly recover health.
   _manaCost: 0
   _icon: {fileID: 0}
   _spellType: 0
   _cooldown: 2
-  _castTime: 0.8
-  _targetType: 7
-  _prefab: {fileID: 3711722537878855986, guid: 57dc8d3cadf938b4a99c27f4e5ff175f, type: 3}
+  _castTime: 0
+  _targetType: 0
+  _prefab: {fileID: -1378570342233943904, guid: 0f6ae0a32e8dce64ab894965f419ac2b,
+    type: 3}
   _damage: 0
+  _modifierAmount: 15
   _travelTime: 0
-  _range: 3
+  _range: 0
   _horizantalCurve:
     serializedVersion: 2
     m_Curve: []

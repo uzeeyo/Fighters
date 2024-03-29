@@ -18,13 +18,14 @@ MonoBehaviour:
   _icon: {fileID: 0}
   _spellType: 0
   _cooldown: 0.5
-  _castTime: 1.2
+  _castTime: 1
   _targetType: 2
   _prefab: {fileID: -4951961062760989420, guid: cb7a1c5b1b0ec6848a791bd037d58f98,
     type: 3}
   _damage: 5
-  _travelTime: 0.7
-  _range: -1
+  _modifierAmount: 0
+  _travelTime: 0.6
+  _range: 0
   _horizantalCurve:
     serializedVersion: 2
     m_Curve:
@@ -37,6 +38,15 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.6567396
+      value: 0.1442542
+      inSlope: 0.82084763
+      outSlope: 0.82084763
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
