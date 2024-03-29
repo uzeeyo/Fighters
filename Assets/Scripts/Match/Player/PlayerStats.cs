@@ -8,7 +8,7 @@ namespace Fighters.Match.Players
 {
     public class PlayerStats : MonoBehaviour
     {
-        const float TIME_BEFORE_MANA_REGEN = 1f;
+        const float TIME_BEFORE_MANA_REGEN = 3.5f;
 
         [SerializeField] private StatusBar _healthBar;
         [SerializeField] private StatusBar _manaBar;
@@ -17,11 +17,61 @@ namespace Fighters.Match.Players
         private float _maxHealth = 100;
         private float _currentMana;
         private float _maxMana = 50;
+        private float _manaRegenRate;
+        private Coroutine _manaRegenCoroutine;
         private List<Buff> _buffs = new();
 
-        public event Action<float> ManaUsed;
+        public float CurrentHealth
+        {
+            get => _currentHealth;
+            set
+            {
+                if (value > _maxHealth)
+                {
+                    _currentHealth = _maxHealth;
+                }
+                else
+                {
+                    _currentHealth = value;
+                }
+                _currentHealth = value;
+                HealthPercentChanged?.Invoke(_currentHealth / _maxHealth);
+            }
+        }
+
+        public float CurrentMana
+        {
+            get => _currentMana;
+            set
+            {
+                if (value > _maxMana)
+                {
+                    _currentMana = _maxMana;
+                }
+                else
+                {
+                    _currentMana = value;
+                }
+                ManaPercentChanged?.Invoke(_currentMana / _maxMana);
+            }
+        }
+
+        public event Action<float> ManaPercentChanged;
+        public event Action<float> HealthPercentChanged;
 
         public List<Buff> Buffs => _buffs;
+
+        private void Awake()
+        {
+            HealthPercentChanged += _healthBar.OnValueChanged;
+            ManaPercentChanged += _manaBar.OnValueChanged;
+        }
+
+        private void OnDisable()
+        {
+            HealthPercentChanged -= _healthBar.OnValueChanged;
+            ManaPercentChanged -= _manaBar.OnValueChanged;
+        }
 
         public void Init(StatData statData)
         {
@@ -29,12 +79,7 @@ namespace Fighters.Match.Players
             _currentHealth = statData.Health;
             _maxMana = statData.Mana;
             _currentMana = statData.Mana;
-        }
-
-        public void SetStatusBars(StatusBar health, StatusBar mana)
-        {
-            _healthBar = health;
-            _manaBar = mana;
+            _manaRegenRate = statData.ManaRegenRate;
         }
 
         public void TakeDamage(float damage)
@@ -49,8 +94,7 @@ namespace Fighters.Match.Players
                 }
             }
 
-            _currentHealth -= damage;
-            StartCoroutine(_healthBar.UpdateBar(_currentHealth / _maxHealth));
+            CurrentHealth -= damage;
         }
 
         public void Heal(float amount)
@@ -58,31 +102,38 @@ namespace Fighters.Match.Players
 
             if (_currentHealth + amount > _maxHealth)
             {
-                _currentHealth = _maxHealth;
+                CurrentHealth = _maxHealth;
             }
             else
             {
-                _currentHealth += amount;
+                CurrentHealth += amount;
             }
-
-            StartCoroutine(_healthBar.UpdateBar(_currentHealth / _maxHealth));
         }
 
         public void UseMana(float mana)
         {
-            _currentMana -= mana;
-            OnManaUsed?.
-            StartCoroutine(_manaBar.UpdateBar(_currentMana / _maxMana));
-        }
-
-        private void OnManaUsed()
-        {
-
+            CurrentMana -= mana;
+            if (_manaRegenCoroutine != null)
+            {
+                StopCoroutine(_manaRegenCoroutine);
+            }
+            _manaRegenCoroutine = StartCoroutine(RegenMana());
         }
 
         private IEnumerator RegenMana()
         {
             yield return new WaitForSeconds(TIME_BEFORE_MANA_REGEN);
+
+            float manaToRegen = _maxMana - CurrentMana;
+            float timeToRegen = manaToRegen / _manaRegenRate;
+            float timeElapsed = 0;
+            while (timeElapsed < timeToRegen)
+            {
+                CurrentMana = CurrentMana + (_manaRegenRate * Time.deltaTime);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            CurrentMana = _maxMana;
         }
 
         public void AddBuff(Buff newBuff)

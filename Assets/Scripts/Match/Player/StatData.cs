@@ -8,9 +8,11 @@ namespace Fighters.Contestants
         [SerializeField] private float _health;
         [SerializeField] private float _mana;
         [SerializeField] private float _moveSpeed;
+        [SerializeField] private float _manaRegenRate;
 
         public float Health => _health;
         public float Mana => _mana;
         public float MoveSpeed => _moveSpeed;
+        public float ManaRegenRate => _manaRegenRate;
     }
 }
