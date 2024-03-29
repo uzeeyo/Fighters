@@ -34,7 +34,7 @@ namespace Fighters.Match.Spells
             var spell = Instantiate(data.Prefab);
             spell.Init(data);
             spell.gameObject.AddComponent(_spellTypes[data.SpellType]);
-            spell.GetComponent<SpellEffect>().SetData(data);
+            spell.GetComponent<SpellEffect>().Init(data);
 
             return spell;
         }
