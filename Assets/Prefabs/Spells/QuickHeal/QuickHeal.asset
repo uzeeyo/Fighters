@@ -22,7 +22,6 @@ MonoBehaviour:
   _targetType: 0
   _prefab: {fileID: -1378570342233943904, guid: 0f6ae0a32e8dce64ab894965f419ac2b,
     type: 3}
-  _damage: 0
   _modifierAmount: 15
   _travelTime: 0
   _range: 0

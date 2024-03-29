@@ -22,8 +22,7 @@ MonoBehaviour:
   _targetType: 2
   _prefab: {fileID: -4951961062760989420, guid: cb7a1c5b1b0ec6848a791bd037d58f98,
     type: 3}
-  _damage: 5
-  _modifierAmount: 0
+  _modifierAmount: 3
   _travelTime: 0.6
   _range: 0
   _horizantalCurve:
