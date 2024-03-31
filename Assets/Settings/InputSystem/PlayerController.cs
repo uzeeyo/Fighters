@@ -55,6 +55,15 @@ namespace Fighters.Match.Players
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""2c85073b-2075-4cb5-8d32-53de8c0f8a42"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -178,6 +187,17 @@ namespace Fighters.Match.Players
                     ""action"": ""BasicCast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4448043e-ee35-4520-971f-6e279add79be"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -189,6 +209,7 @@ namespace Fighters.Match.Players
             m_Base_Cast = m_Base.FindAction("Cast", throwIfNotFound: true);
             m_Base_Move = m_Base.FindAction("Move", throwIfNotFound: true);
             m_Base_BasicCast = m_Base.FindAction("BasicCast", throwIfNotFound: true);
+            m_Base_Reload = m_Base.FindAction("Reload", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -253,6 +274,7 @@ namespace Fighters.Match.Players
         private readonly InputAction m_Base_Cast;
         private readonly InputAction m_Base_Move;
         private readonly InputAction m_Base_BasicCast;
+        private readonly InputAction m_Base_Reload;
         public struct BaseActions
         {
             private @PlayerController m_Wrapper;
@@ -260,6 +282,7 @@ namespace Fighters.Match.Players
             public InputAction @Cast => m_Wrapper.m_Base_Cast;
             public InputAction @Move => m_Wrapper.m_Base_Move;
             public InputAction @BasicCast => m_Wrapper.m_Base_BasicCast;
+            public InputAction @Reload => m_Wrapper.m_Base_Reload;
             public InputActionMap Get() { return m_Wrapper.m_Base; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -278,6 +301,9 @@ namespace Fighters.Match.Players
                 @BasicCast.started += instance.OnBasicCast;
                 @BasicCast.performed += instance.OnBasicCast;
                 @BasicCast.canceled += instance.OnBasicCast;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
 
             private void UnregisterCallbacks(IBaseActions instance)
@@ -291,6 +317,9 @@ namespace Fighters.Match.Players
                 @BasicCast.started -= instance.OnBasicCast;
                 @BasicCast.performed -= instance.OnBasicCast;
                 @BasicCast.canceled -= instance.OnBasicCast;
+                @Reload.started -= instance.OnReload;
+                @Reload.performed -= instance.OnReload;
+                @Reload.canceled -= instance.OnReload;
             }
 
             public void RemoveCallbacks(IBaseActions instance)
@@ -313,6 +342,7 @@ namespace Fighters.Match.Players
             void OnCast(InputAction.CallbackContext context);
             void OnMove(InputAction.CallbackContext context);
             void OnBasicCast(InputAction.CallbackContext context);
+            void OnReload(InputAction.CallbackContext context);
         }
     }
 }
