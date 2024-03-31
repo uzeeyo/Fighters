@@ -23,9 +23,24 @@ namespace Fighters.Match.Spells
             };
         }
 
-        public void SetSpellIcons(List<Spell> spells)
+        public void OnCooldownChanged(CooldownItem cooldownItem)
         {
+            foreach (var item in _spellIcons)
+            {
+                if (item.Value.Name == cooldownItem.Name)
+                {
+                    item.Value.SetCooldown(cooldownItem.TimeRemaining);
+                }
+            }
+        }
 
+        public void OnSpellsChanged(Dictionary<Vector2, SpellData> spellData)
+        {
+            foreach (var direction in spellData.Keys)
+            {
+                var icon = _spellIcons[direction];
+                icon.Load(spellData[direction]);
+            }
         }
     }
 }

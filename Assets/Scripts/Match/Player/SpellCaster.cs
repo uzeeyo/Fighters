@@ -19,24 +19,19 @@ namespace Fighters.Match
             _player = GetComponent<Player>();
         }
 
-        private IEnumerator StartCooldown(float seconds)
-        {
-            _onCooldown = true;
-            yield return new WaitForSeconds(seconds);
-            _onCooldown = false;
-        }
-
         private void OnBasicCast()
         {
             if (_onCooldown || !_player.CanInteract) return;
 
             var spellData = _spellBank.GetBasic();
+            if (!VerifyCanActivate(spellData)) return;
+
             var spell = SpellFactory.Instance.Get(spellData);
             spell.transform.rotation = _player.transform.rotation;
+
             StartCoroutine(spell.Cast(_player.CurrentTile));
-            _player.Stats.UseMana(spell.ManaCost);
             StartCoroutine(DisableInteractionsWhileCasting(spell.CastTime));
-            StartCoroutine(StartCooldown(spell.Cooldown));
+            _spellBank.StartSpellCooldown(spellData);
         }
 
         private void OnCast(InputValue value)
@@ -47,17 +42,26 @@ namespace Fighters.Match
             if (direction == Vector2.zero) return;
 
             var spellData = _spellBank.GetSpellInRotation(direction);
+            if (!VerifyCanActivate(spellData)) return;
+
             var spell = SpellFactory.Instance.Get(spellData);
             spell.transform.rotation = _player.transform.rotation;
-            _player.Stats.UseMana(spell.ManaCost);
             StartCoroutine(spell.Cast(_player.CurrentTile));
-            StartCoroutine(StartCooldown(spell.Cooldown));
+            StartCoroutine(DisableInteractionsWhileCasting(spell.CastTime));
+            _spellBank.StartSpellCooldown(spellData);
         }
+
         private IEnumerator DisableInteractionsWhileCasting(float seconds)
         {
             _player.CanInteract = false;
             yield return new WaitForSeconds(seconds);
             _player.CanInteract = true;
+        }
+
+        private bool VerifyCanActivate(SpellData data)
+        {
+            var onCooldown = _spellBank.GetCooldownTime(data.Name) > 0;
+            return _player.CanInteract && !onCooldown && _player.Stats.TryUseMana(data.ManaCost);
         }
     }
 }
