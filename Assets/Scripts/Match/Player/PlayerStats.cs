@@ -110,14 +110,20 @@ namespace Fighters.Match.Players
             }
         }
 
-        public void UseMana(float mana)
+        public bool TryUseMana(float mana)
         {
+            if (CurrentMana < mana)
+            {
+                return false;
+            }
+
             CurrentMana -= mana;
             if (_manaRegenCoroutine != null)
             {
                 StopCoroutine(_manaRegenCoroutine);
             }
             _manaRegenCoroutine = StartCoroutine(RegenMana());
+            return true;
         }
 
         private IEnumerator RegenMana()
