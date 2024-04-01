@@ -24,6 +24,7 @@ namespace Fighters.Match.Spells
             _vfx.Play();
             var targetTile = origin.Grid.GetTile(origin.Location, new Vector2(_range, 0));
             transform.position = targetTile.transform.position;
+            StartCoroutine(Shaker.ShakeForSeconds(0.15f, .5f));
         }
     }
 }

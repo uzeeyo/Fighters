@@ -12,11 +12,13 @@ namespace Fighters.Match
         private bool _onCooldown = false;
         private SpellBank _spellBank;
         private Player _player;
+        private Animator _animator;
 
         private void Awake()
         {
             _spellBank = GetComponent<SpellBank>();
             _player = GetComponent<Player>();
+            _animator = GetComponentInChildren<Animator>();
         }
 
         private void OnBasicCast()
@@ -32,6 +34,7 @@ namespace Fighters.Match
             StartCoroutine(spell.Cast(_player.CurrentTile));
             StartCoroutine(DisableInteractionsWhileCasting(spell.CastTime));
             _spellBank.StartSpellCooldown(spellData);
+            _animator.SetTrigger(spellData.AnimationTriggerName);
         }
 
         private void OnCast(InputValue value)
@@ -49,6 +52,7 @@ namespace Fighters.Match
             StartCoroutine(spell.Cast(_player.CurrentTile));
             StartCoroutine(DisableInteractionsWhileCasting(spell.CastTime));
             _spellBank.StartSpellCooldown(spellData);
+            _animator.SetTrigger(spellData.AnimationTriggerName);
         }
 
         private IEnumerator DisableInteractionsWhileCasting(float seconds)

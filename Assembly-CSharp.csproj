@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Match\Spells\Data\SpellData.cs" />
+    <Compile Include="Assets\Scripts\Match\Spells\GameObjects\SolarLaser.cs" />
     <Compile Include="Assets\Scripts\Match\Player\StatData.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\Targeting\TargetType.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\HitEffects\Behaviours\IHitEffect.cs" />
@@ -71,15 +72,17 @@
     <Compile Include="Assets\Scripts\Match\Spells\GameObjects\QuickHeal.cs" />
     <Compile Include="Assets\Scripts\Match\Player\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\SpellEffects\SpellEffect.cs" />
+    <Compile Include="Assets\Scripts\Utils\Shaker.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\SpellBank.cs" />
     <Compile Include="Assets\Scripts\Match\Tiles\Tile.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\SpellFactory.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\ElementType.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\Cooldown\CooldownHandler.cs" />
+    <Compile Include="Assets\Scripts\Match\UI\StatusBar.cs" />
     <Compile Include="Assets\Scripts\Match\MatchInitializer.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\Cooldown\CooldownItem.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\GameObjects\PlasmaShot.cs" />
-    <Compile Include="Assets\Scripts\Match\Managers\StatusBar.cs" />
+    <Compile Include="Assets\Scripts\Match\UI\ReloadTimer.cs" />
     <Compile Include="Assets\Settings\InputSystem\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Match\Tiles\TileGrid.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\Spell.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="Assets\Scripts\Match\Spells\SpellEffects\DamageEffect.cs" />
     <Compile Include="Assets\Scripts\Match\Player\Movement.cs" />
     <Compile Include="Assets\Scripts\Match\Player\SpellCaster.cs" />
+    <Compile Include="Assets\Scripts\Match\UI\MatchTimer.cs" />
     <Compile Include="Assets\Scripts\Match\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Match\Spells\SpellEffects\HealEffect.cs" />
     <Compile Include="Assets\Scripts\Match\Player\Owner.cs" />

@@ -8,7 +8,7 @@ namespace Fighters.Match.Spells
 {
     public class SpellBank : MonoBehaviour
     {
-        private const float RELOAD_COOLDOWN = 1f;
+        public const float RELOAD_COOLDOWN = 1f;
 
         private bool _reloadOnCooldown;
         private List<SpellData> _spells;
@@ -32,9 +32,10 @@ namespace Fighters.Match.Spells
 
         private void OnDisable()
         {
-            var spellDisplay = FindFirstObjectByType<ActiveSpellDisplay>();
-            SpellsChanged -= spellDisplay.OnSpellsChanged;
-            CooldownChanged -= spellDisplay.OnCooldownChanged;
+            //TODO: Move the subscription to the display component. This causes a null reference exception
+            //var spellDisplay = FindFirstObjectByType<ActiveSpellDisplay>();
+            //SpellsChanged -= spellDisplay.OnSpellsChanged;
+            //CooldownChanged -= spellDisplay.OnCooldownChanged;
         }
 
         public SpellData GetBasic()

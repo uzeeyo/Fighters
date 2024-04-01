@@ -7,6 +7,7 @@ namespace Fighters.Match.Spells
     {
         [SerializeField] private string _name;
         [SerializeField] private string _description;
+        [SerializeField] private string _animationTriggerName;
         [SerializeField] private float _manaCost;
         [SerializeField] private Sprite _icon;
         [SerializeField] private SpellType _spellType;
@@ -22,6 +23,7 @@ namespace Fighters.Match.Spells
 
         public string Name => _name;
         public string Description => _description;
+        public string AnimationTriggerName => _animationTriggerName;
         public float ManaCost => _manaCost;
         public Sprite Icon => _icon;
         public float Cooldown => _cooldown;
