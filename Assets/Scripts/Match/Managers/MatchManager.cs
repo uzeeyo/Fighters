@@ -47,13 +47,12 @@ namespace Fighters.Match
 
         private void StartMatch()
         {
-            Debug.Log("Match Started");
+            TimeRemaining = 60;
             StartCoroutine(Countdown());
             _matchStarted = true;
-            _timeRemaining = 60;
         }
 
-        private void EndMatch()
+        private static void EndMatch()
         {
             Debug.Log("Match Ended");
             _matchEnded = true;
