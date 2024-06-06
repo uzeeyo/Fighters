@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Fighters.Match.Players
 {
-    public class Movement : MonoBehaviour
+    public class MovementController : MonoBehaviour
     {
         private Vector2 _currentPosition;
         private Player _player;
@@ -18,6 +18,23 @@ namespace Fighters.Match.Players
             _player.CurrentTile = _player.Grid.GetTile(_currentPosition, Vector2.zero);
         }
 
+        public bool TryMove(Vector2 direction)
+        {
+            var targetTile = _player.Grid.GetTile(_currentPosition, direction);
+
+            if (targetTile == null) return false;
+
+            if (targetTile.State == Tile.TileState.None && targetTile.Grid.Owner != Owner.PlayerB)
+            {
+                _currentPosition = targetTile.Location;
+                _player.CurrentTile = targetTile;
+                StartCoroutine(Move(targetTile.transform.position));
+                return true;
+            }
+
+            return false;
+        }
+
         private void OnMove(InputValue value)
         {
             //if (!MatchManager.MatchStarted) return;
@@ -29,16 +46,7 @@ namespace Fighters.Match.Players
                 return;
             }
 
-            var targetTile = _player.Grid.GetTile(_currentPosition, direction);
-
-            if (targetTile == null) return;
-
-            if (targetTile.State == Tile.TileState.None && targetTile.Grid.Owner != Owner.PlayerB)
-            {
-                _currentPosition = targetTile.Location;
-                _player.CurrentTile = targetTile;
-                StartCoroutine(Move(targetTile.transform.position));
-            }
+            TryMove(direction);
         }
 
         private IEnumerator Move(Vector3 targetPosition)
