@@ -27,7 +27,6 @@ namespace Fighters.Match
                 Vector2.right
             };
             _moveDirections = new Queue<Vector2>(tempList.OrderBy(x => Guid.NewGuid()));
-
             Move();
         }
 
@@ -43,6 +42,7 @@ namespace Fighters.Match
             {
                 Move();
             }
+            _fsm.ChangeState(StateType.Idle);
         }
 
         public void Exit()

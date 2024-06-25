@@ -18,6 +18,8 @@ namespace Fighters.Match.Players
         public MovementController MovementController { get; private set; }
         public TileGrid Grid => _grid;
         public Tile CurrentTile { get; set; }
+        //TODO: Auto assign 
+        [field: SerializeField] public Side Side { get; private set; }
 
 
         private void Awake()

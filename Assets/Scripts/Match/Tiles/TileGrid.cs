@@ -10,12 +10,12 @@ namespace Fighters.Match
         const int gridYSize = 3;
 
         [SerializeField] private GameObject _tileParentObject;
-        [SerializeField] private Owner _owner;
+        [SerializeField] private Side _owner;
 
         private Tile[,] _tilesTwoD = new Tile[gridXSize, gridYSize];
         private TileGrid _opponentGrid;
 
-        public Owner Owner => _owner;
+        public Side Owner => _owner;
 
         private void Awake()
         {

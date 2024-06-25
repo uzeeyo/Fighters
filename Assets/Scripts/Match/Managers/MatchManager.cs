@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Fighters.Match
 {
-    public enum PlayerSide
+    public enum Side
     {
         PlayerA,
         PlayerB

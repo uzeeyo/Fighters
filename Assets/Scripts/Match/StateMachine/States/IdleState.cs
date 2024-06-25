@@ -16,7 +16,7 @@ namespace Fighters.Match
         public void Enter()
         {
             _timeSinceEnter = 0f;
-            _timeToAction = Random.Range(1f, 3f);
+            _timeToAction = Random.Range(0.3f, 1.5f);
         }
 
         public void Exit()

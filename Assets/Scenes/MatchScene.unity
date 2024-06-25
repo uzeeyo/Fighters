@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0034868591, g: 0.004681774, b: 0.009618507, a: 1}
+  m_IndirectSpecularColor: {r: 0.0034412988, g: 0.004538637, b: 0.009006635, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1978,6 +1978,9 @@ GameObject:
   - component: {fileID: 513560867}
   - component: {fileID: 513560868}
   - component: {fileID: 513560869}
+  - component: {fileID: 513560870}
+  - component: {fileID: 513560871}
+  - component: {fileID: 513560872}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -2060,7 +2063,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42213b5d23e016d4685fbf79378011ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grid: {fileID: 0}
+  _grid: {fileID: 1632767801}
+  <Side>k__BackingField: 1
 --- !u!54 &513560869
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2088,6 +2092,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &513560870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513560860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c18c533829e6d54c8573b30acd3fd70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _basicSpell: {fileID: 0}
+--- !u!114 &513560871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513560860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73d33b65696c24f42a449600535c3923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &513560872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 513560860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38db0cec6bae75e43a1b319761f057bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveTime: 0.15
 --- !u!4 &541534733 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6788631c847562c4080cd044cf31cf0a,
@@ -5315,6 +5357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38db0cec6bae75e43a1b319761f057bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveTime: 0.2
 --- !u!114 &1314577762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5366,6 +5409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _grid: {fileID: 200777679}
+  <Side>k__BackingField: 0
 --- !u!114 &1314577766
 MonoBehaviour:
   m_ObjectHideFlags: 0
