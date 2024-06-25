@@ -1,6 +1,7 @@
 using Fighters.Contestants;
 using Fighters.Match.Players;
 using Fighters.Match.Spells;
+using Fighters.Match.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,15 @@ namespace Fighters.Match
         private void Start()
         {
             LoadTestData();
+            SetupUI();
+        }
+
+        private void SetupUI()
+        {
+            var spellDisplay = FindFirstObjectByType<ActiveSpellDisplay>();
+            spellDisplay.Init(_playerA.SpellBank);
+            var reloadTimer = FindFirstObjectByType<ReloadTimer>();
+            reloadTimer.Init(_playerA.SpellBank);
         }
 
         private void LoadTestData()

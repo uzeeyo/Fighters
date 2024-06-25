@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Quick Heal
   _description: Instantly recover health.
-  _manaCost: 0
+  _animationTriggerName: QuickHeal
+  _manaCost: 10
   _icon: {fileID: 21300000, guid: e4a15886e47bbe849a76b07f2f39f0b1, type: 3}
   _spellType: 0
-  _cooldown: 2
+  _cooldown: 1
   _castTime: 0
   _targetType: 0
   _prefab: {fileID: -1378570342233943904, guid: 0f6ae0a32e8dce64ab894965f419ac2b,

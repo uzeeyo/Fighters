@@ -9,6 +9,11 @@ namespace Fighters.Match.Spells
         [SerializeField] private SpellIcon _spellIconDown;
         [SerializeField] private SpellIcon _spellIconLeft;
         [SerializeField] private SpellIcon _spellIconRight;
+        [SerializeField] private AnimationCurve _borderResizeCurve;
+
+        private SpellBank _spellBank;
+
+        public static AnimationCurve BorderResizeCurve { get; private set; }
 
         private Dictionary<Vector2, SpellIcon> _spellIcons;
 
@@ -21,6 +26,20 @@ namespace Fighters.Match.Spells
                 {Vector2.left, _spellIconLeft},
                 {Vector2.right, _spellIconRight}
             };
+            BorderResizeCurve = _borderResizeCurve;
+        }
+
+        public void Init(SpellBank spellBank)
+        {
+            _spellBank = spellBank;
+            _spellBank.SpellsChanged += OnSpellsChanged;
+            _spellBank.CooldownChanged += OnCooldownChanged;
+        }
+
+        private void OnDisable()
+        {
+            _spellBank.SpellsChanged -= OnSpellsChanged;
+            _spellBank.CooldownChanged -= OnCooldownChanged;
         }
 
         public void OnCooldownChanged(CooldownItem cooldownItem)

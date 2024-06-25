@@ -15,11 +15,11 @@ MonoBehaviour:
   _name: Solar Laser
   _description: Fire a laser forward.
   _animationTriggerName: Attack2
-  _manaCost: 0
+  _manaCost: 20
   _icon: {fileID: 21300000, guid: bce9db55f5e093f468bc7ec0e39f6394, type: 3}
   _spellType: 0
-  _cooldown: 0
-  _castTime: 0.85
+  _cooldown: 15
+  _castTime: 1.7
   _targetType: 0
   _prefab: {fileID: -2053574786397960436, guid: 9d5ab31b21d4b0c4c885c15b480233e2,
     type: 3}

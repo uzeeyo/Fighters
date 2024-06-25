@@ -15,7 +15,7 @@ MonoBehaviour:
   _name: Basic Spell
   _description: Moves forward to deal 5 damage.
   _animationTriggerName: Attack1
-  _manaCost: 5
+  _manaCost: 3
   _icon: {fileID: 0}
   _spellType: 0
   _cooldown: 0.5
