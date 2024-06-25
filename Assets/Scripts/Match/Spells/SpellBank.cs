@@ -8,7 +8,7 @@ namespace Fighters.Match.Spells
 {
     public class SpellBank : MonoBehaviour
     {
-        public const float RELOAD_COOLDOWN = 1f;
+        public const float RELOAD_COOLDOWN = 10f;
 
         private bool _reloadOnCooldown;
         private List<SpellData> _spells;
@@ -22,21 +22,7 @@ namespace Fighters.Match.Spells
 
         public event Action<Dictionary<Vector2, SpellData>> SpellsChanged;
         public event Action<CooldownItem> CooldownChanged;
-
-        private void Start()
-        {
-            var spellDisplay = FindFirstObjectByType<ActiveSpellDisplay>();
-            SpellsChanged += spellDisplay.OnSpellsChanged;
-            CooldownChanged += spellDisplay.OnCooldownChanged;
-        }
-
-        private void OnDisable()
-        {
-            //TODO: Move the subscription to the display component. This causes a null reference exception
-            //var spellDisplay = FindFirstObjectByType<ActiveSpellDisplay>();
-            //SpellsChanged -= spellDisplay.OnSpellsChanged;
-            //CooldownChanged -= spellDisplay.OnCooldownChanged;
-        }
+        public event Action SpellsReloaded;
 
         public SpellData GetBasic()
         {
@@ -65,12 +51,17 @@ namespace Fighters.Match.Spells
                 _activeSpells[directions[i]] = spellData[i];
             }
             SpellsChanged?.Invoke(_activeSpells);
+            SpellsReloaded?.Invoke();
         }
 
         public void LoadSpells(List<SpellData> spells)
         {
             _spells = spells;
             ReloadActiveSpells();
+
+            //TODO: Move this to the display component
+            var spellDisplay = FindFirstObjectByType<ActiveSpellDisplay>();
+            spellDisplay.OnSpellsChanged(_activeSpells);
         }
 
         private void OnReload()
@@ -81,16 +72,11 @@ namespace Fighters.Match.Spells
 
         private IEnumerator StartReloadCooldown()
         {
-            _reloadOnCooldown = true;
-            float timeElapsed = 0;
-
-            while (timeElapsed < RELOAD_COOLDOWN)
-            {
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-            _reloadOnCooldown = false;
             ReloadActiveSpells();
+
+            _reloadOnCooldown = true;
+            yield return new WaitForSeconds(RELOAD_COOLDOWN);
+            _reloadOnCooldown = false;
         }
 
         public void StartSpellCooldown(SpellData data)
