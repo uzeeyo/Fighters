@@ -40,66 +40,66 @@ MonoBehaviour:
     m_Values:
     - position: {x: -1, y: -1, z: -1}
       index: 0
-      probeCount: 768
+      probeCount: 896
       minSubdiv: 0
       indexChunkCount: 5
       shChunkCount: 1
-      bricksCount: 12
+      bricksCount: 14
       indirectionEntryInfo:
       - positionInBricks: {x: -9, y: -9, z: -9}
         minSubdiv: 0
         hasOnlyBiggerBricks: 0
     - position: {x: -1, y: -1, z: 0}
       index: 4
-      probeCount: 1088
+      probeCount: 1280
       minSubdiv: 0
       indexChunkCount: 5
       shChunkCount: 1
-      bricksCount: 17
+      bricksCount: 20
       indirectionEntryInfo:
       - positionInBricks: {x: -9, y: -9, z: 0}
         minSubdiv: 0
         hasOnlyBiggerBricks: 0
     - position: {x: -1, y: 0, z: 0}
       index: 6
-      probeCount: 3520
+      probeCount: 5568
       minSubdiv: 0
       indexChunkCount: 5
       shChunkCount: 1
-      bricksCount: 55
+      bricksCount: 87
       indirectionEntryInfo:
       - positionInBricks: {x: -9, y: 0, z: 0}
         minSubdiv: 0
         hasOnlyBiggerBricks: 0
     - position: {x: 0, y: -1, z: -1}
       index: 1
-      probeCount: 768
+      probeCount: 896
       minSubdiv: 0
       indexChunkCount: 5
       shChunkCount: 1
-      bricksCount: 12
+      bricksCount: 14
       indirectionEntryInfo:
       - positionInBricks: {x: 0, y: -9, z: -9}
         minSubdiv: 0
         hasOnlyBiggerBricks: 0
     - position: {x: 0, y: -1, z: 0}
       index: 5
-      probeCount: 1088
+      probeCount: 1280
       minSubdiv: 0
       indexChunkCount: 5
       shChunkCount: 1
-      bricksCount: 17
+      bricksCount: 20
       indirectionEntryInfo:
       - positionInBricks: {x: 0, y: -9, z: 0}
         minSubdiv: 0
         hasOnlyBiggerBricks: 0
     - position: {x: 0, y: 0, z: 0}
       index: 7
-      probeCount: 3520
+      probeCount: 4352
       minSubdiv: 0
       indexChunkCount: 5
       shChunkCount: 1
-      bricksCount: 55
+      bricksCount: 68
       indirectionEntryInfo:
       - positionInBricks: {x: 0, y: 0, z: 0}
         minSubdiv: 0
@@ -130,7 +130,7 @@ MonoBehaviour:
     m_Keys:
     - Default
     m_Values:
-    - sceneHash: 1672490438
+    - sceneHash: 1397639800
       cellDataAsset:
         m_AssetGUID: be5384c151a85f14dacca7271e7e358d
         m_StreamableAssetPath: APVStreamingAssets\c749e2c7089c167419215c3e1e87f275\be5384c151a85f14dacca7271e7e358d.bytes
@@ -177,17 +177,17 @@ MonoBehaviour:
       m_Keys: 000000000400000006000000010000000500000007000000
       m_Values:
       - offset: 0
-        elementCount: 12
-      - offset: 192
-        elementCount: 17
-      - offset: 464
-        elementCount: 55
-      - offset: 1344
-        elementCount: 12
-      - offset: 1536
-        elementCount: 17
-      - offset: 1808
-        elementCount: 55
+        elementCount: 14
+      - offset: 224
+        elementCount: 20
+      - offset: 544
+        elementCount: 87
+      - offset: 1936
+        elementCount: 14
+      - offset: 2160
+        elementCount: 20
+      - offset: 2480
+        elementCount: 68
   cellSupportDataAsset:
     m_AssetGUID: 506409afb83dd49439075147333ddcb8
     m_StreamableAssetPath: APVStreamingAssets\c749e2c7089c167419215c3e1e87f275\506409afb83dd49439075147333ddcb8.bytes

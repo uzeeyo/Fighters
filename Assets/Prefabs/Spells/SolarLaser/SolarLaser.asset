@@ -21,8 +21,7 @@ MonoBehaviour:
   _cooldown: 15
   _castTime: 1.7
   _targetType: 0
-  _prefab: {fileID: -2053574786397960436, guid: 9d5ab31b21d4b0c4c885c15b480233e2,
-    type: 3}
+  _prefab: {fileID: 4991315695589501692, guid: 9d5ab31b21d4b0c4c885c15b480233e2, type: 3}
   _modifierAmount: 0
   _travelTime: 0
   _range: 0

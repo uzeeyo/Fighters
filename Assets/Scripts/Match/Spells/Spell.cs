@@ -9,38 +9,28 @@ namespace Fighters.Match
     {
         protected const float MAX_TRAVEL_DISTANCE = 15f;
 
-        private string _name;
-        private string _description;
-        private float _manaCost;
-        private TargetType _targetType;
-        private Sprite _icon;
-        private float _cooldown;
-        private float _castTime;
-        protected VisualEffect _vfx;
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public float ManaCost { get; private set; }
+        public Sprite Icon { get; private set; }
+        public float Cooldown { get; private set; }
+        public float CastTime { get; private set; }
+        public VisualEffect Vfx { get; protected set; }
 
-        public string Name => _name;
-        public string Description => _description;
-        public float ManaCost => _manaCost;
-        public TargetType TargetType => _targetType;
-        public Sprite Icon => _icon;
-        public float Cooldown => _cooldown;
-        public float CastTime => _castTime;
-
-        private void Awake()
+        protected virtual void Awake()
         {
             StartCoroutine(DelayDestroy());
         }
 
         public virtual void Init(SpellData data)
         {
-            _name = data.Name;
-            _description = data.Description;
-            _manaCost = data.ManaCost;
-            _targetType = data.TargetType;
-            _icon = data.Icon;
-            _cooldown = data.Cooldown;
-            _castTime = data.CastTime;
-            _vfx = GetComponent<VisualEffect>();
+            Name = data.Name;
+            Description = data.Description;
+            ManaCost = data.ManaCost;
+            Icon = data.Icon;
+            Cooldown = data.Cooldown;
+            CastTime = data.CastTime;
+            Vfx = GetComponent<VisualEffect>();
         }
 
         public abstract IEnumerator Cast(Tile origin);

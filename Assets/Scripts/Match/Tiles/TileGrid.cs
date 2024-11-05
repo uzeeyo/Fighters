@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Fighters.Match.Spells.Targeting;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -14,6 +16,7 @@ namespace Fighters.Match
 
         private Tile[,] _tilesTwoD = new Tile[gridXSize, gridYSize];
         private TileGrid _opponentGrid;
+        private Dictionary<TargetType, Func<Tile, TargetOptions, List<Tile>>> _targeters;
 
         public Side Owner => _owner;
 
@@ -38,7 +41,12 @@ namespace Fighters.Match
                     index++;
                 }
             }
-
+            _targeters = new()
+            {
+                { TargetType.Single, GetSingle },
+                { TargetType.RandomOpponent, GetRandomOponent },
+                { TargetType.Forward, GetForward }
+            };
             _opponentGrid = FindObjectsByType<TileGrid>(FindObjectsSortMode.InstanceID).ToList().Where(t => t != this).FirstOrDefault();
         }
 
@@ -75,5 +83,36 @@ namespace Fighters.Match
             return tiles;
         }
 
+        public List<Tile> GetTargets(Tile origin, TargetOptions options)
+        {
+            return _targeters[options.TargetType](origin, options);
+        }
+
+        private List<Tile> GetSingle(Tile origin, TargetOptions options)
+        {
+            return new List<Tile>() { GetTile(origin.Location, new Vector2(options.Gap, 0)) };
+        }
+
+        private List<Tile> GetRandomOponent(Tile origin, TargetOptions options)
+        {
+            return new List<Tile>() { _opponentGrid.GetTile(new Vector2(UnityEngine.Random.Range(0, 3), UnityEngine.Random.Range(0, 3)), Vector2.zero) };
+        }
+
+        private List<Tile> GetForward(Tile origin, TargetOptions options)
+        {
+            var tiles = new List<Tile>();
+            var currentX = options.Gap;
+            for (int i = 0; i < options.Range; i++)
+            {
+                var tile = GetTile(origin.Location, new Vector2(currentX, 0));
+                if (tile != null)
+                {
+                    tiles.Add(tile);
+                }
+                else break;
+                currentX++;
+            }
+            return tiles;
+        }
     }
 }

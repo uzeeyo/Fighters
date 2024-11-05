@@ -18,9 +18,9 @@ namespace Fighters.Match.Spells
         public override IEnumerator Cast(Tile origin)
         {
             transform.position = origin.transform.position;
-            _vfx.Stop();
+            Vfx.Stop();
             yield return new WaitForSeconds(CastTime);
-            _vfx.Play();
+            Vfx.Play();
 
         }
     }

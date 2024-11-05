@@ -1,3 +1,4 @@
+using Fighters.Match.Spells.Targeting;
 using UnityEngine;
 
 namespace Fighters.Match.Spells

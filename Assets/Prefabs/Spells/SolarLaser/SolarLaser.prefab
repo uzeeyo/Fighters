@@ -120,7 +120,7 @@ MonoBehaviour:
   m_FadeDistance: 10000
   m_VolumetricFadeDistance: 10000
   m_AffectDiffuse: 1
-  m_AffectSpecular: 1
+  m_AffectSpecular: 0
   m_NonLightmappedOnly: 0
   m_ShapeWidth: 18.99
   m_ShapeHeight: 0.5
@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 1013876914665196363}
   - component: {fileID: -115767599146942458}
   - component: {fileID: -2225851474070170303}
-  - component: {fileID: -2053574786397960436}
+  - component: {fileID: 4991315695589501692}
   m_Layer: 0
   m_Name: SolarLaser
   m_TagString: Untagged
@@ -350,7 +350,7 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &-2053574786397960436
+--- !u!114 &4991315695589501692
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -359,6 +359,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2034027450490385957}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a04185ea048099c43ba24233eda33676, type: 3}
+  m_Script: {fileID: 11500000, guid: 745f144ee7de04a49921705dae985f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

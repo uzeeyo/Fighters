@@ -12,6 +12,8 @@ namespace Fighters.Match
 
     public class MatchManager : MonoBehaviour
     {
+        const float MATCH_DURATION = 180f;
+
         private static bool _matchStarted;
         private static float _timeRemaining;
         private static bool _matchEnded;
@@ -47,7 +49,7 @@ namespace Fighters.Match
 
         private void StartMatch()
         {
-            TimeRemaining = 60;
+            TimeRemaining = MATCH_DURATION;
             StartCoroutine(Countdown());
             _matchStarted = true;
         }

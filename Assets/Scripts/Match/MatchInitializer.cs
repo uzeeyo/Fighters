@@ -21,8 +21,8 @@ namespace Fighters.Match
 
         private void Start()
         {
-            LoadTestData();
             SetupUI();
+            LoadTestData();
         }
 
         private void SetupUI()

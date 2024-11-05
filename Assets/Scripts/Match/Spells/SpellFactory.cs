@@ -26,6 +26,7 @@ namespace Fighters.Match.Spells
             _spellTypes = new()
             {
                 { SpellType.Damage, typeof(DamageEffect) },
+                { SpellType.Heal, typeof(HealEffect) },
             };
         }
 

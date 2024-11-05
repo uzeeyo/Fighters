@@ -37,7 +37,7 @@ namespace Fighters.Match.Spells
         public void ReloadActiveSpells()
         {
             var spellData = _spells.OrderBy(x => Guid.NewGuid()).Take(4).ToList();
-            var directions = new List<Vector2>
+            var directions = new Vector2[]
             {
                 Vector2.up,
                 Vector2.right,
@@ -58,10 +58,6 @@ namespace Fighters.Match.Spells
         {
             _spells = spells;
             ReloadActiveSpells();
-
-            //TODO: Move this to the display component
-            var spellDisplay = FindFirstObjectByType<ActiveSpellDisplay>();
-            spellDisplay.OnSpellsChanged(_activeSpells);
         }
 
         private void OnReload()
@@ -89,11 +85,7 @@ namespace Fighters.Match.Spells
 
         public float GetCooldownTime(string spellName)
         {
-            if (_itemsOnCooldown.Exists(x => x.Name == spellName))
-            {
-                return _itemsOnCooldown.Find(x => x.Name == spellName).TimeRemaining;
-            }
-            return 0;
+            return _itemsOnCooldown.Find(x => x.Name == spellName)?.TimeRemaining ?? 0;
         }
 
         private IEnumerator CountDown(CooldownItem item)
