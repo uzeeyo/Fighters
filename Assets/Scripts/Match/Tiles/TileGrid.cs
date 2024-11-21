@@ -1,118 +1,110 @@
-﻿using Fighters.Match.Spells.Targeting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Fighters.Match.Players;
 using UnityEngine;
 
 namespace Fighters.Match
 {
     public class TileGrid : MonoBehaviour
     {
-        const int gridXSize = 3;
-        const int gridYSize = 3;
+        const int GRID_X_SIZE = 6;
+        const int GRID_Y_SIZE = 3;
 
         [SerializeField] private GameObject _tileParentObject;
-        [SerializeField] private Side _owner;
 
-        private Tile[,] _tilesTwoD = new Tile[gridXSize, gridYSize];
-        private TileGrid _opponentGrid;
-        private Dictionary<TargetType, Func<Tile, TargetOptions, List<Tile>>> _targeters;
-
-        public Side Owner => _owner;
+        private readonly Tile[,] _tilesTwoD = new Tile[GRID_X_SIZE, GRID_Y_SIZE];
 
         private void Awake()
         {
-            var tileObjects = new GameObject[gridXSize * gridYSize];
-            for (int i = 0; i < gridXSize * gridYSize; i++)
+            var tileObjects = new GameObject[GRID_X_SIZE * GRID_Y_SIZE];
+            for (int i = 0; i < GRID_X_SIZE * GRID_Y_SIZE; i++)
             {
                 tileObjects[i] = _tileParentObject.transform.GetChild(i).gameObject;
             }
 
             int index = 0;
-            for (int y = gridYSize - 1; y >= 0; y--)
+            for (int y = GRID_Y_SIZE - 1; y >= 0; y--)
             {
-                for (int x = 0; x < gridYSize; x++)
+                for (int x = 0; x < GRID_X_SIZE; x++)
                 {
-                    var tile = transform.GetChild(index).GetComponent<Tile>();
+                    var tileObj = new GameObject("Tile", typeof(Tile));
+                    tileObj.transform.SetParent(transform);
+                    var tile = tileObj.GetComponent<Tile>();
                     tile.transform.position = tileObjects[index].transform.position;
                     tile.TileObject = tileObjects[index];
                     tile.Init(new Vector2(x, y));
+                    tile.PlayerSide = x > 2 ? Side.Opponent : Side.Self;
                     _tilesTwoD[x, y] = tile;
                     index++;
                 }
             }
-            _targeters = new()
-            {
-                { TargetType.Single, GetSingle },
-                { TargetType.RandomOpponent, GetRandomOponent },
-                { TargetType.Forward, GetForward }
-            };
-            _opponentGrid = FindObjectsByType<TileGrid>(FindObjectsSortMode.InstanceID).ToList().Where(t => t != this).FirstOrDefault();
         }
 
+        public bool IsValidPosition(Vector2 position)
+        {
+            int x = (int)position.x;
+            int y = (int)position.y;
+            return x >= 0 && x < GRID_X_SIZE && y >= 0 && y < GRID_Y_SIZE;
+        }
 
         public Tile GetTile(Vector2 start, Vector2 delta)
         {
             int x = (int)start.x + (int)delta.x;
             int y = (int)start.y + (int)delta.y;
 
-            //(2, 1) -> (2, 1)
-
-            if (x < 0 || y < 0 || y > 2) return null;
-
-            if (x > 2)
-            {
-                return _opponentGrid.GetTile(new Vector2(0, y), new Vector2(x - 3, 0));
-            }
+            if (!IsValidPosition(new Vector2(x, y))) return null;
 
             return _tilesTwoD[x, y];
         }
 
-        public List<Tile> GetTileStraightRange(Vector2 origin, Vector2 range)
+        public List<Tile> GetTilesInDirection(Vector2 origin, Vector2 direction, int range)
         {
             List<Tile> tiles = new List<Tile>();
-            var currentTile = GetTile(origin, Vector2.right);
+            var currentTile = GetTile(origin, direction);
             int tileIndex = 1;
 
-            while (currentTile != null && tileIndex < range.x)
+            while (currentTile != null && tileIndex < range)
             {
                 tiles.Add(currentTile);
                 tileIndex++;
-                currentTile = GetTile(origin, new Vector2(tileIndex, 0));
+                currentTile = GetTile(origin, direction * tileIndex);
             }
             return tiles;
         }
 
-        public List<Tile> GetTargets(Tile origin, TargetOptions options)
+        public List<Tile> GetTileStraightRange(Vector2 origin, Vector2 range)
         {
-            return _targeters[options.TargetType](origin, options);
+            return GetTilesInDirection(origin, Vector2.right, (int)range.x);
         }
 
-        private List<Tile> GetSingle(Tile origin, TargetOptions options)
+        public void PlacePlayer(Player player, Vector2 newPosition)
         {
-            return new List<Tile>() { GetTile(origin.Location, new Vector2(options.Gap, 0)) };
-        }
-
-        private List<Tile> GetRandomOponent(Tile origin, TargetOptions options)
-        {
-            return new List<Tile>() { _opponentGrid.GetTile(new Vector2(UnityEngine.Random.Range(0, 3), UnityEngine.Random.Range(0, 3)), Vector2.zero) };
-        }
-
-        private List<Tile> GetForward(Tile origin, TargetOptions options)
-        {
-            var tiles = new List<Tile>();
-            var currentX = options.Gap;
-            for (int i = 0; i < options.Range; i++)
+            if (!player)
             {
-                var tile = GetTile(origin.Location, new Vector2(currentX, 0));
-                if (tile != null)
-                {
-                    tiles.Add(tile);
-                }
-                else break;
-                currentX++;
+                Debug.LogError("Attempted to place null player");
+                return;
             }
-            return tiles;
+            
+            if (!IsValidPosition(newPosition))
+            {
+                Debug.LogError($"Invalid position: {newPosition}");
+                return;
+            }
+            
+            var targetTile = _tilesTwoD[(int)newPosition.x, (int)newPosition.y];
+            if (targetTile.Player)
+            {
+                Debug.LogError($"Tile at {newPosition} is already occupied");
+                return;
+            }
+            
+            var oldPosition = player.CurrentTile.Location;
+            if (IsValidPosition(oldPosition))
+            {
+                _tilesTwoD[(int)oldPosition.x, (int)oldPosition.y].Player = null;
+            }
+
+            player.CurrentTile = targetTile;
+            targetTile.Player = player;
         }
     }
 }

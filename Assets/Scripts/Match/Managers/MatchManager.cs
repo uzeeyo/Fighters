@@ -1,27 +1,33 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fighters.Match
 {
     public enum Side
     {
-        PlayerA,
-        PlayerB
+        Self,
+        Opponent
     }
 
     public class MatchManager : MonoBehaviour
     {
         const float MATCH_DURATION = 180f;
 
-        private static bool _matchStarted;
         private static float _timeRemaining;
         private static bool _matchEnded;
+        
+        [FormerlySerializedAs("Grid")] [SerializeField] private TileGrid _grid;
 
         public static event Action<float> TimeRemainingChanged;
         public static event Action MatchEnded;
+        
 
-        public static bool MatchStarted { get => _matchStarted; }
+        public static bool MatchStarted { get; private set; }
+
+        public static TileGrid Grid { get; private set; }
+
         public static float TimeRemaining
         {
             get => _timeRemaining;
@@ -30,6 +36,11 @@ namespace Fighters.Match
                 _timeRemaining = value;
                 TimeRemainingChanged?.Invoke(_timeRemaining);
             }
+        }
+
+        private void Awake()
+        {
+            Grid = _grid;
         }
 
         private void Start()
@@ -51,7 +62,7 @@ namespace Fighters.Match
         {
             TimeRemaining = MATCH_DURATION;
             StartCoroutine(Countdown());
-            _matchStarted = true;
+            MatchStarted = true;
         }
 
         private static void EndMatch()
@@ -59,11 +70,6 @@ namespace Fighters.Match
             Debug.Log("Match Ended");
             _matchEnded = true;
             MatchEnded?.Invoke();
-        }
-
-        private void DetermineWinner()
-        {
-
         }
     }
 }

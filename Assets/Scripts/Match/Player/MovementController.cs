@@ -7,10 +7,10 @@ namespace Fighters.Match.Players
 {
     public class MovementController : MonoBehaviour
     {
-        private Animator _animator;
         private Vector2 _currentPosition;
         private Player _player;
         private bool _isMoving = false;
+
         private Dictionary<Vector2, string> _animationTriggers = new()
         {
             { Vector2.up, "MoveLeft" },
@@ -24,10 +24,9 @@ namespace Fighters.Match.Players
 
         void Awake()
         {
-            _currentPosition = new Vector2(1, 1);
             _player = GetComponent<Player>();
-            _player.CurrentTile = _player.Grid.GetTile(_currentPosition, Vector2.zero);
-            _animator = GetComponentInChildren<Animator>();
+            _currentPosition = _player.Side == Side.Self ? new Vector2(1, 1) : new Vector2(4, 1);
+            _player.CurrentTile = MatchManager.Grid.GetTile(_currentPosition, Vector2.zero);
         }
 
         private void OnMove(InputValue value)
@@ -44,15 +43,14 @@ namespace Fighters.Match.Players
                 return false;
             }
 
-            var targetTile = _player.Grid.GetTile(_currentPosition, direction);
+            var targetTile = MatchManager.Grid.GetTile(_currentPosition, direction);
 
-            if (targetTile == null) return false;
+            if (!targetTile) return false;
 
-            if (targetTile.State == Tile.TileState.None && targetTile.Grid.Owner == _player.Side)
+            //
+            if (targetTile.State != Tile.TileState.Blocked && targetTile.PlayerSide == _player.Side)
             {
                 _currentPosition = targetTile.Location;
-                _player.CurrentTile = targetTile;
-                //_animator.SetTrigger(_animationTriggers[direction]);
                 StartCoroutine(Move(targetTile.transform.position));
             }
             return true;
@@ -67,15 +65,22 @@ namespace Fighters.Match.Players
 
             Vector3 path = targetPosition - currentPosition;
 
+            var playerMoved = false;
             while (timeElapsed < duration)
             {
                 timeElapsed += Time.deltaTime;
                 transform.position = path * (timeElapsed / duration) + currentPosition;
+                if (timeElapsed / duration > 0.6f && !playerMoved)
+                {
+                    playerMoved = true;
+                    MatchManager.Grid.PlacePlayer(_player, _currentPosition);
+                }
+
                 yield return null;
             }
+
             transform.position = targetPosition;
             _isMoving = false;
         }
     }
 }
-

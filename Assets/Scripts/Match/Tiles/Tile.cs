@@ -1,3 +1,4 @@
+using Fighters.Match.Players;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -5,6 +6,8 @@ namespace Fighters.Match
 {
     public class Tile : MonoBehaviour
     {
+        private static readonly int EmissionColor = Shader.PropertyToID("_EmissiveColor");
+
         public enum TileState
         {
             None,
@@ -16,32 +19,39 @@ namespace Fighters.Match
             Frozen,
         }
 
-        private TileGrid _grid;
-        private Vector2 _location;
-        private VisualEffect _vfx;
+        private Color _originalGlowColor;
+        private Material _glowMaterial;
 
+        public TileState State { get; private set; }
+        public Vector2 Location { get; private set; }
 
-        public TileState State { get; set; }
-        public Vector2 Location => _location;
-        public bool HasPlayer => GetComponentInChildren<Players.Player>() != null;
+        public Player Player { get; set; }
         public GameObject TileObject { get; set; }
-        public TileGrid Grid => GetComponentInParent<TileGrid>();
-        public VisualEffect Vfx => _vfx;
+
+        [field: SerializeField] public Side PlayerSide { get; set; }
 
         private void Awake()
         {
             State = TileState.None;
-            _grid = GetComponentInParent<TileGrid>();
         }
 
         public void Init(Vector2 location)
         {
-            _location = location;
+            Location = location;
+            _glowMaterial = TileObject.GetComponent<MeshRenderer>().materials[1];
+            _originalGlowColor = _glowMaterial.GetColor(EmissionColor);
         }
 
         public void SetState(TileState state)
         {
             State = state;
+        }
+        
+        public async void HighLight()
+        {
+            _glowMaterial.SetColor(EmissionColor, Color.red * 2f);
+            await Awaitable.WaitForSecondsAsync(1f);
+            _glowMaterial.SetColor(EmissionColor, _originalGlowColor);
         }
     }
 }
