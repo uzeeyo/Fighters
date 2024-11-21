@@ -15,7 +15,7 @@ namespace Fighters.Match.Spells
             { TargetType.Self, TargetSelf },
             { TargetType.Single, TargetSingle },
             { TargetType.MoveForward, MoveForward },
-            
+            { TargetType.MultiForward, TargetMultiForward },
         };
 
         public static void Target(Player caster, Spell spell)
@@ -37,14 +37,20 @@ namespace Fighters.Match.Spells
 
         private static void TargetSingle(Player caster, Spell spell)
         {
-            var spacing = new Position(spell.Data.Range, 0);
-            var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Location, spacing);
+            var delta = new Position(spell.Data.Range, 0);
+            var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Location, delta);
             spell.transform.position = targetTile.transform.position;
-            targetTile.HighLight();
 
-            if (targetTile.Player)
+            ApplyEffect(spell, targetTile);
+        }
+
+        private static void TargetMultiForward(Player caster, Spell spell)
+        {
+            var targetTiles =
+                MatchManager.Grid.GetTilesInDirection(caster.CurrentTile.Location, Position.Right, spell.Data.Range);
+            foreach (var tile in targetTiles)
             {
-                spell.Effect.Apply(targetTile.Player.Stats);
+                ApplyEffect(spell, tile);
             }
         }
 
@@ -62,13 +68,23 @@ namespace Fighters.Match.Spells
             while (timeElapsed < duration)
             {
                 var horizontalPercentage = spell.Data.HorizontalCurve.Evaluate(timeElapsed / duration);
-                spell.transform.position = originalPosition + (targetPosition - originalPosition) * horizontalPercentage;
+                spell.transform.position =
+                    originalPosition + (targetPosition - originalPosition) * horizontalPercentage;
 
                 timeElapsed += Time.deltaTime;
                 await Awaitable.NextFrameAsync();
             }
 
             GameObject.Destroy(spell.gameObject);
+        }
+
+        private static async void ApplyEffect(Spell spell, Tile tile)
+        {
+            await Awaitable.WaitForSecondsAsync(spell.Data.CastTime);
+            if (tile.Player)
+            {
+                spell.Effect.Apply(tile.Player.Stats);
+            }
         }
     }
 }
