@@ -1,6 +1,7 @@
 using Fighters.Match.Players;
 using Fighters.Match.Spells;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,11 +15,24 @@ namespace Fighters.Match
         private Player _player;
         private Animator _animator;
 
+        private Dictionary<SpawnLocation, Transform> _spawnLocations;
+
+        [SerializeField] private Transform _rightHand;
+        [SerializeField] private Transform _leftHand;
+        [SerializeField] private Transform _weapon;
+
         private void Awake()
         {
             _spellBank = GetComponent<SpellBank>();
             _player = GetComponent<Player>();
             _animator = GetComponentInChildren<Animator>();
+            _spawnLocations = new()
+            {
+                { SpawnLocation.Default, transform },
+                { SpawnLocation.RightHand, _rightHand },
+                { SpawnLocation.LeftHand, _leftHand },
+                { SpawnLocation.Weapon, _weapon }
+            };
         }
 
         private void OnBasicCast()
@@ -26,15 +40,7 @@ namespace Fighters.Match
             if (_onCooldown || !_player.CanInteract) return;
 
             var spellData = _spellBank.GetBasic();
-            if (!VerifyCanActivate(spellData)) return;
-
-            var spell = SpellFactory.Instance.Get(spellData);
-            spell.transform.rotation = _player.transform.rotation;
-
-            StartCoroutine(spell.Cast(_player.CurrentTile));
-            StartCoroutine(DisableInteractionsWhileCasting(spell.CastTime));
-            _spellBank.StartSpellCooldown(spellData);
-            _animator.SetTrigger(spellData.AnimationTriggerName);
+            Cast(spellData);
         }
 
         private void OnCast(InputValue value)
@@ -45,14 +51,21 @@ namespace Fighters.Match
             if (direction == Vector2.zero) return;
 
             var spellData = _spellBank.GetSpellInRotation(direction);
+            Cast(spellData);
+        }
+
+        public async void Cast(SpellData spellData)
+        {
             if (!VerifyCanActivate(spellData)) return;
 
-            var spell = SpellFactory.Instance.Get(spellData);
+            var spell = SpellFactory.Get(spellData);
+            spell.transform.SetParent(_spawnLocations[spell.Data.SpawnLocation]);
             spell.transform.rotation = _player.transform.rotation;
-            StartCoroutine(spell.Cast(_player.CurrentTile));
-            StartCoroutine(DisableInteractionsWhileCasting(spell.CastTime));
+            //if player takes damage here, cancel the spell
+            
+            spell.Cast(_player);
+            StartCoroutine(DisableInteractionsWhileCasting(spell.Data.CastTime));
             _spellBank.StartSpellCooldown(spellData);
-            _animator.SetTrigger(spellData.AnimationTriggerName);
         }
 
         private IEnumerator DisableInteractionsWhileCasting(float seconds)

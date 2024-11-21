@@ -1,43 +1,64 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Fighters.Match.Spells
 {
-    public class SpellFactory : MonoBehaviour
+    public static class SpellFactory
     {
-        private Dictionary<SpellType, Type> _spellTypes;
-
-        private static SpellFactory _instance;
-
-        public static SpellFactory Instance => _instance;
-
-        private void Awake()
+        private static readonly Dictionary<SpellType, ISpellEffectFactory> _spellFactories = new()
         {
-            if (_instance == null)
-            {
-                _instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            { SpellType.Damage, new DamageEffectFactory() },
+            { SpellType.Heal, new HealEffectFactory() },
+            //{ SpellType.Buff, new BuffEffectFactory() }
+        };
 
-            _spellTypes = new()
-            {
-                { SpellType.Damage, typeof(DamageEffect) },
-                { SpellType.Heal, typeof(HealEffect) },
-            };
-        }
-
-        public Spell Get(SpellData data)
+        public static Spell Get(SpellData data)
         {
-            var spell = Instantiate(data.Prefab);
-            spell.Init(data);
-            spell.gameObject.AddComponent(_spellTypes[data.SpellType]);
-            spell.GetComponent<SpellEffect>().Init(data);
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            if (data.Prefab == null)
+                throw new ArgumentException("Spell prefab is null", nameof(data));
+
+            if (!_spellFactories.TryGetValue(data.SpellType, out var factory))
+                throw new ArgumentException($"No factory found for spell type: {data.SpellType}", nameof(data));
+
+            var spell = Object.Instantiate(data.Prefab);
+            var effect = factory.Get(data);  // Remove the asterisk
+            spell.Init(data, effect);
 
             return spell;
         }
     }
+
+    public interface ISpellEffectFactory
+    {
+        ISpellEffect Get(SpellData data);
+    }
+
+    public class DamageEffectFactory : ISpellEffectFactory
+    {
+        public ISpellEffect Get(SpellData data)
+        {
+            return new DamageEffect(data);
+        }
+    }
+
+    public class HealEffectFactory : ISpellEffectFactory
+    {
+        public ISpellEffect Get(SpellData data)
+        {
+            return new HealEffect(data);
+        }
+    }
+
+    // public class BuffEffectFactory : ISpellEffectFactory
+    // {
+    //     public SpellEffect Get(SpellData data)
+    //     {
+    //         return new BuffEffect();
+    //     }
+    // }
 }

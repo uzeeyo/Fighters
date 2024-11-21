@@ -9,31 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029404d37fe0a9144bc34bd0eacfdc45, type: 3}
+  m_Script: {fileID: 11500000, guid: 3238ae1ae2584436adc58b024ce5d1ff, type: 3}
   m_Name: SolarLaser
   m_EditorClassIdentifier: 
-  _name: Solar Laser
-  _description: Fire a laser forward.
-  _animationTriggerName: Attack2
-  _manaCost: 20
-  _icon: {fileID: 21300000, guid: bce9db55f5e093f468bc7ec0e39f6394, type: 3}
-  _spellType: 0
-  _cooldown: 15
-  _castTime: 1.7
-  _targetType: 0
-  _prefab: {fileID: 4991315695589501692, guid: 9d5ab31b21d4b0c4c885c15b480233e2, type: 3}
-  _modifierAmount: 0
-  _travelTime: 0
-  _range: 0
-  _horizantalCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _verticalCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  <Name>k__BackingField: Solar Laser
+  <Description>k__BackingField: 
+  <AnimationName>k__BackingField: 
+  <ManaCost>k__BackingField: 10
+  <Icon>k__BackingField: {fileID: 21300000, guid: bce9db55f5e093f468bc7ec0e39f6394,
+    type: 3}
+  <Cooldown>k__BackingField: 5
+  <CastTime>k__BackingField: 0.8
+  <Prefab>k__BackingField: {fileID: 8884725205683912378, guid: 9d5ab31b21d4b0c4c885c15b480233e2,
+    type: 3}
+  <TravelTime>k__BackingField: 0
+  <SpawnLocation>k__BackingField: 0
+  <DamageAmount>k__BackingField: 20

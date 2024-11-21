@@ -6,7 +6,7 @@ namespace Fighters.Match.Spells
 {
     public class SpellIcon : MonoBehaviour
     {
-        private const float ANIMATION_DURATION = 0.3f;
+        private const float ANIMATION_DURATION = 0.2f;
 
         [SerializeField] private Image _spellIcon;
         [SerializeField] private Image _cooldownOverlay;

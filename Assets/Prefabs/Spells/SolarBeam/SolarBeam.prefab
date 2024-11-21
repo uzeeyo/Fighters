@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5557932819427661489}
   - component: {fileID: 5936105985050344091}
   - component: {fileID: 7419948559211713701}
-  - component: {fileID: 8093253902310238620}
+  - component: {fileID: 2779366505651867790}
   m_Layer: 0
   m_Name: SolarBeam
   m_TagString: Untagged
@@ -123,7 +123,7 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8093253902310238620
+--- !u!114 &2779366505651867790
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,6 +132,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2600435905532073123}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60757223727fbfb44955c56e3bcf9b56, type: 3}
+  m_Script: {fileID: 11500000, guid: 783f72962e39bff40abe045ad83cbad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

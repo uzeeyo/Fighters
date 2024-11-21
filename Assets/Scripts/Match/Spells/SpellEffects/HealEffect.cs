@@ -2,18 +2,16 @@ using Fighters.Match.Players;
 
 namespace Fighters.Match.Spells
 {
-    public class HealEffect : SpellEffect
+    public class HealEffect : ISpellEffect
     {
-        private float _healAmount;
-
-        public float HealAmount => _healAmount;
-
-        public override void Init(SpellData data)
+        public HealEffect(SpellData data)
         {
-            _healAmount = data.ModifierAmount;
+            _healAmount = ((HealData)data).HealAmount;
         }
+        
+        private readonly float _healAmount;
 
-        public override void Apply(PlayerStats stats)
+        public void Apply(PlayerStats stats)
         {
             stats.Heal(_healAmount);
         }

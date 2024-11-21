@@ -2,18 +2,16 @@ using Fighters.Match.Players;
 
 namespace Fighters.Match.Spells
 {
-    public class DamageEffect : SpellEffect
+    public class DamageEffect : ISpellEffect
     {
-        private float _damage;
-
-        public float Damage => _damage;
-
-        public override void Init(SpellData data)
+        public DamageEffect(SpellData data)
         {
-            _damage = data.ModifierAmount;
+            _damage = ((DamageData)data).DamageAmount;
         }
+        
+        private readonly float _damage;
 
-        public override void Apply(PlayerStats stats)
+        public void Apply(PlayerStats stats)
         {
             stats.TakeDamage(_damage);
         }

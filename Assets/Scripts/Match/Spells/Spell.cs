@@ -1,43 +1,39 @@
+using System;
 using Fighters.Match.Spells;
-using System.Collections;
+using Fighters.Match.Players;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Fighters.Match
 {
-    public abstract class Spell : MonoBehaviour
+    public class Spell : MonoBehaviour
     {
-        protected const float MAX_TRAVEL_DISTANCE = 15f;
+        private Player _caster;
+        public SpellData Data { get; private set; }
+        public ISpellEffect Effect { get; private set; }
 
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public float ManaCost { get; private set; }
-        public Sprite Icon { get; private set; }
-        public float Cooldown { get; private set; }
-        public float CastTime { get; private set; }
-        public VisualEffect Vfx { get; protected set; }
+        protected virtual void Awake() => Destroy(gameObject, 3f);
 
-        protected virtual void Awake()
+        public void Init(SpellData data, ISpellEffect effect)
         {
-            StartCoroutine(DelayDestroy());
+            Data = data;
+            Effect = effect;
         }
 
-        public virtual void Init(SpellData data)
+        public async void Cast(Player caster)
         {
-            Name = data.Name;
-            Description = data.Description;
-            ManaCost = data.ManaCost;
-            Icon = data.Icon;
-            Cooldown = data.Cooldown;
-            CastTime = data.CastTime;
-            Vfx = GetComponent<VisualEffect>();
+            _caster = caster;
+            Targeter.Target(caster, this);
+            caster.PlayAnimation(Data.AnimationName);
+            await Awaitable.WaitForSecondsAsync(Data.CastTime);
+            transform.SetParent(null);
         }
 
-        public abstract IEnumerator Cast(Tile origin);
-
-        private IEnumerator DelayDestroy()
+        private void OnTriggerEnter(Collider other)
         {
-            yield return new WaitForSeconds(2.5f);
+            if (other.TryGetComponent(out Player player) && player != _caster)
+            {
+                Effect.Apply(player.Stats);
+            }
             Destroy(gameObject);
         }
     }
