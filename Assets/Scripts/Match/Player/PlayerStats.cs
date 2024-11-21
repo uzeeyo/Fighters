@@ -2,6 +2,8 @@ using Fighters.Contestants;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Fighters.Buffs;
+using Match.Player;
 using UnityEngine;
 
 namespace Fighters.Match.Players
@@ -19,7 +21,7 @@ namespace Fighters.Match.Players
         private float _maxMana = 50;
         private float _manaRegenRate;
         private Coroutine _manaRegenCoroutine;
-        private List<Buff> _buffs = new();
+        private BuffHandler _buffs;
 
         public float CurrentHealth
         {
@@ -59,7 +61,6 @@ namespace Fighters.Match.Players
         public event Action<float> ManaPercentChanged;
         public event Action<float> HealthPercentChanged;
 
-        public List<Buff> Buffs => _buffs;
 
         private void Awake()
         {
@@ -84,14 +85,9 @@ namespace Fighters.Match.Players
 
         public void TakeDamage(float damage)
         {
-            for (int i = 0; i < _buffs.Count; i++)
+            if (_buffs.TryGetBuff(BuffType.Shielded, out _))
             {
-                if (_buffs[i].Type == Buff.BuffType.Shielded)
-                {
-                    _buffs[i].Delete();
-                    _buffs.RemoveAt(i);
-                    return;
-                }
+                _buffs.Remove(BuffType.Shielded);
             }
 
             CurrentHealth -= damage;
@@ -142,17 +138,5 @@ namespace Fighters.Match.Players
             CurrentMana = _maxMana;
         }
 
-        public void AddBuff(Buff newBuff)
-        {
-            for (int i = 0; i < _buffs.Count; i++)
-            {
-                if (_buffs[i].Type == newBuff.Type)
-                {
-                    _buffs.RemoveAt(i);
-                    break;
-                }
-            }
-            _buffs.Add(newBuff);
-        }
     }
 }
