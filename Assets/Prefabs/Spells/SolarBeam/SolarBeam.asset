@@ -12,16 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3238ae1ae2584436adc58b024ce5d1ff, type: 3}
   m_Name: SolarBeam
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Solar Beam
-  <Description>k__BackingField: 
-  <AnimationName>k__BackingField: 
-  <ManaCost>k__BackingField: 10
-  <Icon>k__BackingField: {fileID: 21300000, guid: 41fb2f0ad8e2bb34cba939b65a56d371,
-    type: 3}
-  <Cooldown>k__BackingField: 5
-  <CastTime>k__BackingField: 1
-  <Prefab>k__BackingField: {fileID: 2779366505651867790, guid: 57dc8d3cadf938b4a99c27f4e5ff175f,
-    type: 3}
-  <TravelTime>k__BackingField: 0
-  <SpawnLocation>k__BackingField: 0
-  <DamageAmount>k__BackingField: 10
+  _name: Solar Beam
+  _description: 
+  _animationName: BAKED_Attack1
+  _manaCost: 5
+  _icon: {fileID: 21300000, guid: 2427dda5a321b684582355c83649458b, type: 3}
+  _cooldown: 2
+  _castTime: 0.6
+  _prefab: {fileID: 2779366505651867790, guid: 57dc8d3cadf938b4a99c27f4e5ff175f, type: 3}
+  _travelTime: 0
+  _spawnLocation: 0
+  _targetType: 1
+  _range: 3
+  _randomTimeInterval: 0
+  _instantDelay: 0
+  _horizontalCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _verticalCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _damageAmount: 0

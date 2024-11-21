@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fighters.Match.Spells
 {
@@ -9,8 +10,9 @@ namespace Fighters.Match.Spells
         SingleRandom,
         MultiRandom,
         MoveForward,
+        MultiForward,
     }
-    
+
     public enum SpellType
     {
         Damage,
@@ -25,29 +27,47 @@ namespace Fighters.Match.Spells
         RightHand,
         Weapon,
     }
-    
+
     public abstract class SpellData : ScriptableObject
     {
-        [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public string Description { get; private set; }
-        [field: SerializeField] public string AnimationName { get; private set; }
-        [field: SerializeField] public float ManaCost { get; private set; }
-        [field: SerializeField] public Sprite Icon { get; private set; }
-        [field: SerializeField] public float Cooldown { get; private set; }
-        [field: SerializeField] public float CastTime { get; private set; }
-        [field: SerializeField] public Spell Prefab { get; private set; }
-        [field: SerializeField] public float TravelTime { get; private set; }
-        [field: SerializeField] public SpawnLocation SpawnLocation { get; private set; }
+        [SerializeField] private string _name;
+        [SerializeField] private string _description;
+        [SerializeField] private string _animationName;
+        [SerializeField] private float _manaCost;
+        [SerializeField] private Sprite _icon;
+        [SerializeField] private float _cooldown;
+        [SerializeField] private float _castTime;
+        [SerializeField] private Spell _prefab;
+        [SerializeField] private float _travelTime;
+        [SerializeField] private SpawnLocation _spawnLocation;
 
-        public abstract SpellType SpellType { get; }
+        public string Name => _name;
+        public string Description => _description;
+        public string AnimationName => _animationName;
+        public float ManaCost => _manaCost;
+        public Sprite Icon => _icon;
+        public float Cooldown => _cooldown;
+        public float CastTime => _castTime;
+        public Spell Prefab => _prefab;
+        public float TravelTime => _travelTime;
+        public SpawnLocation SpawnLocation => _spawnLocation;
+
+
 
         //Targeting
-        public TargetType TargetType { get; set; }
-        public int Range { get; set; }
-        public float RandomTimeInterval { get; set; }
-        public float InstantDelay { get; set; }
-        public AnimationCurve HorizontalCurve { get; private set; }
-        public AnimationCurve VerticalCurve { get; private set; }
+        [SerializeField] private TargetType _targetType;
+        [SerializeField] private int _range;
+        [SerializeField] private int _randomTimeInterval;
+        [SerializeField] private float _instantDelay;
+        [SerializeField] private AnimationCurve _horizontalCurve;
+        [SerializeField] private AnimationCurve _verticalCurve;
 
+        public TargetType TargetType => _targetType;
+        public int Range => _range;
+        public float RandomTimeInterval => _randomTimeInterval;
+        public float InstantDelay => _instantDelay;
+        public AnimationCurve HorizontalCurve => _horizontalCurve;
+        public AnimationCurve VerticalCurve => _verticalCurve;
+        public abstract SpellType SpellType { get; }
     }
 }
