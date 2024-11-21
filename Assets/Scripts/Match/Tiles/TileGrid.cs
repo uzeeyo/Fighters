@@ -31,7 +31,7 @@ namespace Fighters.Match
                     var tile = tileObj.GetComponent<Tile>();
                     tile.transform.position = tileObjects[index].transform.position;
                     tile.TileObject = tileObjects[index];
-                    tile.Init(new Vector2(x, y));
+                    tile.Init(new Position(x, y));
                     tile.PlayerSide = x > 2 ? Side.Opponent : Side.Self;
                     _tilesTwoD[x, y] = tile;
                     index++;
@@ -39,24 +39,24 @@ namespace Fighters.Match
             }
         }
 
-        public bool IsValidPosition(Vector2 position)
+        public bool IsValidPosition(Position position)
         {
-            int x = (int)position.x;
-            int y = (int)position.y;
+            int x = position.X;
+            int y = position.Y;
             return x >= 0 && x < GRID_X_SIZE && y >= 0 && y < GRID_Y_SIZE;
         }
 
-        public Tile GetTile(Vector2 start, Vector2 delta)
+        public Tile GetTile(Position start, Position delta)
         {
-            int x = (int)start.x + (int)delta.x;
-            int y = (int)start.y + (int)delta.y;
+            int x = start.X + delta.X;
+            int y = start.Y + delta.Y;
 
-            if (!IsValidPosition(new Vector2(x, y))) return null;
+            if (!IsValidPosition(new Position(x, y))) return null;
 
             return _tilesTwoD[x, y];
         }
 
-        public List<Tile> GetTilesInDirection(Vector2 origin, Vector2 direction, int range)
+        public List<Tile> GetTilesInDirection(Position origin, Position direction, int range)
         {
             List<Tile> tiles = new List<Tile>();
             var currentTile = GetTile(origin, direction);
@@ -71,12 +71,7 @@ namespace Fighters.Match
             return tiles;
         }
 
-        public List<Tile> GetTileStraightRange(Vector2 origin, Vector2 range)
-        {
-            return GetTilesInDirection(origin, Vector2.right, (int)range.x);
-        }
-
-        public void PlacePlayer(Player player, Vector2 newPosition)
+        public void PlacePlayer(Player player, Position newPosition)
         {
             if (!player)
             {
@@ -90,7 +85,7 @@ namespace Fighters.Match
                 return;
             }
             
-            var targetTile = _tilesTwoD[(int)newPosition.x, (int)newPosition.y];
+            var targetTile = _tilesTwoD[newPosition.X, newPosition.Y];
             if (targetTile.Player)
             {
                 Debug.LogError($"Tile at {newPosition} is already occupied");
@@ -100,7 +95,7 @@ namespace Fighters.Match
             var oldPosition = player.CurrentTile.Location;
             if (IsValidPosition(oldPosition))
             {
-                _tilesTwoD[(int)oldPosition.x, (int)oldPosition.y].Player = null;
+                _tilesTwoD[oldPosition.X, oldPosition.Y].Player = null;
             }
 
             player.CurrentTile = targetTile;

@@ -14,7 +14,8 @@ namespace Fighters.Match.Spells
         {
             { TargetType.Self, TargetSelf },
             { TargetType.Single, TargetSingle },
-            { TargetType.MoveForward, MoveForward }
+            { TargetType.MoveForward, MoveForward },
+            
         };
 
         public static void Target(Player caster, Spell spell)
@@ -36,7 +37,7 @@ namespace Fighters.Match.Spells
 
         private static void TargetSingle(Player caster, Spell spell)
         {
-            var spacing = new Vector2((float)spell.Data.Range, 0);
+            var spacing = new Position(spell.Data.Range, 0);
             var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Location, spacing);
             spell.transform.position = targetTile.transform.position;
             targetTile.HighLight();

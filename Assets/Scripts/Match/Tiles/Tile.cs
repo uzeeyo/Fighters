@@ -23,7 +23,7 @@ namespace Fighters.Match
         private Material _glowMaterial;
 
         public TileState State { get; private set; }
-        public Vector2 Location { get; private set; }
+        public Position Location { get; private set; }
 
         public Player Player { get; set; }
         public GameObject TileObject { get; set; }
@@ -35,9 +35,9 @@ namespace Fighters.Match
             State = TileState.None;
         }
 
-        public void Init(Vector2 location)
+        public void Init(Position position)
         {
-            Location = location;
+            Location = position;
             _glowMaterial = TileObject.GetComponent<MeshRenderer>().materials[1];
             _originalGlowColor = _glowMaterial.GetColor(EmissionColor);
         }

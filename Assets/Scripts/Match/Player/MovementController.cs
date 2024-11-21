@@ -7,7 +7,7 @@ namespace Fighters.Match.Players
 {
     public class MovementController : MonoBehaviour
     {
-        private Vector2 _currentPosition;
+        private Position _currentPosition;
         private Player _player;
         private bool _isMoving = false;
 
@@ -25,8 +25,8 @@ namespace Fighters.Match.Players
         void Awake()
         {
             _player = GetComponent<Player>();
-            _currentPosition = _player.Side == Side.Self ? new Vector2(1, 1) : new Vector2(4, 1);
-            _player.CurrentTile = MatchManager.Grid.GetTile(_currentPosition, Vector2.zero);
+            _currentPosition = _player.Side == Side.Self ? new Position(1, 1) : new Position(4, 1);
+            _player.CurrentTile = MatchManager.Grid.GetTile(_currentPosition, Position.Zero);
         }
 
         private void OnMove(InputValue value)
@@ -43,7 +43,8 @@ namespace Fighters.Match.Players
                 return false;
             }
 
-            var targetTile = MatchManager.Grid.GetTile(_currentPosition, direction);
+            var delta = new Position(direction);
+            var targetTile = MatchManager.Grid.GetTile(_currentPosition, delta);
 
             if (!targetTile) return false;
 
