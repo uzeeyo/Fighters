@@ -1,8 +1,9 @@
 using System.Collections;
+using Fighters.Match.Spells;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fighters.Match.Spells
+namespace Fighters.UI
 {
     public class SpellIcon : MonoBehaviour
     {

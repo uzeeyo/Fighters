@@ -206,8 +206,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: -3631
     y: -2909
-    width: 6320
-    height: 5752
+    width: 6322
+    height: 5761
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9374,7 +9374,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616655}
   m_ExposedName: CastTime
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 3
   m_Category: 
   m_Min:
     m_Type:
@@ -9526,7 +9526,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616662}
   m_ExposedName: StartHeight
   m_Exposed: 0
-  m_Order: 5
+  m_Order: 4
   m_Category: 
   m_Min:
     m_Type:
@@ -9779,7 +9779,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616696}
   m_ExposedName: BeamTravelCurve
   m_Exposed: 1
-  m_Order: 6
+  m_Order: 5
   m_Category: 
   m_Min:
     m_Type:
@@ -11914,7 +11914,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616872}
   m_ExposedName: BeamScale
   m_Exposed: 0
-  m_Order: 7
+  m_Order: 6
   m_Category: 
   m_Min:
     m_Type:

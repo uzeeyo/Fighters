@@ -14,7 +14,7 @@ namespace Fighters.Match
             s_Transform = transform;
         }
 
-        public static IEnumerator ShakeForSeconds(float strength, float duration)
+        public static async void ShakeForSeconds(float strength, float duration)
         {
             float timeElapsed = 0;
             while (timeElapsed < duration)
@@ -22,7 +22,7 @@ namespace Fighters.Match
                 var posInSphere = Random.insideUnitSphere * strength;
                 s_Transform.localPosition = s_originalPosition + posInSphere;
                 timeElapsed += Time.deltaTime;
-                yield return null;
+                await Awaitable.NextFrameAsync();
             }
 
             s_Transform.localPosition = s_originalPosition;

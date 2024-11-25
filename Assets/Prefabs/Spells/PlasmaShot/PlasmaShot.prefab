@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: -2148438481980614352}
   - component: {fileID: -2779216101125153661}
   - component: {fileID: 5081223957769635697}
-  - component: {fileID: -4951961062760989420}
   - component: {fileID: 3441745030791044498}
+  - component: {fileID: 176096904389592508}
   m_Layer: 0
   m_Name: PlasmaShot
   m_TagString: Untagged
@@ -53,7 +53,10 @@ VisualEffect:
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
-      m_Array: []
+      m_Array:
+      - m_Value: 0.2
+        m_Name: CastTime
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
@@ -94,6 +97,7 @@ VFXRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_StaticBatchInfo:
@@ -143,18 +147,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-4951961062760989420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5879651994530665319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28362c0a69d18c54abdd8d141163cd23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &3441745030791044498
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -176,3 +168,15 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.29
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &176096904389592508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5879651994530665319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 783f72962e39bff40abe045ad83cbad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
