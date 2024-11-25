@@ -8,7 +8,8 @@ namespace Fighters.Match
     public enum Side
     {
         Self,
-        Opponent
+        Opponent,
+        Both
     }
 
     public class MatchManager : MonoBehaviour
@@ -40,12 +41,8 @@ namespace Fighters.Match
 
         private void Awake()
         {
+            MatchStarted = false;
             Grid = _grid;
-        }
-
-        private void Start()
-        {
-            StartMatch();
         }
 
         private IEnumerator Countdown()
@@ -58,7 +55,7 @@ namespace Fighters.Match
             EndMatch();
         }
 
-        private void StartMatch()
+        public void StartMatch()
         {
             TimeRemaining = MATCH_DURATION;
             StartCoroutine(Countdown());

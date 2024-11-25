@@ -2,58 +2,90 @@ using Fighters.Contestants;
 using Fighters.Match.Spells;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Fighters.Match.UI;
+using Fighters.UI;
 using Match.Player;
+using Match.UI;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Fighters.Match.Players
 {
     [RequireComponent(typeof(PlayerStats), typeof(SpellBank))]
     public class Player : MonoBehaviour
     {
-        private Animator _animator;
-
-
-        public bool CanInteract { get; set; } = true;
+        private SpellBank _spellBank;
+        
+        public bool CanInteract { get; private set; } = true;
         public PlayerStats Stats { get; private set; }
-        public SpellBank SpellBank { get; private set; }
         public MovementController MovementController { get; private set; }
         public Tile CurrentTile { get; set; }
-        //TODO: Auto assign 
+
+        public AnimationHandler AnimationHandler { get; private set; }
+        
+        //TODO: Auto assign
         [field: SerializeField] public Side Side { get; private set; }
-        public BuffHandler BuffHandler { get; private set; } = new BuffHandler();
-
-
+        
         private void Awake()
         {
             Stats = GetComponent<PlayerStats>();
-            SpellBank = GetComponent<SpellBank>();
             MovementController = GetComponent<MovementController>();
-            _animator = GetComponentInChildren<Animator>();
+            _spellBank = GetComponent<SpellBank>();
         }
 
-        public void Init(StatData statData, List<SpellData> spells)
+        public async void DisableInteractions(float seconds)
         {
-            Stats.Init(statData);
-            SpellBank?.LoadSpells(spells);
+            CanInteract = false;
+            await Awaitable.WaitForSecondsAsync(seconds);
+            CanInteract = true;
         }
 
-        public async void PlayAnimation(string animationName)
+        #region Initialization
+        public Player WithStats(StatData statData)
         {
-            var hash = Animator.StringToHash(animationName);
-            var clip = _animator.runtimeAnimatorController.animationClips
-                .FirstOrDefault(x => x.name == animationName);
-        
-            if (!clip)
-            {
-                Debug.LogError($"Animation clip {animationName} not found, skipping!");
-                return;
-            }
+            Stats.SetStats(statData);
+            return this;
+        }
 
-            float crossfadeDuration = 0.1f;
-            _animator.CrossFadeInFixedTime(hash, crossfadeDuration);
-            await Awaitable.WaitForSecondsAsync(clip.length + crossfadeDuration);
+        public Player WithStatusBars(StatusBar healthBar, StatusBar manaBar)
+        {
+            Stats.SetStatBars(healthBar, manaBar);
+            return this;
+        }
+
+        public Player WithBuffDisplay(BuffDisplay buffDisplay)
+        {
+            Stats.SetBuffDisplay(buffDisplay);
+            return this;
+        }
+
+        public Player WithSpellDisplay(ActiveSpellDisplay spellDisplay)
+        {
+            var spellCaster = GetComponent<SpellCaster>();
+            spellDisplay.Init(_spellBank, spellCaster.CooldownHandler);
+            return this;
+        }
+
+        public Player WithReloadTimer(ReloadTimer reloadTimer)
+        {
+            reloadTimer.Init(_spellBank);
+            return this;
+        }
+
+        public Player WithSpells(List<SpellData> spells)
+        {
+            _spellBank?.LoadSpells(spells);
+            return this;
+        }
+
+        public async Task SpawnPlayer()
+        {
+            //spawn player here
             
-            _animator.Play("Idle");
+            //
+            AnimationHandler = new(GetComponentInChildren<Animator>());
         }
+#endregion
     }
 }
