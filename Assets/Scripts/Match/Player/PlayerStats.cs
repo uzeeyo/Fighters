@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Fighters.Buffs;
 using Match.Player;
+using Match.UI;
 using UnityEngine;
 
 namespace Fighters.Match.Players
@@ -12,16 +13,15 @@ namespace Fighters.Match.Players
     {
         const float TIME_BEFORE_MANA_REGEN = 3.5f;
 
-        [SerializeField] private StatusBar _healthBar;
-        [SerializeField] private StatusBar _manaBar;
-
+        private StatusBar _healthBar;
+        private StatusBar _manaBar;
         private float _currentHealth;
         private float _maxHealth = 100;
         private float _currentMana;
         private float _maxMana = 50;
         private float _manaRegenRate;
         private Coroutine _manaRegenCoroutine;
-        private BuffHandler _buffs;
+        private readonly BuffHandler _buffs = new();
 
         public float CurrentHealth
         {
@@ -46,14 +46,7 @@ namespace Fighters.Match.Players
             get => _currentMana;
             set
             {
-                if (value > _maxMana)
-                {
-                    _currentMana = _maxMana;
-                }
-                else
-                {
-                    _currentMana = value;
-                }
+                _currentMana = value > _maxMana ? _maxMana : value;
                 ManaPercentChanged?.Invoke(_currentMana / _maxMana);
             }
         }
@@ -61,20 +54,13 @@ namespace Fighters.Match.Players
         public event Action<float> ManaPercentChanged;
         public event Action<float> HealthPercentChanged;
 
-
-        private void Awake()
-        {
-            HealthPercentChanged += _healthBar.OnValueChanged;
-            ManaPercentChanged += _manaBar.OnValueChanged;
-        }
-
         private void OnDisable()
         {
             HealthPercentChanged -= _healthBar.OnValueChanged;
             ManaPercentChanged -= _manaBar.OnValueChanged;
         }
 
-        public void Init(StatData statData)
+        public void SetStats(StatData statData)
         {
             _maxHealth = statData.Health;
             _currentHealth = statData.Health;
@@ -83,13 +69,27 @@ namespace Fighters.Match.Players
             _manaRegenRate = statData.ManaRegenRate;
         }
 
+        public void SetStatBars(StatusBar healthBar, StatusBar manaBar)
+        {
+            _healthBar = healthBar;
+            _manaBar = manaBar;
+            
+            HealthPercentChanged += _healthBar.OnValueChanged;
+            ManaPercentChanged += _manaBar.OnValueChanged;
+        }
+
+        public void SetBuffDisplay(BuffDisplay buffDisplay)
+        {
+            buffDisplay.Init(_buffs);
+        }
+
         public void TakeDamage(float damage)
         {
-            if (_buffs.TryGetBuff(BuffType.Shielded, out _))
+            if (_buffs.TryGetBuff(BuffType.Shield, out _))
             {
-                _buffs.Remove(BuffType.Shielded);
+                _buffs.Remove(BuffType.Shield);
             }
-
+            
             CurrentHealth -= damage;
         }
 

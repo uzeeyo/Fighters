@@ -6,7 +6,7 @@ namespace Fighters.Buffs
     {
         private static Dictionary<BuffType, IBuffFactory> _buffFactories = new()
         {
-            { BuffType.Rooted, new RootBuffFactory() }
+            { BuffType.Root, new RootBuffFactory() }
         };
         
         public static Buff Get(BuffData buffData)

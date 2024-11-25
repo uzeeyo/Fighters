@@ -15,7 +15,7 @@ namespace Match.Player
 
         private List<BuffType> _uniqueBuffs = new()
         {
-            BuffType.Shielded,
+            BuffType.Shield,
         };
 
         public event Action<Buff> BuffAdded;

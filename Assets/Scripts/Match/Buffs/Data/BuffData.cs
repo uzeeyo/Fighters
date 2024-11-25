@@ -4,20 +4,21 @@ namespace Fighters.Buffs
 {
     public enum BuffType
     {
-        Poisoned,
-        Stunned,
-        Silenced,
-        Rooted,
-        Slowed,
-        Confused,
-        Blinded,
-        Shielded,
+        Poison,
+        Stun,
+        Silence,
+        Root,
+        Slow,
+        Confuse,
+        Blind,
+        Shield,
     }
     
-    [CreateAssetMenu(fileName = "NewBuffData", menuName = "ScriptableObjects/SpellData/BuffData")]
+    [CreateAssetMenu(fileName = "NewBuffData", menuName = "ScriptableObjects/BuffData")]
     public class BuffData : ScriptableObject
     {
         [field: SerializeField] public float Duration;
         [field: SerializeField] public BuffType BuffType;
+        [field: SerializeField] public Sprite Icon;
     }
 }

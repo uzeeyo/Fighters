@@ -7,16 +7,19 @@ namespace Fighters.Buffs
     {
         public Buff(BuffData buffData)
         {
-            _duration = buffData.Duration;
+            Duration = buffData.Duration;
             BuffType = buffData.BuffType;
             _timeStarted = Time.time;
+            Icon = buffData.Icon;
         }
         
         private float _timeStarted;
-        private float _duration;
-        
+
         public BuffType BuffType { get; protected set; }
-        public float TimeRemaining => _duration - (Time.time - _timeStarted);
+        public float Duration { get; }
+        public Sprite Icon { get; private set; }
+
+        public float TimeRemaining => Duration - (Time.time - _timeStarted);
 
 
         public abstract void Activate();
