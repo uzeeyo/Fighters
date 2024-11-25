@@ -11,12 +11,12 @@ namespace Fighters.Match.Players
         private Player _player;
         private bool _isMoving = false;
 
-        private Dictionary<Vector2, string> _animationTriggers = new()
+        private Dictionary<Position, string> _animationTriggers = new()
         {
-            { Vector2.up, "MoveLeft" },
-            { Vector2.down, "MoveRight" },
-            { Vector2.left, "MoveBack" },
-            { Vector2.right, "MoveForward" }
+            { Position.Up, "GMoveLeft" },
+            { Position.Down, "GMoveRight" },
+            { Position.Left, "GMoveBack" },
+            { Position.Right, "GMoveForward" }
         };
 
         [SerializeField] private float _moveTime = 0.3f;
@@ -31,7 +31,7 @@ namespace Fighters.Match.Players
 
         private void OnMove(InputValue value)
         {
-            //if (!MatchManager.MatchStarted) return;
+            if (!MatchManager.MatchStarted) return;
             var direction = value.Get<Vector2>();
             TryMove(direction);
         }
@@ -47,11 +47,11 @@ namespace Fighters.Match.Players
             var targetTile = MatchManager.Grid.GetTile(_currentPosition, delta);
 
             if (!targetTile) return false;
-
-            //
+            
             if (targetTile.State != Tile.TileState.Blocked && targetTile.PlayerSide == _player.Side)
             {
                 _currentPosition = targetTile.Location;
+                _player.AnimationHandler.Play(_animationTriggers[delta]);
                 StartCoroutine(Move(targetTile.transform.position));
             }
             return true;

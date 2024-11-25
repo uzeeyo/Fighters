@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Fighters.Match.Players;
 using UnityEngine;
 
@@ -54,6 +55,14 @@ namespace Fighters.Match
             if (!IsValidPosition(new Position(x, y))) return null;
 
             return _tilesTwoD[x, y];
+        }
+
+        public Tile GetRandomTile(Side side)
+        {
+            return _tilesTwoD.Cast<Tile>()
+                .Where(tile => side == Side.Both || tile.PlayerSide == side)
+                .OrderBy(x => UnityEngine.Random.value)
+                .FirstOrDefault();
         }
 
         public List<Tile> GetTilesInDirection(Position origin, Position direction, int range)

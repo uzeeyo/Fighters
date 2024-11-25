@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Fighters.Match
 {
-    public struct Position
+    public struct Position : IEquatable<Position>
     {
         public Position(int x, int y)
         {
@@ -28,6 +29,21 @@ namespace Fighters.Match
         public static Position operator *(Position position, int number)
         {
             return new Position(position.X * number, position.Y * number);
+        }
+
+        public bool Equals(Position other)
+        {
+            return X == other.X && Y == other.Y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Position other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y);
         }
     }
 }

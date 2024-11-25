@@ -4,6 +4,7 @@ using Fighters.Match;
 using Fighters.Match.Spells;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Editor
 {
@@ -55,13 +56,15 @@ namespace Editor
             {
                 serializedObject.FindProperty(GetPropertyName(nameof(damageData.DamageAmount))).floatValue =
                     EditorGUILayout.FloatField("Damage Amount", damageData.DamageAmount);
+                serializedObject.FindProperty(GetPropertyName(nameof(damageData.HitEffect))).objectReferenceValue =
+                    EditorGUILayout.ObjectField("Hit Effect", damageData.HitEffect, typeof(VisualEffectAsset), false);
             }
         }
 
         private void CheckTargetingChange(SpellData spellData)
         {
             EditorGUILayout.Space();
-            
+
             var propName = GetPropertyName(nameof(spellData.TargetType));
             serializedObject.FindProperty(propName).enumValueFlag =
                 (int)(TargetType)EditorGUILayout.EnumPopup("Target Type", spellData.TargetType);
@@ -91,10 +94,21 @@ namespace Editor
                     serializedObject.FindProperty(propName).intValue =
                         EditorGUILayout.IntField("Range", data.Range);
                     break;
-                case TargetType.MultiRandom:
+                case TargetType.SingleRandom:
+                    propName = GetPropertyName(nameof(SpellData.TargetSide));
+                    serializedObject.FindProperty(propName).enumValueIndex =
+                        (int)(Side)EditorGUILayout.EnumPopup("TargetSide", data.TargetSide);
+                    break;
+                case TargetType.MultiRandomDelayed:
+                    propName = GetPropertyName(nameof(SpellData.TargetSide));
+                    serializedObject.FindProperty(propName).enumValueIndex =
+                        (int)(Side)EditorGUILayout.EnumPopup("TargetSide", data.TargetSide);
                     propName = GetPropertyName(nameof(SpellData.RandomTimeInterval));
                     serializedObject.FindProperty(propName).floatValue =
                         EditorGUILayout.FloatField("Time interval", data.RandomTimeInterval);
+                    propName = GetPropertyName(nameof(SpellData.Range));
+                    serializedObject.FindProperty(propName).intValue =
+                        EditorGUILayout.IntField("Tile count", data.Range);
                     break;
                 case TargetType.MultiForward:
                     propName = GetPropertyName(nameof(SpellData.Range));
@@ -104,7 +118,20 @@ namespace Editor
                 case TargetType.MoveForward:
                     serializedObject.FindProperty(GetPropertyName(nameof(SpellData.TravelTime))).floatValue =
                         EditorGUILayout.FloatField("TravelTime", data.TravelTime);
+                    serializedObject.FindProperty((GetPropertyName(nameof(SpellData.HorizontalCurve))))
+                            .animationCurveValue =
+                        EditorGUILayout.CurveField("HorizontalCurve", data.HorizontalCurve);
                     break;
+            }
+
+            propName = GetPropertyName(nameof(SpellData.HasDuration));
+            serializedObject.FindProperty(propName).boolValue =
+                EditorGUILayout.Toggle("Has Duration", data.HasDuration);
+            if (data.HasDuration)
+            {
+                propName = GetPropertyName(nameof(SpellData.Duration));
+                serializedObject.FindProperty(propName).floatValue =
+                    EditorGUILayout.FloatField("Duration", data.Duration);
             }
 
             serializedObject.ApplyModifiedProperties();

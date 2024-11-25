@@ -14,8 +14,10 @@ namespace Fighters.Match.Spells
         {
             { TargetType.Self, TargetSelf },
             { TargetType.Single, TargetSingle },
+            { TargetType.SingleRandom, TargetSingleRandom },
             { TargetType.MoveForward, MoveForward },
             { TargetType.MultiForward, TargetMultiForward },
+            { TargetType.MultiRandomDelayed, TargetMultiRandomDelayed }
         };
 
         public static void Target(Player caster, Spell spell)
@@ -41,7 +43,14 @@ namespace Fighters.Match.Spells
             var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Location, delta);
             spell.transform.position = targetTile.transform.position;
 
-            ApplyEffect(spell, targetTile);
+            TryApplyEffect(spell, targetTile);
+        }
+
+        private static void TargetSingleRandom(Player caster, Spell spell)
+        {
+            var targetTile = MatchManager.Grid.GetRandomTile(spell.Data.TargetSide);
+            spell.transform.position = targetTile.transform.position;
+            TryApplyEffect(spell, targetTile);
         }
 
         private static void TargetMultiForward(Player caster, Spell spell)
@@ -50,14 +59,13 @@ namespace Fighters.Match.Spells
                 MatchManager.Grid.GetTilesInDirection(caster.CurrentTile.Location, Position.Right, spell.Data.Range);
             foreach (var tile in targetTiles)
             {
-                ApplyEffect(spell, tile);
+                TryApplyEffect(spell, tile);
             }
         }
 
         private static async void MoveForward(Player caster, Spell spell)
         {
-            var originalPosition = caster.transform.position;
-            spell.transform.position = originalPosition;
+            var originalPosition = spell.transform.position;
 
             var timeElapsed = 0f;
             var duration = spell.Data.TravelTime;
@@ -67,6 +75,7 @@ namespace Fighters.Match.Spells
 
             while (timeElapsed < duration)
             {
+                if (!spell) return;
                 var horizontalPercentage = spell.Data.HorizontalCurve.Evaluate(timeElapsed / duration);
                 spell.transform.position =
                     originalPosition + (targetPosition - originalPosition) * horizontalPercentage;
@@ -78,13 +87,32 @@ namespace Fighters.Match.Spells
             GameObject.Destroy(spell.gameObject);
         }
 
-        private static async void ApplyEffect(Spell spell, Tile tile)
+        private static async void TargetMultiRandomDelayed(Player caster, Spell spell)
+        {
+            for (var i = 0; i < spell.Data.Range; i++)
+            {
+                var newSpell = GameObject.Instantiate(spell.Data.Prefab);
+                newSpell.Init(spell.Data, spell.Effect);
+                TargetSingleRandom(caster, newSpell);
+
+                await Awaitable.WaitForSecondsAsync(spell.Data.RandomTimeInterval);
+            }
+        }
+
+        private static async void TryApplyEffect(Spell spell, Tile tile)
         {
             await Awaitable.WaitForSecondsAsync(spell.Data.CastTime);
-            if (tile.Player)
+            float timer = 0;
+            do
             {
-                spell.Effect.Apply(tile.Player.Stats);
-            }
+                if (tile.Player)
+                {
+                    spell.Effect.Apply(tile.Player.Stats);
+                    break;
+                }
+                timer += Time.deltaTime;
+                await Awaitable.NextFrameAsync();
+            } while (timer < spell.Data.Duration);
         }
     }
 }
