@@ -13,15 +13,11 @@ namespace Fighters.Match.Spells
         private bool _reloadOnCooldown;
         private List<SpellData> _spells;
         private Dictionary<Vector2, SpellData> _activeSpells;
-        //TODO: Move back to cooldown handler
-        private List<CooldownItem> _itemsOnCooldown = new List<CooldownItem>();
 
+        //TODO: Remove test data ref
         [SerializeField] private SpellData _basicSpell;
 
-        public Dictionary<Vector2, SpellData> ActiveSpells => _activeSpells;
-
         public event Action<Dictionary<Vector2, SpellData>> SpellsChanged;
-        public event Action<CooldownItem> CooldownChanged;
         public event Action SpellsReloaded;
 
         public SpellData GetBasic()
@@ -34,7 +30,7 @@ namespace Fighters.Match.Spells
             return _activeSpells[direction];
         }
 
-        public void ReloadActiveSpells()
+        private void ReloadActiveSpells()
         {
             var spellData = _spells.OrderBy(x => Guid.NewGuid()).Take(4).ToList();
             var directions = new Vector2[]
@@ -63,43 +59,16 @@ namespace Fighters.Match.Spells
         private void OnReload()
         {
             if (_reloadOnCooldown) return;
-            StartCoroutine(StartReloadCooldown());
+            StartReloadCooldown();
         }
 
-        private IEnumerator StartReloadCooldown()
+        private async void StartReloadCooldown()
         {
             ReloadActiveSpells();
 
             _reloadOnCooldown = true;
-            yield return new WaitForSeconds(RELOAD_COOLDOWN);
+            await Awaitable.WaitForSecondsAsync(RELOAD_COOLDOWN);
             _reloadOnCooldown = false;
-        }
-
-        public void StartSpellCooldown(SpellData data)
-        {
-            var item = new CooldownItem(data.Name, data.Cooldown);
-            _itemsOnCooldown.Add(item);
-            StartCoroutine(CountDown(item));
-            CooldownChanged?.Invoke(item);
-        }
-
-        public float GetCooldownTime(string spellName)
-        {
-            return _itemsOnCooldown.Find(x => x.Name == spellName)?.TimeRemaining ?? 0;
-        }
-
-        private IEnumerator CountDown(CooldownItem item)
-        {
-            float timeElapsed = 0;
-            float duration = item.TimeRemaining;
-
-            while (timeElapsed < duration)
-            {
-                timeElapsed += Time.deltaTime;
-                item.TimeRemaining = duration - timeElapsed;
-                yield return null;
-            }
-            _itemsOnCooldown.Remove(item);
         }
     }
 }

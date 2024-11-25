@@ -5,16 +5,19 @@ using UnityEngine;
 
 namespace Fighters.Match
 {
-    public class CooldownHandler : MonoBehaviour
+    public class CooldownHandler
     {
         private List<CooldownItem> _itemsOnCooldown = new List<CooldownItem>();
+        
+        public event System.Action<CooldownItem> CooldownItemsChanged;
 
         public void AddItem(SpellData spellData)
         {
             var item = new CooldownItem(spellData.Name, spellData.Cooldown);
 
             _itemsOnCooldown.Add(item);
-            StartCoroutine(CountDown(item));
+            CooldownItemsChanged?.Invoke(item);
+            CountDown(item);
         }
 
         public float GetCooldownTime(string name)
@@ -27,7 +30,7 @@ namespace Fighters.Match
             return 0;
         }
 
-        private IEnumerator CountDown(CooldownItem item)
+        private async void CountDown(CooldownItem item)
         {
             float timeElapsed = 0;
             float duration = item.TimeRemaining;
@@ -36,7 +39,7 @@ namespace Fighters.Match
             {
                 timeElapsed += Time.deltaTime;
                 item.TimeRemaining = duration - timeElapsed;
-                yield return null;
+                await Awaitable.NextFrameAsync();
             }
             _itemsOnCooldown.Remove(item);
         }

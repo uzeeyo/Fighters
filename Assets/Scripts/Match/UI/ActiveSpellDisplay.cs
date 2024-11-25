@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Fighters.Match;
+using Fighters.Match.Spells;
 using UnityEngine;
 
-namespace Fighters.Match.Spells
+namespace Fighters.UI
 {
     public class ActiveSpellDisplay : MonoBehaviour
     {
@@ -12,6 +14,7 @@ namespace Fighters.Match.Spells
         [SerializeField] private AnimationCurve _borderResizeCurve;
 
         private SpellBank _spellBank;
+        private CooldownHandler _cooldownHandler;
 
         public static AnimationCurve BorderResizeCurve { get; private set; }
 
@@ -29,17 +32,19 @@ namespace Fighters.Match.Spells
             BorderResizeCurve = _borderResizeCurve;
         }
 
-        public void Init(SpellBank spellBank)
+        public void Init(SpellBank spellBank, CooldownHandler cooldownHandler)
         {
             _spellBank = spellBank;
             _spellBank.SpellsChanged += OnSpellsChanged;
-            _spellBank.CooldownChanged += OnCooldownChanged;
+            
+            _cooldownHandler = cooldownHandler;
+            _cooldownHandler.CooldownItemsChanged += OnCooldownChanged;
         }
 
         private void OnDisable()
         {
             _spellBank.SpellsChanged -= OnSpellsChanged;
-            _spellBank.CooldownChanged -= OnCooldownChanged;
+            _cooldownHandler.CooldownItemsChanged -= OnCooldownChanged;
         }
 
         public void OnCooldownChanged(CooldownItem cooldownItem)
