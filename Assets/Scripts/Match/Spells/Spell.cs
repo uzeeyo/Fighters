@@ -2,6 +2,7 @@ using System;
 using Fighters.Match.Spells;
 using Fighters.Match.Players;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Fighters.Match
 {
@@ -11,7 +12,7 @@ namespace Fighters.Match
         public SpellData Data { get; private set; }
         public ISpellEffect Effect { get; private set; }
 
-        protected virtual void Awake() => Destroy(gameObject, 3f);
+        protected virtual void Awake() => Destroy(gameObject, 2f);
 
         public void Init(SpellData data, ISpellEffect effect)
         {
@@ -22,9 +23,11 @@ namespace Fighters.Match
         public async void Cast(Player caster)
         {
             _caster = caster;
+            caster.AnimationHandler.Play(Data.AnimationName);
             Targeter.Target(caster, this);
-            caster.PlayAnimation(Data.AnimationName);
+            
             await Awaitable.WaitForSecondsAsync(Data.CastTime);
+            
             transform.SetParent(null);
         }
 
@@ -33,6 +36,13 @@ namespace Fighters.Match
             if (other.TryGetComponent(out Player player) && player != _caster)
             {
                 Effect.Apply(player.Stats);
+                if (Data is DamageData damageData && damageData.HitEffect)
+                {
+                    var hitEffect = new GameObject("HitEffect", typeof(VisualEffect), typeof(HitEffect));
+                    Instantiate(hitEffect);
+                    hitEffect.transform.position = transform.position;
+                    hitEffect.GetComponent<VisualEffect>().visualEffectAsset = damageData.HitEffect;
+                }
             }
             Destroy(gameObject);
         }
