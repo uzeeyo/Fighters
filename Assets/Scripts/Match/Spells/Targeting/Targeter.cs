@@ -17,7 +17,7 @@ namespace Fighters.Match.Spells
             { TargetType.SingleRandom, TargetSingleRandom },
             { TargetType.MoveForward, MoveForward },
             { TargetType.MultiForward, TargetMultiForward },
-            { TargetType.MultiRandomDelayed, TargetMultiRandomDelayed }
+            { TargetType.MultiMoveDelayed, TargetMoveToTile }
         };
 
         public static void Target(Player caster, Spell spell)
@@ -87,14 +87,21 @@ namespace Fighters.Match.Spells
             GameObject.Destroy(spell.gameObject);
         }
 
-        private static async void TargetMultiRandomDelayed(Player caster, Spell spell)
+        private static async void TargetMoveToTile(Player caster, Spell spell)
         {
-            for (var i = 0; i < spell.Data.Range; i++)
+            var childCount = spell.transform.childCount;
+            Tile lastTile = null;
+            for (var i = childCount - 1; i >= 0; i--)
             {
-                var newSpell = GameObject.Instantiate(spell.Data.Prefab);
-                newSpell.Init(spell.Data, spell.Effect);
-                TargetSingleRandom(caster, newSpell);
+                var tile = MatchManager.Grid.GetRandomTile(spell.Data.TargetSide);
+                while (lastTile && tile == lastTile)
+                {
+                    tile = MatchManager.Grid.GetRandomTile(spell.Data.TargetSide);
+                }
+                spell.transform.GetChild(i).GetComponent<Projectile>().MoveToPosition(tile.transform.position,
+                    spell.Data.TravelTime, spell.Data.SpeedCurve);
 
+                lastTile = tile;
                 await Awaitable.WaitForSecondsAsync(spell.Data.RandomTimeInterval);
             }
         }
@@ -110,6 +117,7 @@ namespace Fighters.Match.Spells
                     spell.Effect.Apply(tile.Player.Stats);
                     break;
                 }
+
                 timer += Time.deltaTime;
                 await Awaitable.NextFrameAsync();
             } while (timer < spell.Data.Duration);

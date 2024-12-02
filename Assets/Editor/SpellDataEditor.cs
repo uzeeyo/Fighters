@@ -99,7 +99,10 @@ namespace Editor
                     serializedObject.FindProperty(propName).enumValueIndex =
                         (int)(Side)EditorGUILayout.EnumPopup("TargetSide", data.TargetSide);
                     break;
-                case TargetType.MultiRandomDelayed:
+                case TargetType.MultiMoveDelayed:
+                    propName = GetPropertyName(nameof(SpellData.TravelTime));
+                    serializedObject.FindProperty(propName).floatValue =
+                        EditorGUILayout.FloatField("Travel time", data.TravelTime);
                     propName = GetPropertyName(nameof(SpellData.TargetSide));
                     serializedObject.FindProperty(propName).enumValueIndex =
                         (int)(Side)EditorGUILayout.EnumPopup("TargetSide", data.TargetSide);
@@ -109,6 +112,9 @@ namespace Editor
                     propName = GetPropertyName(nameof(SpellData.Range));
                     serializedObject.FindProperty(propName).intValue =
                         EditorGUILayout.IntField("Tile count", data.Range);
+                    propName = GetPropertyName(nameof(SpellData.SpeedCurve));
+                    serializedObject.FindProperty(propName).animationCurveValue =
+                        EditorGUILayout.CurveField("SpeedCurve", data.SpeedCurve);
                     break;
                 case TargetType.MultiForward:
                     propName = GetPropertyName(nameof(SpellData.Range));

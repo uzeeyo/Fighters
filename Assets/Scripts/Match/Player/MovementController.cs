@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Fighters.Match.Players
 {
@@ -13,13 +14,13 @@ namespace Fighters.Match.Players
 
         private Dictionary<Position, string> _animationTriggers = new()
         {
-            { Position.Up, "GMoveLeft" },
-            { Position.Down, "GMoveRight" },
-            { Position.Left, "GMoveBack" },
-            { Position.Right, "GMoveForward" }
+            { Position.Up, "MoveLeft" },
+            { Position.Down, "MoveRight" },
+            { Position.Left, "MoveBack" },
+            { Position.Right, "MoveForward" }
         };
 
-        [SerializeField] private float _moveTime = 0.3f;
+        [FormerlySerializedAs("_moveTime")] [SerializeField] private float _defaultMoveTime = 0.3f;
 
 
         void Awake()
@@ -51,16 +52,16 @@ namespace Fighters.Match.Players
             if (targetTile.State != Tile.TileState.Blocked && targetTile.PlayerSide == _player.Side)
             {
                 _currentPosition = targetTile.Location;
-                _player.AnimationHandler.Play(_animationTriggers[delta]);
-                StartCoroutine(Move(targetTile.transform.position));
+                var moveTime = _player.AnimationHandler.Play(_animationTriggers[delta]);
+                //Move(targetTile.transform.position, moveTime);
             }
             return true;
         }
 
-        private IEnumerator Move(Vector3 targetPosition)
+        private async void Move(Vector3 targetPosition, float moveTime)
         {
             _isMoving = true;
-            float duration = _moveTime;
+            float duration = moveTime == 0 ? _defaultMoveTime : moveTime;
             float timeElapsed = 0;
             Vector3 currentPosition = transform.position;
 
@@ -77,7 +78,7 @@ namespace Fighters.Match.Players
                     MatchManager.Grid.PlacePlayer(_player, _currentPosition);
                 }
 
-                yield return null;
+                await Awaitable.NextFrameAsync();
             }
 
             transform.position = targetPosition;

@@ -4,7 +4,7 @@ using Fighters.Match.Players;
 using UnityEngine;
 using UnityEngine.VFX;
 
-namespace Fighters.Match
+namespace Fighters.Match.Spells
 {
     public class Spell : MonoBehaviour
     {
@@ -24,27 +24,32 @@ namespace Fighters.Match
         {
             _caster = caster;
             caster.AnimationHandler.Play(Data.AnimationName);
-            Targeter.Target(caster, this);
-            
             await Awaitable.WaitForSecondsAsync(Data.CastTime);
+            Targeter.Target(caster, this);
             
             transform.SetParent(null);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Player player) && player != _caster)
+            OnImpact(other, transform.position, gameObject);
+        }
+
+        public void OnImpact(Collider other, Vector3 hitPoint, GameObject projectile)
+        {
+            if (other && other.TryGetComponent(out Player player) && player != _caster)
             {
                 Effect.Apply(player.Stats);
-                if (Data is DamageData damageData && damageData.HitEffect)
-                {
-                    var hitEffect = new GameObject("HitEffect", typeof(VisualEffect), typeof(HitEffect));
-                    Instantiate(hitEffect);
-                    hitEffect.transform.position = transform.position;
-                    hitEffect.GetComponent<VisualEffect>().visualEffectAsset = damageData.HitEffect;
-                }
             }
-            Destroy(gameObject);
+
+            if (Data is DamageData damageData && damageData.HitEffect)
+            {
+                var hitEffect = new GameObject("HitEffect", typeof(VisualEffect), typeof(HitEffect));
+                Instantiate(hitEffect);
+                hitEffect.transform.position = hitPoint;
+                hitEffect.GetComponent<VisualEffect>().visualEffectAsset = damageData.HitEffect;
+            }
+            Destroy(projectile);
         }
     }
 }

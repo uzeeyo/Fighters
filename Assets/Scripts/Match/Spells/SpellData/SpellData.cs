@@ -8,7 +8,7 @@ namespace Fighters.Match.Spells
         Self,
         Single,
         SingleRandom,
-        MultiRandomDelayed,
+        MultiMoveDelayed,
         MoveForward,
         MultiForward,
     }
@@ -58,10 +58,10 @@ namespace Fighters.Match.Spells
         [SerializeField] private TargetType _targetType;
         [SerializeField] private Side _targetSide;
         [SerializeField] private int _range;
-        [SerializeField] private int _randomTimeInterval;
-        [SerializeField] private float _instantDelay;
+        [SerializeField] private float _randomTimeInterval;
         [SerializeField] private AnimationCurve _horizontalCurve;
         [SerializeField] private AnimationCurve _verticalCurve;
+        [SerializeField] private AnimationCurve _speedCurve;
         [SerializeField] private bool _hasDuration;
         [SerializeField] private float _duration;
 
@@ -69,9 +69,9 @@ namespace Fighters.Match.Spells
         public Side TargetSide => _targetSide;
         public int Range => _range;
         public float RandomTimeInterval => _randomTimeInterval;
-        public float InstantDelay => _instantDelay;
         public AnimationCurve HorizontalCurve => _horizontalCurve;
         public AnimationCurve VerticalCurve => _verticalCurve;
+        public AnimationCurve SpeedCurve => _speedCurve;
         public abstract SpellType SpellType { get; }
         public bool HasDuration => _hasDuration;
         public float Duration => _duration;
