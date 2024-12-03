@@ -12,7 +12,7 @@ namespace Match.Player
         
         private readonly Animator _animator;
         
-        public async void Play(string animationName)
+        public float Play(string animationName)
         {
             var hash = Animator.StringToHash(animationName);
             var clip = _animator.runtimeAnimatorController.animationClips
@@ -21,12 +21,21 @@ namespace Match.Player
             if (!clip)
             {
                 //Debug.LogError($"Animation clip {animationName} not found, skipping!");
-                return;
+                return 0;
             }
 
-            float crossfadeDuration = 0.1f;
-            _animator.CrossFadeInFixedTime(hash, crossfadeDuration);
-            await Awaitable.WaitForSecondsAsync(clip.length + crossfadeDuration);
+            // float crossfadeDuration = 0.1f;
+            // _animator.CrossFadeInFixedTime(hash, crossfadeDuration);
+            
+            _animator.Play(animationName);
+            ReturnToIdle(clip.length);
+            return clip.length;
+            
+        }
+
+        private async void ReturnToIdle(float duration)
+        {
+            await Awaitable.WaitForSecondsAsync(duration);
             
             _animator.Play("Idle");
         }
