@@ -10,8 +10,6 @@ namespace Fighters.Match.Players
     {
         private Position _currentPosition;
         private Player _player;
-        private bool _isMoving = false;
-
         private Dictionary<Position, string> _animationTriggers = new()
         {
             { Position.Up, "MoveLeft" },
@@ -19,9 +17,10 @@ namespace Fighters.Match.Players
             { Position.Left, "MoveBack" },
             { Position.Right, "MoveForward" }
         };
+        
+        [SerializeField] private float _defaultMoveTime = 0.3f;
 
-        [FormerlySerializedAs("_moveTime")] [SerializeField] private float _defaultMoveTime = 0.3f;
-
+        public bool IsMoving { get; private set; }
 
         void Awake()
         {
@@ -39,7 +38,7 @@ namespace Fighters.Match.Players
 
         public bool TryMove(Vector2 direction)
         {
-            if (_isMoving || !_player.CanInteract || direction == Vector2.zero)
+            if (!_player.CanMove || direction == Vector2.zero)
             {
                 return false;
             }
@@ -53,14 +52,14 @@ namespace Fighters.Match.Players
             {
                 _currentPosition = targetTile.Location;
                 var moveTime = _player.AnimationHandler.Play(_animationTriggers[delta]);
-                //Move(targetTile.transform.position, moveTime);
+                Move(targetTile.transform.position, moveTime);
             }
             return true;
         }
 
         private async void Move(Vector3 targetPosition, float moveTime)
         {
-            _isMoving = true;
+            IsMoving = true;
             float duration = moveTime == 0 ? _defaultMoveTime : moveTime;
             float timeElapsed = 0;
             Vector3 currentPosition = transform.position;
@@ -82,7 +81,7 @@ namespace Fighters.Match.Players
             }
 
             transform.position = targetPosition;
-            _isMoving = false;
+            IsMoving = false;
         }
     }
 }

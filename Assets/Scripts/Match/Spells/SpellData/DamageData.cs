@@ -3,7 +3,7 @@ using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
 {
-    [CreateAssetMenu(fileName = "DamageData", menuName = "ScriptableObjects/SpellData/DamageData")]
+    [CreateAssetMenu(fileName = "DamageData", menuName = "Spell/SpellData/DamageData", order = 0)]
     public class DamageData : SpellData
     {
         [SerializeField] private float _damageAmount;

@@ -16,8 +16,10 @@ namespace Fighters.Match.Players
     public class Player : MonoBehaviour
     {
         private SpellBank _spellBank;
+        private SpellCaster _spellCaster;
         
-        public bool CanInteract { get; private set; } = true;
+        public bool CanAct => !_spellCaster.IsCasting && !Stats.DisableActionEffects.Any() && !MovementController.IsMoving;
+        public bool CanMove => CanAct && !Stats.DisableMovementEffects.Any();
         public PlayerStats Stats { get; private set; }
         public MovementController MovementController { get; private set; }
         public Tile CurrentTile { get; set; }
@@ -31,14 +33,8 @@ namespace Fighters.Match.Players
         {
             Stats = GetComponent<PlayerStats>();
             MovementController = GetComponent<MovementController>();
+            _spellCaster = GetComponent<SpellCaster>();
             _spellBank = GetComponent<SpellBank>();
-        }
-
-        public async void DisableInteractions(float seconds)
-        {
-            CanInteract = false;
-            await Awaitable.WaitForSecondsAsync(seconds);
-            CanInteract = true;
         }
 
         #region Initialization
@@ -62,8 +58,7 @@ namespace Fighters.Match.Players
 
         public Player WithSpellDisplay(ActiveSpellDisplay spellDisplay)
         {
-            var spellCaster = GetComponent<SpellCaster>();
-            spellDisplay.Init(_spellBank, spellCaster.CooldownHandler);
+            spellDisplay.Init(_spellBank, _spellCaster.CooldownHandler);
             return this;
         }
 

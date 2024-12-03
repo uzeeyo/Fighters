@@ -23,6 +23,7 @@ namespace Fighters.Match
         [SerializeField] private Transform _weapon;
 
         public CooldownHandler CooldownHandler { get; } = new();
+        public bool IsCasting { get; private set; }
         
         private void Awake()
         {
@@ -39,7 +40,7 @@ namespace Fighters.Match
 
         private void OnBasicCast()
         {
-            if (_onCooldown || !_player.CanInteract) return;
+            if (_onCooldown || !_player.CanAct) return;
 
             var spellData = _spellBank.GetBasic();
             Cast(spellData);
@@ -47,7 +48,7 @@ namespace Fighters.Match
 
         private void OnCast(InputValue value)
         {
-            if (_onCooldown || !_player.CanInteract) return;
+            if (_onCooldown || !_player.CanAct) return;
 
             var direction = value.Get<Vector2>();
             if (direction == Vector2.zero) return;
@@ -66,14 +67,21 @@ namespace Fighters.Match
             
             //if player takes damage, cancel the spell
             spell.Cast(_player);
-            _player.DisableInteractions(spell.Data.CastTime);
+            DisableCasting(spell.Data.CastTime);
             CooldownHandler.AddItem(spellData);
         }
 
         private bool VerifyCanActivate(SpellData data)
         {
             var onCooldown = CooldownHandler.GetCooldownTime(data.Name) > 0;
-            return _player.CanInteract && !onCooldown && _player.Stats.TryUseMana(data.ManaCost);
+            return _player.CanAct && !onCooldown && _player.Stats.TryUseMana(data.ManaCost);
+        }
+
+        private async void DisableCasting(float duration)
+        {
+            IsCasting = true;
+            await Awaitable.WaitForSecondsAsync(duration);
+            IsCasting = false;
         }
     }
 }

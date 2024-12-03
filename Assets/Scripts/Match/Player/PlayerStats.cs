@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fighters.Buffs;
+using Fighters.Match.Spells;
 using Match.Player;
 using Match.UI;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Fighters.Match.Players
 {
     public class PlayerStats : MonoBehaviour
     {
-        const float TIME_BEFORE_MANA_REGEN = 3.5f;
+        const float TIME_BEFORE_MANA_REGEN = 2f;
 
         private StatusBar _healthBar;
         private StatusBar _manaBar;
@@ -22,6 +23,9 @@ namespace Fighters.Match.Players
         private float _manaRegenRate;
         private Coroutine _manaRegenCoroutine;
         private readonly BuffHandler _buffs = new();
+
+        public List<BuffEffect> DisableMovementEffects { get; private set; } = new();
+        public List<BuffEffect> DisableActionEffects { get; private set; } = new();
 
         public float CurrentHealth
         {
@@ -138,5 +142,9 @@ namespace Fighters.Match.Players
             CurrentMana = _maxMana;
         }
 
+        public void AddBuff(BuffEffect buff)
+        {
+            _buffs.Add(buff);
+        }
     }
 }
