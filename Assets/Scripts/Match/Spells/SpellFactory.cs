@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using Object = UnityEngine.Object;
+using Fighters.Buffs;
 
 namespace Fighters.Match.Spells
 {
@@ -11,7 +10,7 @@ namespace Fighters.Match.Spells
         {
             { SpellType.Damage, new DamageEffectFactory() },
             { SpellType.Heal, new HealEffectFactory() },
-            //{ SpellType.Buff, new BuffEffectFactory() }
+            { SpellType.Buff, new BuffEffectFactory() }
         };
 
         public static Spell Get(SpellData data)
@@ -25,8 +24,8 @@ namespace Fighters.Match.Spells
             if (!_spellFactories.TryGetValue(data.SpellType, out var factory))
                 throw new ArgumentException($"No factory found for spell type: {data.SpellType}", nameof(data));
 
-            var spell = Object.Instantiate(data.Prefab);
-            var effect = factory.Get(data);  // Remove the asterisk
+            var spell = UnityEngine.Object.Instantiate(data.Prefab);
+            var effect = factory.Get(data);
             spell.Init(data, effect);
 
             return spell;
@@ -54,11 +53,44 @@ namespace Fighters.Match.Spells
         }
     }
 
-    // public class BuffEffectFactory : ISpellEffectFactory
-    // {
-    //     public SpellEffect Get(SpellData data)
-    //     {
-    //         return new BuffEffect();
-    //     }
-    // }
+    public class BuffEffectFactory : ISpellEffectFactory
+    {
+        private Dictionary<BuffType, IBuffFactory> _buffFactories = new()
+        {
+            { BuffType.Root, new RootBuffFactory() },
+            { BuffType.Poison, new PoisonEffectFactory() }
+        };
+        
+        public ISpellEffect Get(SpellData data)
+        {
+            if (data is BuffData buffData)
+            {
+                return _buffFactories[buffData.BuffType].Get(buffData);
+            }
+
+            throw new ArgumentException($"Unknown spell type: {data.GetType()}", nameof(data));
+        }
+        
+        private interface IBuffFactory
+        {
+            public BuffEffect Get(BuffData buffData);
+        }
+        
+        private class RootBuffFactory : IBuffFactory
+        {
+            public BuffEffect Get(BuffData buffData)
+            {
+                return new RootEffect(buffData);
+            }
+        }
+
+        private class PoisonEffectFactory : IBuffFactory
+        {
+            public BuffEffect Get(BuffData buffData)
+            {
+                return new PoisonEffect(buffData);
+            }
+        }
+        
+    }
 }

@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Text.RegularExpressions;
+using Fighters.Buffs;
 using Fighters.Match;
 using Fighters.Match.Spells;
 using UnityEditor;
@@ -19,6 +20,8 @@ namespace Editor
 
             DrawCommonFields(spellData);
             CheckTargetingChange(spellData);
+            CheckBuffFields(spellData);
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawCommonFields(SpellData spellData)
@@ -70,7 +73,6 @@ namespace Editor
                 (int)(TargetType)EditorGUILayout.EnumPopup("Target Type", spellData.TargetType);
             EditorUtility.SetDirty(spellData);
 
-            serializedObject.ApplyModifiedProperties();
             CreateTargetingFields(spellData);
         }
 
@@ -139,8 +141,34 @@ namespace Editor
                 serializedObject.FindProperty(propName).floatValue =
                     EditorGUILayout.FloatField("Duration", data.Duration);
             }
+        }
 
-            serializedObject.ApplyModifiedProperties();
+        private void CheckBuffFields(SpellData spellData)
+        {
+            if (spellData is not BuffData buffData) return;
+
+            GUILayout.Label("Buff Data", new GUIStyle()
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 16,
+                margin = new RectOffset(0, 0, 20, 5),
+                normal = new GUIStyleState { textColor = Color.white }
+            });
+            
+            serializedObject.FindProperty(GetPropertyName(nameof(buffData.BuffType))).enumValueIndex =
+                (int)(BuffType)EditorGUILayout.EnumPopup("BuffType", buffData.BuffType);
+            serializedObject.FindProperty(GetPropertyName(nameof(buffData.Duration))).floatValue =
+                EditorGUILayout.FloatField("Duration", buffData.Duration);
+            
+            switch (buffData.BuffType)
+            {
+                case BuffType.Poison:
+                {
+                    serializedObject.FindProperty(GetPropertyName(nameof(buffData.HPPS))).floatValue =
+                        EditorGUILayout.FloatField("DPS", buffData.HPPS);
+                    break;
+                }
+            }
         }
 
         private static string GetPropertyName(string propertyName)

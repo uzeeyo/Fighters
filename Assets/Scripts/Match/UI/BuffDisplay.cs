@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using Fighters.Buffs;
+using Fighters.Match.Spells;
 using Match.Player;
 using UnityEngine;
 
@@ -8,7 +10,7 @@ namespace Match.UI
     public class BuffDisplay : MonoBehaviour
     {
         private BuffHandler _buffHandler;
-        private List<BuffIcon> _buffIcons;
+        private readonly List<BuffIcon> _buffIcons = new();
         
         [SerializeField] private BuffIcon _buffIconPrefab;
 
@@ -20,16 +22,25 @@ namespace Match.UI
         }
 
 
-        private void OnBuffAdded(Buff buff)
+        private void OnBuffAdded(BuffEffect buff)
         {
             var icon  = Instantiate(_buffIconPrefab, transform);
             _buffIcons.Add(icon);
-            icon.Init(buff.Icon, buff.Duration);
+            icon.Init(buff);
         }
 
-        private void OnBuffRemoved(Buff buff)
+        private void OnBuffRemoved(BuffEffect buff)
         {
-            
+            try
+            {
+                var icon = _buffIcons.First(x => x.Effect == buff);
+                _buffIcons.Remove(icon);
+                Destroy(icon.gameObject);
+            }
+            catch
+            {
+                Debug.LogError($"Failed to remove buff {buff.BuffType} from display");
+            }
         }
         
         private void OnDestroy()

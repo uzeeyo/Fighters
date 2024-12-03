@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using Fighters.Match.Spells;
 
 namespace Match.Player
 {
     public class BuffHandler
     {
-        private readonly List<Buff> _buffs = new();
+        private readonly List<BuffEffect> _buffs = new();
 
         private object _buffLock = new();
         private bool _checking;
@@ -18,56 +19,73 @@ namespace Match.Player
             BuffType.Shield,
         };
 
-        public event Action<Buff> BuffAdded;
-        public event Action<Buff> BuffRemoved;
+        public event Action<BuffEffect> BuffAdded;
+        public event Action<BuffEffect> BuffRemoved;
 
-        public bool TryGetBuff(BuffType buffType, out Buff buff)
+        public bool TryGetBuff(BuffType buffType, out BuffEffect buff)
         {
             buff = _buffs.FirstOrDefault(x => x.BuffType == buffType);
             return buff != null;
         }
 
-        public bool TryGetBuffs(BuffType buffType, out IEnumerable<Buff> buffs)
+        public bool TryGetBuffs(BuffType buffType, out IEnumerable<BuffEffect> buffs)
         {
             buffs = _buffs.Where(x => x.BuffType == buffType);
             return buffs.Any();
         }
 
-        public void Add(BuffData buffData)
+        public void Add(BuffEffect effect)
         {
-            if (_uniqueBuffs.Contains(buffData.BuffType)) return;
-            var buff = BuffFactory.Get(buffData);
+            Debug.Log("Applying buff");
+            if (_uniqueBuffs.Contains(effect.BuffType))
+            {
+                Remove(effect.BuffType);
+            }
+            
             lock (_buffLock)
             {
-                _buffs.Add(buff);
+                _buffs.Add(effect);
             }
 
-            BuffAdded?.Invoke(buff);
+            effect.Activate();
+            BuffAdded?.Invoke(effect);
             if (!_checking) CheckForExpired();
         }
 
         public void Remove(BuffType buffType)
         {
-            _buffs.RemoveAll(x => x.BuffType == buffType);
+                var buff = _buffs.First(x => x.BuffType == buffType);
+                Remove(buff);
+        }
+
+        private void Remove(BuffEffect buff)
+        {
+            try
+            {
+                lock (_buffLock)
+                {
+                    _buffs.Remove(buff);
+                }
+                
+                buff.Deactivate();
+                BuffRemoved?.Invoke(buff);
+            }
+            catch
+            {
+                Debug.LogError($"Failed to remove buff");
+            }
         }
 
         public void RemoveAll()
         {
             foreach (var buff in _buffs)
             {
-                BuffRemoved?.Invoke(buff);
-            }
-            lock (_buffLock)
-            {
-                _buffs.Clear();
+                Remove(buff);
             }
         }
 
         private async void CheckForExpired()
         {
-            if (_checking) return;
-
-            _checking = true;
             try
             {
                 while (_buffs.Any())
@@ -76,11 +94,7 @@ namespace Match.Player
                     {
                         if (!(_buffs[i].TimeRemaining < 0)) continue;
 
-                        BuffRemoved?.Invoke(_buffs[i]);
-                        lock (_buffLock)
-                        {
-                            _buffs.RemoveAt(i);
-                        }
+                        Remove(_buffs[i]);
                     }
 
                     await Awaitable.NextFrameAsync();
