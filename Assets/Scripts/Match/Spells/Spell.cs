@@ -42,6 +42,11 @@ namespace Fighters.Match.Spells
                 Effect.Apply(player.Stats);
             }
 
+            if (Data.ShakesCamera)
+            {
+                Shaker.ShakeForSeconds(Data.ShakeStrength, Data.ShakeDuration);
+            }
+
             if (Data is DamageData damageData && damageData.HitEffect)
             {
                 var hitEffect = new GameObject("HitEffect", typeof(VisualEffect), typeof(HitEffect));

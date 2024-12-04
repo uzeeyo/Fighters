@@ -22,6 +22,9 @@ MonoBehaviour:
   _prefab: {fileID: 510164400441732913, guid: 2b93548f3646dfa43ad0f2cb76ee04b6, type: 3}
   _travelTime: 0.4
   _spawnLocation: 0
+  _shakesCamera: 1
+  _shakeDuration: 0.1
+  _shakeStrength: 5
   _targetType: 3
   _targetSide: 1
   _range: 4
