@@ -40,7 +40,8 @@ namespace Fighters.Match.Spells
         [SerializeField] private Spell _prefab;
         [SerializeField] private float _travelTime;
         [SerializeField] private SpawnLocation _spawnLocation;
-        [SerializeField] private bool _shakesCamera;
+        [FormerlySerializedAs("_shakesCamera")] [SerializeField] private bool _shakesOnImpact;
+        [SerializeField] private bool _shakesOnCast;
         [SerializeField] private float _shakeDuration;
         [SerializeField] private float _shakeStrength;
 
@@ -54,7 +55,8 @@ namespace Fighters.Match.Spells
         public Spell Prefab => _prefab;
         public float TravelTime => _travelTime;
         public SpawnLocation SpawnLocation => _spawnLocation;
-        public bool ShakesCamera => _shakesCamera;
+        public bool ShakesOnImpact => _shakesOnImpact;
+        public bool ShakesOnCast => _shakesOnCast;
         public float ShakeDuration => _shakeDuration;
         public float ShakeStrength => _shakeStrength;
 

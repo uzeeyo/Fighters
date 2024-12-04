@@ -15,6 +15,13 @@ namespace Editor
     [CanEditMultipleObjects]
     public class SpellDataEditor : UnityEditor.Editor
     {
+        private enum ShakeType
+        {
+            None,
+            OnCast,
+            OnImpact,
+        }
+        
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -30,7 +37,7 @@ namespace Editor
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            serializedObject.FindProperty(GetPropertyName(nameof(spellData.Icon))).objectReferenceValue =
+            GetProperty(nameof(spellData.Icon)).objectReferenceValue =
                 EditorGUILayout.ObjectField(string.Empty, spellData.Icon, typeof(Sprite), false, GUILayout.Height(100));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -43,12 +50,23 @@ namespace Editor
             DrawField("CastTime", x => x.CastTime);
             DrawField("Prefab", x => x.Prefab);
             DrawField("SpawnLocation", x => x.SpawnLocation);
-            DrawField("Shakes Camera", x => x.ShakesCamera);
-            
-            if (spellData.ShakesCamera)
+            DrawField("Shakes on impact", x => x.ShakesOnImpact);
+            DrawField("Shakes on cast", x => x.ShakesOnCast);
+
+            if (spellData.ShakesOnImpact)
+            {
+                GetProperty(nameof(spellData.ShakesOnCast)).boolValue = false;
+            }
+
+            if (spellData.ShakesOnCast)
+            {
+                GetProperty(nameof(spellData.ShakesOnImpact)).boolValue = false;
+            }
+
+            if (spellData.ShakesOnImpact || spellData.ShakesOnCast)
             {
                 DrawField("Shake Duration", x => x.ShakeDuration);
-                DrawField("Shake Strength", x => x.ShakeStrength);
+                GetProperty(nameof(spellData.ShakeStrength)).floatValue = EditorGUILayout.Slider("Shake Strength", spellData.ShakeStrength, 0f, 0.5f);
             }
 
             if (spellData is HealData healData)
@@ -66,10 +84,7 @@ namespace Editor
         private void CheckTargetingChange(SpellData spellData)
         {
             EditorGUILayout.Space();
-
-            var propName = GetPropertyName(nameof(spellData.TargetType));
-            serializedObject.FindProperty(propName).enumValueFlag =
-                (int)(TargetType)EditorGUILayout.EnumPopup("Target Type", spellData.TargetType);
+            DrawField("Target Type", x => x.TargetType);
             EditorUtility.SetDirty(spellData);
 
             CreateTargetingFields(spellData);
@@ -77,7 +92,7 @@ namespace Editor
 
         private void CreateTargetingFields(SpellData data)
         {
-            if (data.TargetType == TargetType.Self || data.TargetType == TargetType.SingleRandom) return;
+            if (data.TargetType is TargetType.Self or TargetType.SingleRandom) return;
 
             GUILayout.Label($"{data.TargetType} Target Data", new GUIStyle()
             {
@@ -143,18 +158,21 @@ namespace Editor
             }
         }
 
-        private static string GetPropertyName(string propertyName)
+        private SerializedProperty GetProperty(string propertyName)
         {
             const string pattern = @"\b([A-Z][a-zA-Z0-9]*)\b";
-            return Regex.Replace(propertyName, pattern, m => $"_{char.ToLower(m.Value[0])}{m.Value.Substring(1)}");
+            var privateName = Regex.Replace(propertyName, pattern, m => $"_{char.ToLower(m.Value[0])}{m.Value.Substring(1)}");
+            return serializedObject.FindProperty(privateName);
         }
         
         private void DrawField<T>(string label, Expression<Func<SpellData, T>> propertyExpression)
         {
             var memberExpression = propertyExpression.Body as MemberExpression;
+            if (memberExpression == null) return;
             var propertyInfo = memberExpression.Member as PropertyInfo;
-        
-            var prop = serializedObject.FindProperty(GetPropertyName(propertyInfo.Name));
+
+            if (propertyInfo == null) return;
+            var prop = GetProperty(propertyInfo.Name);
             EditorGUILayout.PropertyField(prop, new GUIContent(label));
         }
     }

@@ -26,6 +26,10 @@ namespace Fighters.Match.Spells
             caster.AnimationHandler.Play(Data.AnimationName);
             await Awaitable.WaitForSecondsAsync(Data.CastTime);
             Targeter.Target(caster, this);
+            if (Data.ShakesOnCast)
+            {
+                Shaker.ShakeForSeconds(Data.ShakeStrength, Data.ShakeDuration);
+            }
             
             transform.SetParent(null);
         }
@@ -42,7 +46,7 @@ namespace Fighters.Match.Spells
                 Effect.Apply(player.Stats);
             }
 
-            if (Data.ShakesCamera)
+            if (Data.ShakesOnImpact)
             {
                 Shaker.ShakeForSeconds(Data.ShakeStrength, Data.ShakeDuration);
             }
