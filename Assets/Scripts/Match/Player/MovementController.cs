@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Fighters.Match.Players
 {
@@ -47,34 +45,34 @@ namespace Fighters.Match.Players
             var targetTile = MatchManager.Grid.GetTile(_currentPosition, delta);
 
             if (!targetTile) return false;
+
+            if (!targetTile.State.IsSteppable || targetTile.PlayerSide != _player.Side) return false;
             
-            if (targetTile.State != Tile.TileState.Blocked && targetTile.PlayerSide == _player.Side)
-            {
-                _currentPosition = targetTile.Location;
-                var moveTime = _player.AnimationHandler.Play(_animationTriggers[delta]);
-                Move(targetTile.transform.position, moveTime);
-            }
+            if (_player.Side == Side.Opponent && delta.X != 0) delta.Inverse();
+            var moveTime = _player.AnimationHandler.Play(_animationTriggers[delta]);
+            
+            Move(targetTile, moveTime);
             return true;
         }
 
-        private async void Move(Vector3 targetPosition, float moveTime)
+        private async void Move(Tile targetTile, float moveTime)
         {
             IsMoving = true;
+            float timer = 0;
             float duration = moveTime == 0 ? _defaultMoveTime : moveTime;
-            float timeElapsed = 0;
-            Vector3 currentPosition = transform.position;
-
-            Vector3 path = targetPosition - currentPosition;
-
-            var playerMoved = false;
-            while (timeElapsed < duration)
+            Vector3 originalPosition = transform.position;
+            var targetPosition = targetTile.transform.position;
+            
+            var movedToNextTile = false;
+            while (timer < duration)
             {
-                timeElapsed += Time.deltaTime;
-                transform.position = path * (timeElapsed / duration) + currentPosition;
-                if (timeElapsed / duration > 0.6f && !playerMoved)
+                timer += Time.deltaTime;
+                transform.position = Vector3.Lerp(originalPosition, targetPosition, timer / duration);
+                if (timer / duration > 0.6f && !movedToNextTile)
                 {
-                    playerMoved = true;
-                    MatchManager.Grid.PlacePlayer(_player, _currentPosition);
+                    _currentPosition = targetTile.Position;
+                    movedToNextTile = true;
+                    MatchManager.Grid.PlacePlayer(_player, targetTile);
                 }
 
                 await Awaitable.NextFrameAsync();
