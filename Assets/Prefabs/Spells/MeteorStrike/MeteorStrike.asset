@@ -18,13 +18,16 @@ MonoBehaviour:
   _manaCost: 0
   _icon: {fileID: 21300000, guid: 70cb77f3373424340bf09c5c780fc7eb, type: 3}
   _cooldown: 2
-  _castTime: 0.5
+  _castTime: 1
   _prefab: {fileID: 510164400441732913, guid: 2b93548f3646dfa43ad0f2cb76ee04b6, type: 3}
   _travelTime: 0.4
+  _hasCastingVFX: 0
+  _castingVFXEffect: {fileID: 0}
   _spawnLocation: 0
-  _shakesCamera: 1
-  _shakeDuration: 0.1
-  _shakeStrength: 5
+  _shakesOnImpact: 1
+  _shakesOnCast: 0
+  _shakeDuration: 0.06
+  _shakeStrength: 0.1
   _targetType: 3
   _targetSide: 1
   _range: 4
