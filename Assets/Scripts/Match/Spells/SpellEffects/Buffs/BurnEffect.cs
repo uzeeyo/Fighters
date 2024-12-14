@@ -1,21 +1,19 @@
-using Fighters.Match.Players;
 using Fighters.Match.Spells;
 using UnityEngine;
 
 namespace Fighters.Buffs
 {
-    public class PoisonEffect : BuffEffect
+    public class BurnEffect : BuffEffect
     {
-        public PoisonEffect(BuffData buffData) : base(buffData)
+        public BurnEffect(BuffData buffData) : base(buffData)
         {
-            _dps = buffData.HPPS;
             _duration = buffData.BuffDuration;
         }
 
-        private readonly float _dps;
+        private const float DPS = 3f;
         private readonly float _duration;
         private bool _active;
-
+        
         public override async void Activate()
         {
             float timer = 0;
@@ -28,7 +26,7 @@ namespace Fighters.Buffs
                     Deactivate();
                     return;
                 }
-                var damageForFrame = _dps * Time.deltaTime;
+                var damageForFrame = DPS * Time.deltaTime;
                 _playerStats.TakeDamage(damageForFrame);
                 timer += Time.deltaTime;
 

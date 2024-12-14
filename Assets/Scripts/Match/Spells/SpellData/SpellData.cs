@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
 {
@@ -10,6 +10,7 @@ namespace Fighters.Match.Spells
         SingleRandom,
         MultiMoveDelayed,
         MoveForward,
+        SingleMoveToTile,
         MultiForward,
     }
 
@@ -39,11 +40,14 @@ namespace Fighters.Match.Spells
         [SerializeField] private float _castTime;
         [SerializeField] private Spell _prefab;
         [SerializeField] private float _travelTime;
+        [SerializeField] private bool _hasCastingVFX;
+        [SerializeField] private VisualEffectAsset _castingVFXEffect;
         [SerializeField] private SpawnLocation _spawnLocation;
-        [FormerlySerializedAs("_shakesCamera")] [SerializeField] private bool _shakesOnImpact;
+        [SerializeField] private bool _shakesOnImpact;
         [SerializeField] private bool _shakesOnCast;
         [SerializeField] private float _shakeDuration;
         [SerializeField] private float _shakeStrength;
+        [SerializeField] private bool _changesTileState;
 
         public string Name => _name;
         public string Description => _description;
@@ -55,10 +59,18 @@ namespace Fighters.Match.Spells
         public Spell Prefab => _prefab;
         public float TravelTime => _travelTime;
         public SpawnLocation SpawnLocation => _spawnLocation;
+        public bool HasCastingVFX => _hasCastingVFX;
         public bool ShakesOnImpact => _shakesOnImpact;
         public bool ShakesOnCast => _shakesOnCast;
         public float ShakeDuration => _shakeDuration;
         public float ShakeStrength => _shakeStrength;
+        
+        //Tile state modifiers
+        [SerializeField] private TileState _tileState;
+        [SerializeField] private float _tileStateDuration;
+        
+        public TileState TileState => _tileState;
+        public float TileStateDuration => _tileStateDuration;
 
 
 

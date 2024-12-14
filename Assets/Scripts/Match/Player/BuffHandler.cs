@@ -17,6 +17,7 @@ namespace Match.Player
         private List<BuffType> _uniqueBuffs = new()
         {
             BuffType.Shield,
+            BuffType.Burn,
         };
 
         public event Action<BuffEffect> BuffAdded;
@@ -37,11 +38,11 @@ namespace Match.Player
         public void Add(BuffEffect effect)
         {
             Debug.Log("Applying buff");
-            if (_uniqueBuffs.Contains(effect.BuffType))
+            if (_uniqueBuffs.Contains(effect.BuffType) && _buffs.Any(x => x.BuffType == effect.BuffType))
             {
                 Remove(effect.BuffType);
             }
-            
+
             lock (_buffLock)
             {
                 _buffs.Add(effect);
@@ -54,8 +55,8 @@ namespace Match.Player
 
         public void Remove(BuffType buffType)
         {
-                var buff = _buffs.First(x => x.BuffType == buffType);
-                Remove(buff);
+            var buff = _buffs.First(x => x.BuffType == buffType);
+            Remove(buff);
         }
 
         private void Remove(BuffEffect buff)
@@ -66,7 +67,7 @@ namespace Match.Player
                 {
                     _buffs.Remove(buff);
                 }
-                
+
                 buff.Deactivate();
                 BuffRemoved?.Invoke(buff);
             }

@@ -80,7 +80,7 @@ namespace Fighters.Match
             return tiles;
         }
 
-        public void PlacePlayer(Player player, Position newPosition)
+        public void PlacePlayer(Player player, Tile targetTile)
         {
             if (!player)
             {
@@ -88,25 +88,20 @@ namespace Fighters.Match
                 return;
             }
             
-            if (!IsValidPosition(newPosition))
-            {
-                Debug.LogError($"Invalid position: {newPosition}");
-                return;
-            }
-            
-            var targetTile = _tilesTwoD[newPosition.X, newPosition.Y];
             if (targetTile.Player)
             {
-                Debug.LogError($"Tile at {newPosition} is already occupied");
+                Debug.LogError($"Tile at {targetTile.Position} is already occupied");
                 return;
             }
             
-            var oldPosition = player.CurrentTile.Location;
+            var oldPosition = player.CurrentTile.Position;
             if (IsValidPosition(oldPosition))
             {
                 _tilesTwoD[oldPosition.X, oldPosition.Y].Player = null;
             }
 
+            targetTile.Step(player);
+            
             player.CurrentTile = targetTile;
             targetTile.Player = player;
         }

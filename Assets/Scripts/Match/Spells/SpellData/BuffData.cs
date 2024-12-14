@@ -7,11 +7,12 @@ namespace Fighters.Buffs
     public enum BuffType
     {
         Poison,
+        Burn,
         Stun,
         Silence,
         Root,
         Slow,
-        COnfusion,
+        Confusion,
         Blind,
         Shield,
     }

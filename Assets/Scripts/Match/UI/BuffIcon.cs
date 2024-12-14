@@ -33,11 +33,11 @@ namespace Match.UI
         //TODO: this should probably be removed and subscribe to a TimeRemainingChanged event
         private async void Countdown()
         {
-            while (Effect.TimeRemaining >= 0 && gameObject)
+            while (gameObject && Effect.TimeRemaining >= 0 && gameObject)
             {
                 _icon.fillAmount = Effect.TimeRemaining / Effect.Duration;
                 _timeRemainingText.text = Effect.TimeRemaining.ToString("F2");
-                await Awaitable.NextFrameAsync();
+                await Awaitable.NextFrameAsync(destroyCancellationToken);
             }
             Destroy(gameObject);
         }

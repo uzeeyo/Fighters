@@ -1,4 +1,6 @@
+using System;
 using Fighters.Match.Players;
+using Fighters.Match.Spells;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -8,45 +10,43 @@ namespace Fighters.Match
     {
         private static readonly int EmissionColor = Shader.PropertyToID("_EmissiveColor");
 
-        public enum TileState
-        {
-            None,
-            Slow,
-            Root,
-            Blocked,
-            Burned,
-            Poisoned,
-            Frozen,
-        }
-
         private Color _originalGlowColor;
         private Material _glowMaterial;
+        private Material _stateMaterial;
+        private TileStateHandler _stateHandler;
 
-        public TileState State { get; private set; }
-        public Position Location { get; private set; }
-
+        public Position Position { get; private set; }
         public Player Player { get; set; }
         public GameObject TileObject { get; set; }
+        public ITileState State => _stateHandler.State;
 
         [field: SerializeField] public Side PlayerSide { get; set; }
 
-        private void Awake()
-        {
-            State = TileState.None;
-        }
-
         public void Init(Position position)
         {
-            Location = position;
+            Position = position;
+            _stateMaterial = TileObject.GetComponent<MeshRenderer>().materials[0];
             _glowMaterial = TileObject.GetComponent<MeshRenderer>().materials[1];
             _originalGlowColor = _glowMaterial.GetColor(EmissionColor);
+            _stateHandler = new(_stateMaterial);
         }
 
-        public void SetState(TileState state)
+        public void ChangeState(SpellData spellData)
         {
-            State = state;
+            _stateHandler.ChangeState(spellData);
         }
         
+        public void Step(Player player)
+        {
+            if (!_stateHandler.State.IsSteppable);
+
+            if (State is IBuffTileState buffState)
+            {
+                buffState.HandleStep(player);
+            }
+        }
+        
+        //delete??
         public async void HighLight()
         {
             _glowMaterial.SetColor(EmissionColor, Color.red * 2f);
