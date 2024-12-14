@@ -1,35 +1,40 @@
 using System;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
 {
-    public class Projectile : MonoBehaviour
+    public class Projectile : SpellVisual
     {
         private Spell _spell;
-        private VisualEffect _visualEffect;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _spell = GetComponentInParent<Spell>();
+            GetComponent<Collider>().isTrigger = true;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            _spell.OnImpact(other, transform.position, gameObject);
+            _spell.OnImpact(this, other, transform.position);
         }
 
-        public async void MoveToPosition(Vector3 targetPosition, float travelTime, AnimationCurve speedCurve)
+        public async void MoveToPosition(Vector3 targetPosition)
         {
             float timer = 0;
             var originalPosition = transform.position;
 
-            while (gameObject && timer < travelTime)
+            while (gameObject && timer < _spell.Data.TravelTime)
             {
-                var curveValue = speedCurve.Evaluate(timer / travelTime);
-                transform.position = originalPosition + (targetPosition - originalPosition) * curveValue;
-
                 timer += Time.deltaTime;
+                var percentage = timer / _spell.Data.TravelTime;
+                var distancePercentage = _spell.Data.SpeedCurve.Evaluate(percentage);
+                var newPosition =
+                    originalPosition + (targetPosition - originalPosition) * distancePercentage;
+                newPosition.y += _spell.Data.VerticalCurve.Evaluate(percentage);
+                newPosition.x += _spell.Data.HorizontalCurve.Evaluate(percentage);
+                transform.position = newPosition;
+
                 try
                 {
                     await Awaitable.NextFrameAsync(destroyCancellationToken);
@@ -39,8 +44,9 @@ namespace Fighters.Match.Spells
                     return;
                 }
             }
+            transform.position = targetPosition;
 
-            _spell.OnImpact(null, targetPosition, gameObject);
+            _spell.OnImpact(this, null, targetPosition);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Fighters.Match.Players;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
 {
@@ -14,14 +15,23 @@ namespace Fighters.Match.Spells
         {
             { TargetType.Self, TargetSelf },
             { TargetType.Single, TargetSingle },
+            { TargetType.SingleMoveToTile, SingleMoveToTile },
             { TargetType.SingleRandom, TargetSingleRandom },
             { TargetType.MoveForward, MoveForward },
             { TargetType.MultiForward, TargetMultiForward },
-            { TargetType.MultiMoveDelayed, TargetMoveToTile }
+            { TargetType.MultiMoveDelayed, MultiMoveToTile }
         };
 
+        
+        //TODO: create a strategy pattern
         public static void Target(Player caster, Spell spell)
         {
+            if (spell.transform.childCount == 0)
+            {
+                Debug.LogError($"Spell {spell.Data.Name} has no children.");
+                return;
+            }
+
             if (_spellTargetingActions.TryGetValue(spell.Data.TargetType, out var action))
             {
                 action(caster, spell);
@@ -33,61 +43,65 @@ namespace Fighters.Match.Spells
 
         private static void TargetSelf(Player caster, Spell spell)
         {
-            spell.transform.position = caster.transform.position;
+            var spellVisual = spell.transform.GetChild(0).GetComponent<SpellVisual>();
+            spellVisual.Init(caster.transform.position, caster.transform.rotation);
             spell.Effect.Apply(caster.Stats);
         }
 
         private static void TargetSingle(Player caster, Spell spell)
         {
             var delta = new Position(spell.Data.Range, 0);
-            var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Location, delta);
-            spell.transform.position = targetTile.transform.position;
-
+            var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Position, delta);
+            
+            var spellVisual = spell.transform.GetChild(0).GetComponent<SpellVisual>();
+            spellVisual.Init(targetTile.transform.position, caster.transform.rotation);
+            
             TryApplyEffect(spell, targetTile);
         }
 
         private static void TargetSingleRandom(Player caster, Spell spell)
         {
             var targetTile = MatchManager.Grid.GetRandomTile(spell.Data.TargetSide);
-            spell.transform.position = targetTile.transform.position;
+            
+            var spellVisual = spell.transform.GetChild(0).GetComponent<SpellVisual>();
+            spellVisual.Init(targetTile.transform.position, caster.transform.rotation);
+            
             TryApplyEffect(spell, targetTile);
         }
 
+
+        //TODO: Not fully implemented, merge with TargetSingle
         private static void TargetMultiForward(Player caster, Spell spell)
         {
             var targetTiles =
-                MatchManager.Grid.GetTilesInDirection(caster.CurrentTile.Location, Position.Right, spell.Data.Range);
+                MatchManager.Grid.GetTilesInDirection(caster.CurrentTile.Position, Position.Right, spell.Data.Range);
             foreach (var tile in targetTiles)
             {
                 TryApplyEffect(spell, tile);
             }
         }
 
-        private static async void MoveForward(Player caster, Spell spell)
+        private static void MoveForward(Player caster, Spell spell)
         {
-            var originalPosition = spell.transform.position;
+            var projectile = spell.transform.GetChild(0).GetComponent<Projectile>();
+            
 
-            var timeElapsed = 0f;
-            var duration = spell.Data.TravelTime;
+            var maxX = projectile.transform.position.x + MAX_TRAVEL_DISTANCE;
+            var targetPosition = new Vector3(maxX, projectile.transform.position.y, projectile.transform.position.z);
 
-            var maxX = originalPosition.x + MAX_TRAVEL_DISTANCE;
-            var targetPosition = new Vector3(maxX, originalPosition.y, originalPosition.z);
-
-            while (timeElapsed < duration)
-            {
-                if (!spell) return;
-                var horizontalPercentage = spell.Data.HorizontalCurve.Evaluate(timeElapsed / duration);
-                spell.transform.position =
-                    originalPosition + (targetPosition - originalPosition) * horizontalPercentage;
-
-                timeElapsed += Time.deltaTime;
-                await Awaitable.NextFrameAsync();
-            }
-
-            GameObject.Destroy(spell.gameObject);
+            projectile.MoveToPosition(targetPosition);
         }
 
-        private static async void TargetMoveToTile(Player caster, Spell spell)
+        private static void SingleMoveToTile(Player caster, Spell spell)
+        {
+            var delta = new Position(spell.Data.Range, 0);
+            var targetTilePosition = MatchManager.Grid.GetTile(caster.CurrentTile.Position, delta).transform.position;
+
+            var projectile = spell.GetComponentInChildren<Projectile>();
+            projectile.MoveToPosition(targetTilePosition);
+        }
+
+        private static async void MultiMoveToTile(Player caster, Spell spell)
         {
             var childCount = spell.transform.childCount;
             Tile lastTile = null;
@@ -98,17 +112,17 @@ namespace Fighters.Match.Spells
                 {
                     tile = MatchManager.Grid.GetRandomTile(spell.Data.TargetSide);
                 }
-                spell.transform.GetChild(i).GetComponent<Projectile>().MoveToPosition(tile.transform.position,
-                    spell.Data.TravelTime, spell.Data.SpeedCurve);
+
+                spell.transform.GetChild(i).GetComponent<Projectile>().MoveToPosition(tile.transform.position);
 
                 lastTile = tile;
-                await Awaitable.WaitForSecondsAsync(spell.Data.RandomTimeInterval);
+                
+                await Awaitable.WaitForSecondsAsync(spell.Data.RandomTimeInterval, spell.destroyCancellationToken);
             }
         }
 
         private static async void TryApplyEffect(Spell spell, Tile tile)
         {
-            await Awaitable.WaitForSecondsAsync(spell.Data.CastTime);
             float timer = 0;
             do
             {

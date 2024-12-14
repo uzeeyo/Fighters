@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Fighters.Buffs;
+using Fighters.Match;
 using Fighters.Match.Spells;
 using UnityEditor;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace Editor
             var spellData = (SpellData)target;
 
             DrawCommonFields(spellData);
+            CheckTileStateChange(spellData);
             CheckTargetingChange(spellData);
             CheckBuffFields(spellData);
             serializedObject.ApplyModifiedProperties();
@@ -81,6 +83,15 @@ namespace Editor
             }
         }
 
+        private void CheckTileStateChange(SpellData spellData)
+        {
+            DrawField("Tile State", x => x.TileState);
+            if (spellData.TileState != TileState.Default)
+            {
+                DrawField("Duration", x => x.TileStateDuration);
+            }
+        }
+
         private void CheckTargetingChange(SpellData spellData)
         {
             EditorGUILayout.Space();
@@ -105,10 +116,17 @@ namespace Editor
             switch (data.TargetType)
             {
                 case TargetType.Single:
-                    DrawField("Range", x => x.Range);
+                    DrawField("Distance", x => x.Range);
                     break;
                 case TargetType.SingleRandom:
                     DrawField("TargetSide", x => x.TargetSide);
+                    break;
+                case TargetType.SingleMoveToTile:
+                    DrawField("Distance", x => x.Range);
+                    DrawField("Travel Time", x => x.TravelTime);
+                    DrawField("Speed Curve", x => x.SpeedCurve);
+                    DrawField("Vertical Curve", x => x.VerticalCurve);
+                    DrawField("Horizontal Curve", x => x.HorizontalCurve);
                     break;
                 case TargetType.MultiMoveDelayed:
                     DrawField("Travel Time", x => x.TravelTime);
@@ -116,13 +134,15 @@ namespace Editor
                     DrawField("Time Interval", x => x.RandomTimeInterval);
                     DrawField("Tile Count", x => x.Range);
                     DrawField("Speed Curve", x => x.SpeedCurve);
+                    DrawField("Vertical Curve", x => x.VerticalCurve);
+                    DrawField("Horizontal Curve", x => x.HorizontalCurve);
                     break;
                 case TargetType.MultiForward:
                     DrawField("Range", x => x.Range);
                     break;
                 case TargetType.MoveForward:
                     DrawField("Travel Time", x => x.TravelTime);
-                    DrawField("Horizontal Curve", x => x.HorizontalCurve);
+                    DrawField("Speed Curve", x => x.SpeedCurve);
                     break;
             }
 
@@ -146,11 +166,16 @@ namespace Editor
             });
             
             DrawField("Buff Type", x => buffData.BuffType);
-            DrawField("Duration", x => buffData.Duration);
+            DrawField("Duration", x => buffData.BuffDuration);
             
             switch (buffData.BuffType)
             {
                 case BuffType.Poison:
+                {
+                    DrawField("DPS", x => buffData.HPPS);
+                    break;
+                }
+                case BuffType.Burn:
                 {
                     DrawField("DPS", x => buffData.HPPS);
                     break;

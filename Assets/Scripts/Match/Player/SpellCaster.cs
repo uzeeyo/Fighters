@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 
 namespace Fighters.Match
 {
@@ -43,7 +44,7 @@ namespace Fighters.Match
             if (_onCooldown || !_player.CanAct) return;
 
             var spellData = _spellBank.GetBasic();
-            Cast(spellData);
+            StartCast(spellData);
         }
 
         private void OnCast(InputValue value)
@@ -54,34 +55,67 @@ namespace Fighters.Match
             if (direction == Vector2.zero) return;
 
             var spellData = _spellBank.GetSpellInRotation(direction);
-            Cast(spellData);
+            StartCast(spellData);
         }
 
-        private void Cast(SpellData spellData)
+        private async void StartCast(SpellData spellData)
         {
             if (!VerifyCanActivate(spellData)) return;
-
-            var spell = SpellFactory.Get(spellData);
-            spell.transform.SetParent(_spawnLocations[spell.Data.SpawnLocation], false);
-            spell.transform.rotation = _player.transform.rotation;
             
-            //if player takes damage, cancel the spell
-            spell.Cast(_player);
-            DisableCasting(spell.Data.CastTime);
-            CooldownHandler.AddItem(spellData);
+            var spell = SpellFactory.Get(spellData);
+            SetSpellTransform(spell);
+            
+            //start cooldown immediately or after spell finishes??
+            CooldownHandler.AddItem(spell.Data);
+            
+            var animationTime = _player.AnimationHandler.Play(spell.Data.AnimationName);
+            PlayVFX(spell, "OnCast");
+            
+            DisableCasting(animationTime);
+            await Awaitable.WaitForSecondsAsync(spell.Data.CastTime, spell.destroyCancellationToken);
+            
+            LaunchSpell(spell);
+        }
+
+        private void LaunchSpell(Spell spell)
+        {
+            PlayVFX(spell, "OnPlay");
+            if (spell.Data.ShakesOnCast) Shaker.Shake(spell.Data.ShakeStrength, spell.Data.ShakeDuration);
+            
+            Targeter.Target(_player, spell);
+        }
+
+        private static void PlayVFX(Spell spell, string eventName)
+        {
+            foreach (var vfx in spell.GetComponentsInChildren<VisualEffect>())
+            {
+                vfx.SendEvent(eventName);
+            }
+        }
+
+        private async void DisableCasting(float duration)
+        {
+            IsCasting = true;
+            await Awaitable.WaitForSecondsAsync(duration, destroyCancellationToken);
+            IsCasting = false;
+        }
+
+        private void SetSpellTransform(Spell spell)
+        {
+            var spawnParent = _spawnLocations[spell.Data.SpawnLocation];
+            if (spawnParent == null)
+            {
+                Debug.LogWarning("No spawn location specified for spell: " + spell.Data.Name);
+                spawnParent = transform;
+            }
+            spell.transform.SetParent(spawnParent, false);
+            spell.transform.rotation = _player.transform.rotation;
         }
 
         private bool VerifyCanActivate(SpellData data)
         {
             var onCooldown = CooldownHandler.GetCooldownTime(data.Name) > 0;
             return _player.CanAct && !onCooldown && _player.Stats.TryUseMana(data.ManaCost);
-        }
-
-        private async void DisableCasting(float duration)
-        {
-            IsCasting = true;
-            await Awaitable.WaitForSecondsAsync(duration);
-            IsCasting = false;
         }
     }
 }
