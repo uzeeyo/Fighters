@@ -32,6 +32,8 @@ namespace Fighters.Match.Spells
         }
     }
 
+    
+    //Effect factory needs to split off in its own thing
     public interface ISpellEffectFactory
     {
         ISpellEffect Get(SpellData data);
@@ -58,7 +60,8 @@ namespace Fighters.Match.Spells
         private Dictionary<BuffType, IBuffFactory> _buffFactories = new()
         {
             { BuffType.Root, new RootBuffFactory() },
-            { BuffType.Poison, new PoisonEffectFactory() }
+            { BuffType.Poison, new PoisonEffectFactory() },
+            { BuffType.Burn, new BurnEffectFactory() }
         };
         
         public ISpellEffect Get(SpellData data)
@@ -78,19 +81,17 @@ namespace Fighters.Match.Spells
         
         private class RootBuffFactory : IBuffFactory
         {
-            public BuffEffect Get(BuffData buffData)
-            {
-                return new RootEffect(buffData);
-            }
+            public BuffEffect Get(BuffData buffData) => new RootEffect(buffData);
         }
 
         private class PoisonEffectFactory : IBuffFactory
         {
-            public BuffEffect Get(BuffData buffData)
-            {
-                return new PoisonEffect(buffData);
-            }
+            public BuffEffect Get(BuffData buffData) => new PoisonEffect(buffData);
         }
-        
+
+        private class BurnEffectFactory : IBuffFactory
+        {
+            public BuffEffect Get(BuffData buffData) => new BurnEffect(buffData);
+        }
     }
 }
