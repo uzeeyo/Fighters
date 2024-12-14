@@ -6,7 +6,7 @@ namespace Fighters.Match
     {
         private void Awake()
         {
-            Destroy(gameObject, 0.5f);
+            Destroy(gameObject, 2f);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Fighters.Match
             s_Transform = transform;
         }
 
-        public static async void ShakeForSeconds(float strength, float duration)
+        public static async void Shake(float strength, float duration)
         {
             float timeElapsed = 0;
             while (timeElapsed < duration)

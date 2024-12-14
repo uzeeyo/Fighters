@@ -5,6 +5,7 @@ namespace Match.Player
 {
     public class AnimationHandler
     {
+        const float CROSSFADE_DURATION = 0.1f;
         public AnimationHandler(Animator animator)
         {
             _animator = animator;
@@ -20,14 +21,13 @@ namespace Match.Player
         
             if (!clip)
             {
-                //Debug.LogError($"Animation clip {animationName} not found, skipping!");
+                Debug.LogWarning($"Animation clip {animationName} not found, skipping!");
                 return 0;
             }
-
-            // float crossfadeDuration = 0.1f;
-            // _animator.CrossFadeInFixedTime(hash, crossfadeDuration);
             
-            _animator.Play(animationName);
+            _animator.CrossFadeInFixedTime(hash, CROSSFADE_DURATION);
+            
+            
             ReturnToIdle(clip.length);
             return clip.length;
             

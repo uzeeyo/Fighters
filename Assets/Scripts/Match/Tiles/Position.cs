@@ -45,5 +45,11 @@ namespace Fighters.Match
         {
             return HashCode.Combine(X, Y);
         }
+
+        public void Inverse()
+        {
+            X = -X;
+            Y *= -Y;
+        }
     }
 }
