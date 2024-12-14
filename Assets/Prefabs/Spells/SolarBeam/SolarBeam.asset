@@ -21,11 +21,17 @@ MonoBehaviour:
   _castTime: 0.6
   _prefab: {fileID: 2779366505651867790, guid: 57dc8d3cadf938b4a99c27f4e5ff175f, type: 3}
   _travelTime: 0
+  _hasCastingVFX: 0
+  _castingVFXEffect: {fileID: 0}
   _spawnLocation: 0
+  _shakesOnImpact: 0
+  _shakesOnCast: 0
+  _shakeDuration: 0
+  _shakeStrength: 0
   _targetType: 1
+  _targetSide: 0
   _range: 3
   _randomTimeInterval: 0
-  _instantDelay: 0
   _horizontalCurve:
     serializedVersion: 2
     m_Curve: []
@@ -38,4 +44,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _speedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _hasDuration: 0
+  _duration: 0
   _damageAmount: 20
+  _hitEffect: {fileID: 0}

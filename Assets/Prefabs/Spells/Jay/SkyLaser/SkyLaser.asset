@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3238ae1ae2584436adc58b024ce5d1ff, type: 3}
+  m_Name: SkyLaser
+  m_EditorClassIdentifier: 
+  _name: Orbital Reflection
+  _description: 
+  _animationName: ShootSky
+  _manaCost: 0
+  _icon: {fileID: 0}
+  _cooldown: 1
+  _castTime: 0.9
+  _prefab: {fileID: 7073661747438798055, guid: 6ee951bfcd4e8134cbd8ca9782ecf9de, type: 3}
+  _travelTime: 0
+  _hasCastingVFX: 0
+  _castingVFXEffect: {fileID: 0}
+  _spawnLocation: 3
+  _shakesOnImpact: 0
+  _shakesOnCast: 0
+  _shakeDuration: 0
+  _shakeStrength: 0
+  _targetType: 1
+  _targetSide: 0
+  _range: 2
+  _randomTimeInterval: 0
+  _horizontalCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _verticalCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _speedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _hasDuration: 0
+  _duration: 0
+  _damageAmount: 0
+  _hitEffect: {fileID: 0}

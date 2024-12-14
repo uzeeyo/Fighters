@@ -18,15 +18,20 @@ MonoBehaviour:
   _manaCost: 5
   _icon: {fileID: 21300000, guid: bce9db55f5e093f468bc7ec0e39f6394, type: 3}
   _cooldown: 2
-  _castTime: 0
+  _castTime: 0.5
   _prefab: {fileID: 8884725205683912378, guid: 9d5ab31b21d4b0c4c885c15b480233e2, type: 3}
   _travelTime: 0
+  _hasCastingVFX: 0
+  _castingVFXEffect: {fileID: 0}
   _spawnLocation: 0
+  _shakesOnImpact: 0
+  _shakesOnCast: 1
+  _shakeDuration: 1
+  _shakeStrength: 0.072
   _targetType: 5
   _targetSide: 0
   _range: 6
   _randomTimeInterval: 0
-  _instantDelay: 0
   _horizontalCurve:
     serializedVersion: 2
     m_Curve: []
@@ -34,6 +39,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _verticalCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _speedCurve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
