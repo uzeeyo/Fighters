@@ -8,7 +8,7 @@ namespace Fighters.Match.Spells
     {
         protected BuffEffect(BuffData buffData)
         {
-            Duration = buffData.Duration;
+            Duration = buffData.BuffDuration;
             BuffType = buffData.BuffType;
             _timeStarted = Time.time;
             Icon = buffData.Icon;
