@@ -12,7 +12,7 @@ namespace Fighters.Match.Spells
         public SpellData Data { get; private set; }
         public ISpellEffect Effect { get; private set; }
 
-        protected virtual void Awake() => Destroy(gameObject, 2f);
+        private void Awake() => Destroy(gameObject, 5f);
 
         public void Init(SpellData data, ISpellEffect effect)
         {
@@ -20,37 +20,27 @@ namespace Fighters.Match.Spells
             Effect = effect;
         }
 
-        public async void Cast(Player caster)
+        public void OnTileHit(Tile tile)
         {
-            _caster = caster;
-            caster.AnimationHandler.Play(Data.AnimationName);
-            await Awaitable.WaitForSecondsAsync(Data.CastTime);
-            Targeter.Target(caster, this);
-            if (Data.ShakesOnCast)
-            {
-                Shaker.ShakeForSeconds(Data.ShakeStrength, Data.ShakeDuration);
-            }
-            
-            transform.SetParent(null);
+            tile.ChangeState(Data);
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnImpact(Projectile projectile, Collider other, Vector3 hitPoint)
         {
-            OnImpact(other, transform.position, gameObject);
-        }
-
-        public void OnImpact(Collider other, Vector3 hitPoint, GameObject projectile)
-        {
+            Destroy(projectile.gameObject);
             if (other && other.TryGetComponent(out Player player) && player != _caster)
             {
                 Effect.Apply(player.Stats);
+                //should player getting hit also apply tile buffs??
+                OnTileHit(player.CurrentTile);
             }
 
             if (Data.ShakesOnImpact)
             {
-                Shaker.ShakeForSeconds(Data.ShakeStrength, Data.ShakeDuration);
+                Shaker.Shake(Data.ShakeStrength, Data.ShakeDuration);
             }
 
+            //all spells should be able to make hit effects
             if (Data is DamageData damageData && damageData.HitEffect)
             {
                 var hitEffect = new GameObject("HitEffect", typeof(VisualEffect), typeof(HitEffect));
@@ -58,7 +48,6 @@ namespace Fighters.Match.Spells
                 hitEffect.transform.position = hitPoint;
                 hitEffect.GetComponent<VisualEffect>().visualEffectAsset = damageData.HitEffect;
             }
-            Destroy(projectile);
         }
     }
 }
