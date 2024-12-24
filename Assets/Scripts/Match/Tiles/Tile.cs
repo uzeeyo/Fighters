@@ -18,9 +18,8 @@ namespace Fighters.Match
         public Position Position { get; private set; }
         public Player Player { get; set; }
         public GameObject TileObject { get; set; }
-        public ITileState State => _stateHandler.State;
-
-        [field: SerializeField] public Side PlayerSide { get; set; }
+        public ITileState State => _stateHandler.CurrentState;
+        public Side PlayerSide { get; set; }
 
         public void Init(Position position)
         {
@@ -29,6 +28,7 @@ namespace Fighters.Match
             _glowMaterial = TileObject.GetComponent<MeshRenderer>().materials[1];
             _originalGlowColor = _glowMaterial.GetColor(EmissionColor);
             _stateHandler = new(_stateMaterial);
+            PlayerSide = position.X > 2 ? Side.Opponent : Side.Self;
         }
 
         public void ChangeState(SpellData spellData)
@@ -38,7 +38,7 @@ namespace Fighters.Match
         
         public void Step(Player player)
         {
-            if (!_stateHandler.State.IsSteppable);
+            if (!_stateHandler.CurrentState.IsSteppable);
 
             if (State is IBuffTileState buffState)
             {

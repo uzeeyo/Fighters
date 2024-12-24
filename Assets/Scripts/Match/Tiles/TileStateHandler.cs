@@ -10,25 +10,26 @@ namespace Fighters.Match
         public TileStateHandler(Material material)
         {
             _material = material;
-            State = TileStateFactory.GetDefault();
+            CurrentState = TileStateFactory.GetDefault();
         }
 
         private readonly Material _material;
         private readonly CancellationTokenSource _stateChangeCancellation = new();
-        private string _previousState = "Default";
         
-        public ITileState State { get; private set; }
+        public ITileState CurrentState { get; private set; }
         
 
         public void ChangeState(SpellData spellData)
         {
-            Debug.Log("Changing tile state to " + State.ShaderProperty);
-            if (State is not DefaultTileState)
+            if (spellData.TileState == TileState.Default) return;
+            
+            if (CurrentState is not DefaultTileState)
             {
                 _stateChangeCancellation.Cancel();
             }
-            State = TileStateFactory.Get(spellData);
-            if (State is ITemporalTileState temporalState)
+            
+            CurrentState = TileStateFactory.Get(spellData);
+            if (CurrentState is ITemporalTileState temporalState)
             {
                 Countdown(temporalState);
             }
@@ -40,10 +41,10 @@ namespace Fighters.Match
             try
             {
                 await Awaitable.WaitForSecondsAsync(state.Duration, _stateChangeCancellation.Token);
-                State = TileStateFactory.GetDefault();
+                CurrentState = TileStateFactory.GetDefault();
                 UpdateView();
             }
-            catch (OperationCanceledException) {}
+            catch (OperationCanceledException) { }
         }
 
         private void UpdateView()
@@ -52,8 +53,7 @@ namespace Fighters.Match
             {
                 _material.DisableKeyword(keyword);
             }
-            _material.EnableKeyword($"_STATE_{State.ShaderProperty.ToUpper()}");
-            _previousState = State.ShaderProperty;
+            _material.EnableKeyword($"_STATE_{CurrentState.ShaderProperty.ToUpper()}");
         }
     }
 }

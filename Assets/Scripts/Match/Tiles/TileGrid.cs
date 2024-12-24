@@ -33,7 +33,6 @@ namespace Fighters.Match
                     tile.transform.position = tileObjects[index].transform.position;
                     tile.TileObject = tileObjects[index];
                     tile.Init(new Position(x, y));
-                    tile.PlayerSide = x > 2 ? Side.Opponent : Side.Self;
                     _tilesTwoD[x, y] = tile;
                     index++;
                 }
