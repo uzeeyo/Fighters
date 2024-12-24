@@ -20,14 +20,18 @@ MonoBehaviour:
   _cooldown: 1
   _castTime: 0.6
   _prefab: {fileID: -98583861537712902, guid: 01b847df32484084baaf60f85bef6fa8, type: 3}
-  _travelTime: 0.4
+  _travelTime: 0.7
   _hasCastingVFX: 0
   _castingVFXEffect: {fileID: 0}
-  _spawnLocation: 3
+  _spawnLocation: 0
   _shakesOnImpact: 0
   _shakesOnCast: 0
   _shakeDuration: 0
   _shakeStrength: 0
+  _changesTileState: 0
+  _targetDelayAfterCast: 0
+  _tileState: 0
+  _tileStateDuration: 0
   _targetType: 4
   _targetSide: 0
   _range: 0
@@ -64,12 +68,30 @@ MonoBehaviour:
     m_RotationOrder: 4
   _speedCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: -0.23328595
+      outSlope: -0.23328595
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.069765046
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2.7108958
+      outSlope: 2.7108958
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.050867915
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _hasDuration: 0
-  _duration: 4
+  _targetDuration: 4
   _buffType: 0
-  _buffDuration: 0
+  _buffDuration: 10
   _hPPS: 2

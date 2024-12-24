@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Solar Laser
   _description: 
-  _animationName: GAttack_Beam
+  _animationName: EvilBeam
   _manaCost: 5
   _icon: {fileID: 21300000, guid: bce9db55f5e093f468bc7ec0e39f6394, type: 3}
   _cooldown: 2
-  _castTime: 0.5
+  _castTime: 0.1
   _prefab: {fileID: 8884725205683912378, guid: 9d5ab31b21d4b0c4c885c15b480233e2, type: 3}
   _travelTime: 0
   _hasCastingVFX: 0
@@ -28,7 +28,11 @@ MonoBehaviour:
   _shakesOnCast: 1
   _shakeDuration: 1
   _shakeStrength: 0.072
-  _targetType: 5
+  _changesTileState: 0
+  _targetDelayAfterCast: 0
+  _tileState: 0
+  _tileStateDuration: 0
+  _targetType: 6
   _targetSide: 0
   _range: 6
   _randomTimeInterval: 0
@@ -51,6 +55,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _hasDuration: 1
-  _duration: 1
+  _targetDuration: 1
   _damageAmount: 15
   _hitEffect: {fileID: 0}

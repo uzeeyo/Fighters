@@ -28,6 +28,10 @@ MonoBehaviour:
   _shakesOnCast: 0
   _shakeDuration: 0
   _shakeStrength: 0
+  _changesTileState: 0
+  _targetDelayAfterCast: 0
+  _tileState: 0
+  _tileStateDuration: 0
   _targetType: 5
   _targetSide: 0
   _range: 3
@@ -114,7 +118,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _hasDuration: 0
-  _duration: 0
+  _targetDuration: 0
   _damageAmount: 10
   _hitEffect: {fileID: 8926484042661614526, guid: c9fb67eb725ac1443b7b2c2228d5eb06,
     type: 3}

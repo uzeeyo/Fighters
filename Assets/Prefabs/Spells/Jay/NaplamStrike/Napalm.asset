@@ -21,19 +21,20 @@ MonoBehaviour:
   _castTime: 1.166667
   _prefab: {fileID: -2770056557908715149, guid: 6418acd4469c29b44a96f3b1bb0b7696,
     type: 3}
-  _travelTime: 0.49
+  _travelTime: 0.34
   _hasCastingVFX: 0
   _castingVFXEffect: {fileID: 0}
-  _spawnLocation: 0
+  _spawnLocation: 2
   _shakesOnImpact: 1
   _shakesOnCast: 0
   _shakeDuration: 0.1
   _shakeStrength: 0.137
   _changesTileState: 0
+  _targetDelayAfterCast: 0
   _tileState: 2
   _tileStateDuration: 8
   _targetType: 3
-  _targetSide: 0
+  _targetSide: 1
   _range: 0
   _randomTimeInterval: 0.5
   _horizontalCurve:
@@ -73,7 +74,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _hasDuration: 0
-  _duration: 10
+  _targetDuration: 10
   _buffType: 1
-  _buffDuration: 0
-  _hPPS: 2
+  _buffDuration: 10
+  _hPPS: 1

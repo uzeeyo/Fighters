@@ -50,6 +50,22 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _BurntBaseColor:
+        m_Texture: {fileID: 2800000, guid: e4a0d3f9490da3d428bf629a1cd1d1b6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BurntEmissive:
+        m_Texture: {fileID: 2800000, guid: 51f9aa3093fd6f64083140b6d95a0967, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BurntMaskMap:
+        m_Texture: {fileID: 2800000, guid: 503e76bb36d19ae4ab6a2697f09902a2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BurntNormal:
+        m_Texture: {fileID: 2800000, guid: 8eb1f8d9c55985045a3006211b5cdd6b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _CoatMaskMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -147,7 +163,10 @@ Material:
     - _AlphaRemapMin: 0
     - _AlphaSrcBlend: 1
     - _Anisotropy: 0
+    - _BaseMetallic: 1
+    - _BaseSmoothness: 0.75
     - _BlendMode: 0
+    - _BurntEmissiveInstensity: 0.81
     - _CoatMask: 0
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2

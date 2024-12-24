@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3238ae1ae2584436adc58b024ce5d1ff, type: 3}
+  m_Name: GigaBurst
+  m_EditorClassIdentifier: 
+  _name: Giga Burst
+  _description: 
+  _animationName: GigaBurst
+  _manaCost: 4
+  _icon: {fileID: 0}
+  _cooldown: 2
+  _castTime: 0.33333334
+  _prefab: {fileID: 7724894874466452382, guid: 8ec302bbad9730046ab43fcaf400475d, type: 3}
+  _travelTime: 0.3
+  _hasCastingVFX: 0
+  _castingVFXEffect: {fileID: 0}
+  _spawnLocation: 3
+  _shakesOnImpact: 0
+  _shakesOnCast: 0
+  _shakeDuration: 0
+  _shakeStrength: 0
+  _changesTileState: 0
+  _targetDelayAfterCast: 0
+  _tileState: 0
+  _tileStateDuration: 0
+  _targetType: 4
+  _targetSide: 0
+  _range: 0
+  _randomTimeInterval: 0
+  _horizontalCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _verticalCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _hasDuration: 0
+  _targetDuration: 0
+  _damageAmount: 10
+  _hitEffect: {fileID: 0}
