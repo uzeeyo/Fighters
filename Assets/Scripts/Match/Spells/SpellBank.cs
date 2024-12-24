@@ -56,6 +56,11 @@ namespace Fighters.Match.Spells
             ReloadActiveSpells();
         }
 
+        public SpellData GetRandomSpell()
+        {
+            return _spells.OrderBy(x => Guid.NewGuid()).Take(1).Single();
+        }
+
         private void OnReload()
         {
             if (_reloadOnCooldown) return;

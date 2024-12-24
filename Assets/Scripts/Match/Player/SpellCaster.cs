@@ -12,6 +12,7 @@ namespace Fighters.Match
     [RequireComponent(typeof(SpellBank), typeof(PlayerInput))]
     public class SpellCaster : MonoBehaviour
     {
+        private static readonly int Cast = Animator.StringToHash("Cast");
         private bool _onCooldown = false;
         private SpellBank _spellBank;
         private Player _player;
@@ -58,6 +59,13 @@ namespace Fighters.Match
             StartCast(spellData);
         }
 
+        public float CastRandom()
+        {
+            var spellData = _spellBank.GetRandomSpell();
+            StartCast(spellData);
+            return _player.AnimationHandler.GetAnimationTime(spellData.AnimationName);
+        }
+
         private async void StartCast(SpellData spellData)
         {
             if (!VerifyCanActivate(spellData)) return;
@@ -79,7 +87,11 @@ namespace Fighters.Match
 
         private void LaunchSpell(Spell spell)
         {
-            PlayVFX(spell, "OnPlay");
+            PlayVFX(spell, "OnLaunch");
+            if (spell.TryGetComponent(out Animator animator))
+            {
+                animator.SetTrigger(Cast);
+            }
             if (spell.Data.ShakesOnCast) Shaker.Shake(spell.Data.ShakeStrength, spell.Data.ShakeDuration);
             
             Targeter.Target(_player, spell);

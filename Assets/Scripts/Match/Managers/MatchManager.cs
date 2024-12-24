@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Fighters.Match.Players;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -19,12 +20,10 @@ namespace Fighters.Match
         private static float _timeRemaining;
         private static bool _matchEnded;
         
-        [FormerlySerializedAs("Grid")] [SerializeField] private TileGrid _grid;
+        [SerializeField] private TileGrid _grid;
 
         public static event Action<float> TimeRemainingChanged;
         public static event Action MatchEnded;
-        
-
         public static bool MatchStarted { get; private set; }
 
         public static TileGrid Grid { get; private set; }
@@ -67,6 +66,11 @@ namespace Fighters.Match
             Debug.Log("Match Ended");
             _matchEnded = true;
             MatchEnded?.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            Grid = null;
         }
     }
 }

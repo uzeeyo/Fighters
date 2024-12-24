@@ -37,7 +37,6 @@ namespace Match.Player
 
         public void Add(BuffEffect effect)
         {
-            Debug.Log("Applying buff");
             if (_uniqueBuffs.Contains(effect.BuffType) && _buffs.Any(x => x.BuffType == effect.BuffType))
             {
                 Remove(effect.BuffType);

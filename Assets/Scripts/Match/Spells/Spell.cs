@@ -20,19 +20,12 @@ namespace Fighters.Match.Spells
             Effect = effect;
         }
 
-        public void OnTileHit(Tile tile)
-        {
-            tile.ChangeState(Data);
-        }
-
         public void OnImpact(Projectile projectile, Collider other, Vector3 hitPoint)
         {
             Destroy(projectile.gameObject);
             if (other && other.TryGetComponent(out Player player) && player != _caster)
             {
                 Effect.Apply(player.Stats);
-                //should player getting hit also apply tile buffs??
-                OnTileHit(player.CurrentTile);
             }
 
             if (Data.ShakesOnImpact)

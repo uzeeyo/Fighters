@@ -10,7 +10,6 @@ namespace Fighters.Match.Spells
         {
             Duration = buffData.BuffDuration;
             BuffType = buffData.BuffType;
-            _timeStarted = Time.time;
             Icon = buffData.Icon;
         }
 
@@ -26,6 +25,7 @@ namespace Fighters.Match.Spells
 
         public void Apply(PlayerStats stats)
         {
+            _timeStarted = Time.time;
             _playerStats = stats;
             _playerStats.AddBuff(this);
         }
