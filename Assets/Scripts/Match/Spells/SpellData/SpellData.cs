@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
@@ -48,6 +49,7 @@ namespace Fighters.Match.Spells
         [SerializeField] private float _shakeDuration;
         [SerializeField] private float _shakeStrength;
         [SerializeField] private bool _changesTileState;
+        [SerializeField] private float _targetDelayAfterCast;
 
         public string Name => _name;
         public string Description => _description;
@@ -64,6 +66,7 @@ namespace Fighters.Match.Spells
         public bool ShakesOnCast => _shakesOnCast;
         public float ShakeDuration => _shakeDuration;
         public float ShakeStrength => _shakeStrength;
+        public float TargetDelayAfterCast => _targetDelayAfterCast;
         
         //Tile state modifiers
         [SerializeField] private TileState _tileState;
@@ -83,7 +86,7 @@ namespace Fighters.Match.Spells
         [SerializeField] private AnimationCurve _verticalCurve;
         [SerializeField] private AnimationCurve _speedCurve;
         [SerializeField] private bool _hasDuration;
-        [SerializeField] private float _duration;
+        [FormerlySerializedAs("_duration")] [SerializeField] private float _targetDuration;
 
         public TargetType TargetType => _targetType;
         public Side TargetSide => _targetSide;
@@ -94,6 +97,6 @@ namespace Fighters.Match.Spells
         public AnimationCurve SpeedCurve => _speedCurve;
         public abstract SpellType SpellType { get; }
         public bool HasDuration => _hasDuration;
-        public float Duration => _duration;
+        public float TargetDuration => _targetDuration;
     }
 }

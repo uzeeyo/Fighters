@@ -50,10 +50,15 @@ namespace Editor
             DrawField("ManaCost", x => x.ManaCost);
             DrawField("Cooldown", x => x.Cooldown);
             DrawField("CastTime", x => x.CastTime);
+            DrawField("Target Delay", x => x.TargetDelayAfterCast);
             DrawField("Prefab", x => x.Prefab);
             DrawField("SpawnLocation", x => x.SpawnLocation);
+            
+            EditorGUILayout.Space();
             DrawField("Shakes on impact", x => x.ShakesOnImpact);
             DrawField("Shakes on cast", x => x.ShakesOnCast);
+            
+            
 
             if (spellData.ShakesOnImpact)
             {
@@ -85,10 +90,11 @@ namespace Editor
 
         private void CheckTileStateChange(SpellData spellData)
         {
+            EditorGUILayout.Space();
             DrawField("Tile State", x => x.TileState);
             if (spellData.TileState != TileState.Default)
             {
-                DrawField("Duration", x => x.TileStateDuration);
+                DrawField("Tile State Duration", x => x.TileStateDuration);
             }
         }
 
@@ -149,13 +155,14 @@ namespace Editor
             DrawField("Has Duration", x => x.HasDuration);
             if (data.HasDuration)
             {
-                DrawField("Duration", x => x.Duration);
+                DrawField("Targeting Duration", x => x.TargetDuration);
             }
         }
 
         private void CheckBuffFields(SpellData spellData)
         {
             if (spellData is not BuffData buffData) return;
+            EditorGUILayout.Space();
 
             GUILayout.Label("Buff Data", new GUIStyle()
             {
@@ -166,7 +173,7 @@ namespace Editor
             });
             
             DrawField("Buff Type", x => buffData.BuffType);
-            DrawField("Duration", x => buffData.BuffDuration);
+            DrawField("Buff Duration", x => buffData.BuffDuration);
             
             switch (buffData.BuffType)
             {
