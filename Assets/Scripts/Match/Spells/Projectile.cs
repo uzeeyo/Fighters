@@ -6,6 +6,7 @@ namespace Fighters.Match.Spells
     public class Projectile : SpellVisual
     {
         private Spell _spell;
+        private Tile _targetTile;
 
         protected override void Awake()
         {
@@ -17,6 +18,12 @@ namespace Fighters.Match.Spells
         private void OnTriggerEnter(Collider other)
         {
             _spell.OnImpact(this, other, transform.position);
+        }
+
+        public void MoveToTile(Tile tile)
+        {
+            _targetTile = tile;
+            MoveToPosition(tile.transform.position);
         }
 
         public async void MoveToPosition(Vector3 targetPosition)
@@ -45,8 +52,15 @@ namespace Fighters.Match.Spells
                 }
             }
             transform.position = targetPosition;
+            if (_targetTile != null)
+            {
+                _targetTile.ChangeState(_spell.Data);
+            }
 
-            _spell.OnImpact(this, null, targetPosition);
+            var alteredPosition = targetPosition;
+            alteredPosition.y += 0.5f;
+
+            _spell.OnImpact(this, null, alteredPosition);
         }
     }
 }
