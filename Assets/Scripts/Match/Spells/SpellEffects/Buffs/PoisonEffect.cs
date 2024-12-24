@@ -21,7 +21,7 @@ namespace Fighters.Buffs
             float timer = 0;
             _active = true;
             
-            while (timer < _duration || _active)
+            while (timer < _duration && _active)
             {
                 if (_playerStats.CurrentHealth <= 0)
                 {
