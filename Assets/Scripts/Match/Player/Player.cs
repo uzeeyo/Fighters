@@ -23,11 +23,9 @@ namespace Fighters.Match.Players
         public PlayerStats Stats { get; private set; }
         public MovementController MovementController { get; private set; }
         public Tile CurrentTile { get; set; }
+        [field: SerializeField] public Side Side { get; private set; }
 
         public AnimationHandler AnimationHandler { get; private set; }
-        
-        //TODO: Auto assign
-        [field: SerializeField] public Side Side { get; private set; }
         
         private void Awake()
         {
@@ -74,11 +72,18 @@ namespace Fighters.Match.Players
             return this;
         }
 
+        public Player WithSide(Side side)
+        {
+            Side = side;
+            return this;
+        }
+
         public async Task SpawnPlayer()
         {
             //spawn player here
             
             //
+            MovementController.Init();
             AnimationHandler = new(GetComponentInChildren<Animator>());
         }
 #endregion

@@ -20,7 +20,7 @@ namespace Fighters.Match.Players
 
         public bool IsMoving { get; private set; }
 
-        void Awake()
+        public void Init()
         {
             _player = GetComponent<Player>();
             _currentPosition = _player.Side == Side.Self ? new Position(1, 1) : new Position(4, 1);

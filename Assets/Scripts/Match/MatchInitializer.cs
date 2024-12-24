@@ -16,6 +16,7 @@ namespace Fighters.Match
         [SerializeField] private Player _playerB;
         [SerializeField] private StatData _testStatData;
         [SerializeField] private List<SpellData> _testSpells;
+        [SerializeField] private List<SpellData> _aiSpells;
         
         [Header("UI Elements")]
         [SerializeField] private StatusBar _selfHealthBar;
@@ -47,16 +48,19 @@ namespace Fighters.Match
                 .WithReloadTimer(_reloadTimer)
                 .WithSpells(_testSpells)
                 .WithStats(_testStatData)
+                .WithSide(Side.Self)
                 .SpawnPlayer();
 
             await _playerB.WithStatusBars(_enemyHealthBar, _enemyManaBar)
                 .WithBuffDisplay(_enemyBuffDisplay)
-                .WithSpells(_testSpells)
+                .WithSpells(_aiSpells)
                 .WithStats(_testStatData)
+                .WithSide(Side.Opponent)
                 .SpawnPlayer();
 
-            FindFirstObjectByType<MatchManager>().StartMatch();
+            var matchManager = FindFirstObjectByType<MatchManager>();
             
+            matchManager.StartMatch();
             Destroy(gameObject);
         }
     }
