@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Fighters.Match.Players;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
 {
@@ -51,21 +49,22 @@ namespace Fighters.Match.Spells
         private static void TargetSingle(Player caster, Spell spell)
         {
             var delta = new Position(spell.Data.Range, 0);
+            if (caster.Side == Side.Opponent) delta.Inverse();
             var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Position, delta);
-            
+
             var spellVisual = spell.transform.GetChild(0).GetComponent<SpellVisual>();
             spellVisual.Init(targetTile.transform.position, caster.transform.rotation);
-            
+
             TryApplyEffect(spell, targetTile);
         }
 
         private static void TargetSingleRandom(Player caster, Spell spell)
         {
             var targetTile = MatchManager.Grid.GetRandomTile(spell.Data.TargetSide);
-            
+
             var spellVisual = spell.transform.GetChild(0).GetComponent<SpellVisual>();
             spellVisual.Init(targetTile.transform.position, caster.transform.rotation);
-            
+
             TryApplyEffect(spell, targetTile);
         }
 
@@ -73,8 +72,9 @@ namespace Fighters.Match.Spells
         //TODO: Not fully implemented, merge with TargetSingle
         private static void TargetMultiForward(Player caster, Spell spell)
         {
+            var direction = caster.Side == Side.Self ? Position.Right : Position.Left;
             var targetTiles =
-                MatchManager.Grid.GetTilesInDirection(caster.CurrentTile.Position, Position.Right, spell.Data.Range);
+                MatchManager.Grid.GetTilesInDirection(caster.CurrentTile.Position, direction, spell.Data.Range);
             foreach (var tile in targetTiles)
             {
                 TryApplyEffect(spell, tile);
@@ -84,9 +84,9 @@ namespace Fighters.Match.Spells
         private static void MoveForward(Player caster, Spell spell)
         {
             var projectile = spell.transform.GetChild(0).GetComponent<Projectile>();
-            
 
-            var maxX = projectile.transform.position.x + MAX_TRAVEL_DISTANCE;
+            var x = caster.Side == Side.Self ? MAX_TRAVEL_DISTANCE : -MAX_TRAVEL_DISTANCE;
+            var maxX = spell.transform.position.x + x;
             var targetPosition = new Vector3(maxX, projectile.transform.position.y, projectile.transform.position.z);
 
             projectile.MoveToPosition(targetPosition);
@@ -95,10 +95,9 @@ namespace Fighters.Match.Spells
         private static void SingleMoveToTile(Player caster, Spell spell)
         {
             var delta = new Position(spell.Data.Range, 0);
-            var targetTilePosition = MatchManager.Grid.GetTile(caster.CurrentTile.Position, delta).transform.position;
+            var targetTile = MatchManager.Grid.GetTile(caster.CurrentTile.Position, delta);
 
-            var projectile = spell.GetComponentInChildren<Projectile>();
-            projectile.MoveToPosition(targetTilePosition);
+            spell.GetComponentInChildren<Projectile>().MoveToTile(targetTile);
         }
 
         private static async void MultiMoveToTile(Player caster, Spell spell)
@@ -113,17 +112,20 @@ namespace Fighters.Match.Spells
                     tile = MatchManager.Grid.GetRandomTile(spell.Data.TargetSide);
                 }
 
-                spell.transform.GetChild(i).GetComponent<Projectile>().MoveToPosition(tile.transform.position);
+                spell.transform.GetChild(i).GetComponent<Projectile>().MoveToTile(tile);
 
                 lastTile = tile;
-                
+
                 await Awaitable.WaitForSecondsAsync(spell.Data.RandomTimeInterval, spell.destroyCancellationToken);
             }
         }
 
         private static async void TryApplyEffect(Spell spell, Tile tile)
         {
+            await Awaitable.WaitForSecondsAsync(spell.Data.TargetDelayAfterCast);
+
             float timer = 0;
+            tile.ChangeState(spell.Data);
             do
             {
                 if (tile.Player)
@@ -134,7 +136,7 @@ namespace Fighters.Match.Spells
 
                 timer += Time.deltaTime;
                 await Awaitable.NextFrameAsync();
-            } while (timer < spell.Data.Duration);
+            } while (timer < spell.Data.TargetDuration);
         }
     }
 }
