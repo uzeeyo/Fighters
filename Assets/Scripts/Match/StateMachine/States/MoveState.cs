@@ -15,7 +15,7 @@ namespace Fighters.Match
 
         }
 
-        private StateMachine _fsm;
+        private readonly StateMachine _fsm;
 
         public void Enter()
         {

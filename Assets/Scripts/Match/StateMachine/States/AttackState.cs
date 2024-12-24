@@ -4,9 +4,21 @@ namespace Fighters.Match
 {
     public class AttackState : IState
     {
+        public AttackState(StateMachine fsm)
+        {
+            _fsm = fsm;
+            _spellCaster = _fsm.GetComponent<SpellCaster>();
+        }
+
+        private readonly StateMachine _fsm;
+        private readonly SpellCaster _spellCaster;
+        private float _startTime;
+        private float _attackTIme;
+        
         public void Enter()
         {
-            Debug.Log("Attacking");
+            _startTime = Time.time;
+            _attackTIme = _spellCaster.CastRandom();
         }
 
         public void Exit()
@@ -16,7 +28,9 @@ namespace Fighters.Match
 
         public void Tick()
         {
-            //throw new System.NotImplementedException();
+            if (Time.time - _startTime < _attackTIme) return;
+            
+            _fsm.ChangeState(StateType.Idle);
         }
     }
 }

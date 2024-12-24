@@ -9,14 +9,16 @@ namespace Fighters.Match
             _fsm = fsm;
         }
 
-        private StateMachine _fsm;
+        private readonly StateMachine _fsm;
         private float _timeSinceEnter;
         private float _timeToAction;
+        private float _chanceToAttack;
 
         public void Enter()
         {
             _timeSinceEnter = 0f;
-            _timeToAction = Random.Range(0.3f, 1.5f);
+            _timeToAction = Random.Range(0.5f, 2f);
+            _chanceToAttack = Random.Range(0f, 0.2f);
         }
 
         public void Exit()
@@ -30,9 +32,18 @@ namespace Fighters.Match
 
             if (_timeSinceEnter > _timeToAction)
             {
-                _fsm.ChangeState(StateType.Move);
+                DecideNextState();
+            }
+        }
+
+        private void DecideNextState()
+        {
+            if (Random.Range(0f, 1f) < _chanceToAttack)
+            {
+                _fsm.ChangeState(StateType.Attack);
                 return;
             }
+            _fsm.ChangeState(StateType.Move);
         }
     }
 }
