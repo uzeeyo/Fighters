@@ -15,7 +15,7 @@ namespace Fighters.Match.Players
             { Position.Left, "MoveBack" },
             { Position.Right, "MoveForward" }
         };
-        
+
         [SerializeField] private float _defaultMoveTime = 0.3f;
 
         public bool IsMoving { get; private set; }
@@ -25,13 +25,6 @@ namespace Fighters.Match.Players
             _player = GetComponent<Player>();
             _currentPosition = _player.Side == Side.Self ? new Position(1, 1) : new Position(4, 1);
             _player.CurrentTile = MatchManager.Grid.GetTile(_currentPosition, Position.Zero);
-        }
-
-        private void OnMove(InputValue value)
-        {
-            if (!MatchManager.MatchStarted) return;
-            var direction = value.Get<Vector2>();
-            TryMove(direction);
         }
 
         public bool TryMove(Vector2 direction)
@@ -47,10 +40,10 @@ namespace Fighters.Match.Players
             if (!targetTile) return false;
 
             if (!targetTile.State.IsSteppable || targetTile.PlayerSide != _player.Side) return false;
-            
+
             if (_player.Side == Side.Opponent && delta.X != 0) delta.Inverse();
             var moveTime = _player.AnimationHandler.Play(_animationTriggers[delta]);
-            
+
             Move(targetTile, moveTime);
             return true;
         }
@@ -62,11 +55,11 @@ namespace Fighters.Match.Players
             float duration = moveTime == 0 ? _defaultMoveTime : moveTime;
             Vector3 originalPosition = transform.position;
             var targetPosition = targetTile.transform.position;
-            
+
             var movedToNextTile = false;
             while (timer < duration)
             {
-                timer += Time.deltaTime;
+                await Awaitable.NextFrameAsync();
                 transform.position = Vector3.Lerp(originalPosition, targetPosition, timer / duration);
                 if (timer / duration > 0.6f && !movedToNextTile)
                 {
@@ -75,7 +68,7 @@ namespace Fighters.Match.Players
                     MatchManager.Grid.PlacePlayer(_player, targetTile);
                 }
 
-                await Awaitable.NextFrameAsync();
+                timer += Time.deltaTime;
             }
 
             transform.position = targetPosition;

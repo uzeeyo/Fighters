@@ -23,6 +23,7 @@ namespace Fighters.Match
         [SerializeField] private Transform _rightHand;
         [SerializeField] private Transform _leftHand;
         [SerializeField] private Transform _weapon;
+        [SerializeField] private Transform _center;
 
         public CooldownHandler CooldownHandler { get; } = new();
         public bool IsCasting { get; private set; }
@@ -36,7 +37,8 @@ namespace Fighters.Match
                 { SpawnLocation.Default, _default },
                 { SpawnLocation.RightHand, _rightHand },
                 { SpawnLocation.LeftHand, _leftHand },
-                { SpawnLocation.Weapon, _weapon }
+                { SpawnLocation.Weapon, _weapon },
+                { SpawnLocation.Center, _center },
             };
         }
 
@@ -48,11 +50,9 @@ namespace Fighters.Match
             StartCast(spellData);
         }
 
-        private void OnCast(InputValue value)
+        public void TryCast(Vector2 direction)
         {
             if (_onCooldown || !_player.CanAct) return;
-
-            var direction = value.Get<Vector2>();
             if (direction == Vector2.zero) return;
 
             var spellData = _spellBank.GetSpellInRotation(direction);
@@ -70,7 +70,7 @@ namespace Fighters.Match
         {
             if (!VerifyCanActivate(spellData)) return;
             
-            var spell = SpellFactory.Get(spellData);
+            var spell = SpellFactory.Get(spellData, _player);
             SetSpellTransform(spell);
             
             //start cooldown immediately or after spell finishes??
@@ -121,13 +121,18 @@ namespace Fighters.Match
                 spawnParent = transform;
             }
             spell.transform.SetParent(spawnParent, false);
-            spell.transform.rotation = _player.transform.rotation;
+            spell.transform.forward = _player.transform.forward;
         }
 
         private bool VerifyCanActivate(SpellData data)
         {
             var onCooldown = CooldownHandler.GetCooldownTime(data.Name) > 0;
             return _player.CanAct && !onCooldown && _player.Stats.TryUseMana(data.ManaCost);
+        }
+
+        public void PlaceInSpellSlot(Transform spellSlot, SpawnLocation spawnLocation)
+        {
+            spellSlot.SetParent(_spawnLocations[spawnLocation], false);
         }
     }
 }

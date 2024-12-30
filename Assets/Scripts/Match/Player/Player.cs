@@ -1,3 +1,4 @@
+using System;
 using Fighters.Contestants;
 using Fighters.Match.Spells;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Fighters.Match.Players
     {
         private SpellBank _spellBank;
         private SpellCaster _spellCaster;
+        private InputHandler _inputHandler;
         
         public bool CanAct => !_spellCaster.IsCasting && !Stats.DisableActionEffects.Any() && !MovementController.IsMoving;
         public bool CanMove => CanAct && !Stats.DisableMovementEffects.Any();
@@ -26,16 +28,22 @@ namespace Fighters.Match.Players
         [field: SerializeField] public Side Side { get; private set; }
 
         public AnimationHandler AnimationHandler { get; private set; }
-        
+
         private void Awake()
+        {
+            _inputHandler = GetComponent<InputHandler>();
+        }
+
+        #region Initialization
+        public Player Init()
         {
             Stats = GetComponent<PlayerStats>();
             MovementController = GetComponent<MovementController>();
             _spellCaster = GetComponent<SpellCaster>();
             _spellBank = GetComponent<SpellBank>();
+            return this;
         }
-
-        #region Initialization
+        
         public Player WithStats(StatData statData)
         {
             Stats.SetStats(statData);
@@ -81,10 +89,10 @@ namespace Fighters.Match.Players
         public async Task SpawnPlayer()
         {
             //spawn player here
-            
             //
             MovementController.Init();
             AnimationHandler = new(GetComponentInChildren<Animator>());
+            _inputHandler.Init(this, _spellCaster);
         }
 #endregion
     }

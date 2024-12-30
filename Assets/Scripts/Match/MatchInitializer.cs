@@ -42,7 +42,8 @@ namespace Fighters.Match
         
         private async void Setup()
         {
-            await _playerA.WithStatusBars(_selfHealthBar, _selfManaBar)
+            await _playerA.Init()
+                .WithStatusBars(_selfHealthBar, _selfManaBar)
                 .WithSpellDisplay(_activeSpellDisplay)
                 .WithBuffDisplay(_selfBuffDisplay)
                 .WithReloadTimer(_reloadTimer)
@@ -51,7 +52,8 @@ namespace Fighters.Match
                 .WithSide(Side.Self)
                 .SpawnPlayer();
 
-            await _playerB.WithStatusBars(_enemyHealthBar, _enemyManaBar)
+            await _playerB.Init()
+                .WithStatusBars(_enemyHealthBar, _enemyManaBar)
                 .WithBuffDisplay(_enemyBuffDisplay)
                 .WithSpells(_aiSpells)
                 .WithStats(_testStatData)
