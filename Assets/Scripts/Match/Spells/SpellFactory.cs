@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Fighters.Buffs;
+using Fighters.Match.Players;
 
 namespace Fighters.Match.Spells
 {
@@ -13,7 +14,7 @@ namespace Fighters.Match.Spells
             { SpellType.Buff, new BuffEffectFactory() }
         };
 
-        public static Spell Get(SpellData data)
+        public static Spell Get(SpellData data, Player caster)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
@@ -26,7 +27,7 @@ namespace Fighters.Match.Spells
 
             var spell = UnityEngine.Object.Instantiate(data.Prefab);
             var effect = factory.Get(data);
-            spell.Init(data, effect);
+            spell.Init(data, effect, caster);
 
             return spell;
         }
@@ -61,7 +62,8 @@ namespace Fighters.Match.Spells
         {
             { BuffType.Root, new RootBuffFactory() },
             { BuffType.Poison, new PoisonEffectFactory() },
-            { BuffType.Burn, new BurnEffectFactory() }
+            { BuffType.Burn, new BurnEffectFactory() },
+            { BuffType.Shield, new ShieldEffectFactory() }
         };
         
         public ISpellEffect Get(SpellData data)
@@ -92,6 +94,11 @@ namespace Fighters.Match.Spells
         private class BurnEffectFactory : IBuffFactory
         {
             public BuffEffect Get(BuffData buffData) => new BurnEffect(buffData);
+        }
+
+        private class ShieldEffectFactory : IBuffFactory
+        {
+            public BuffEffect Get(BuffData buffData) => new ShieldEffect(buffData);
         }
     }
 }

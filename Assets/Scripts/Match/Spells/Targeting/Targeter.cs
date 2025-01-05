@@ -20,16 +20,10 @@ namespace Fighters.Match.Spells
             { TargetType.MultiMoveDelayed, MultiMoveToTile }
         };
 
-        
+
         //TODO: create a strategy pattern
         public static void Target(Player caster, Spell spell)
         {
-            if (spell.transform.childCount == 0)
-            {
-                Debug.LogError($"Spell {spell.Data.Name} has no children.");
-                return;
-            }
-
             if (_spellTargetingActions.TryGetValue(spell.Data.TargetType, out var action))
             {
                 action(caster, spell);
@@ -41,8 +35,12 @@ namespace Fighters.Match.Spells
 
         private static void TargetSelf(Player caster, Spell spell)
         {
-            var spellVisual = spell.transform.GetChild(0).GetComponent<SpellVisual>();
-            spellVisual.Init(caster.transform.position, caster.transform.rotation);
+            if (spell.transform.childCount > 0)
+            {
+                var spellVisual = spell.transform.GetChild(0).GetComponent<SpellVisual>();
+                spellVisual.Init(caster.transform.position, caster.transform.rotation);
+            }
+
             spell.Effect.Apply(caster.Stats);
         }
 
@@ -89,6 +87,7 @@ namespace Fighters.Match.Spells
             var maxX = spell.transform.position.x + x;
             var targetPosition = new Vector3(maxX, projectile.transform.position.y, projectile.transform.position.z);
 
+            projectile.transform.SetParent(null, true);
             projectile.MoveToPosition(targetPosition);
         }
 

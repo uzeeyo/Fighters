@@ -174,6 +174,7 @@ namespace Editor
             
             DrawField("Buff Type", x => buffData.BuffType);
             DrawField("Buff Duration", x => buffData.BuffDuration);
+            DrawField("VFX", x => buffData.BuffVFX);
             
             switch (buffData.BuffType)
             {

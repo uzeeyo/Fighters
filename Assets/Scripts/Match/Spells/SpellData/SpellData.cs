@@ -28,6 +28,7 @@ namespace Fighters.Match.Spells
         LeftHand,
         RightHand,
         Weapon,
+        Center
     }
 
     public abstract class SpellData : ScriptableObject

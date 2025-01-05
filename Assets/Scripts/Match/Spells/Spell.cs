@@ -14,18 +14,25 @@ namespace Fighters.Match.Spells
 
         private void Awake() => Destroy(gameObject, 5f);
 
-        public void Init(SpellData data, ISpellEffect effect)
+        public void Init(SpellData data, ISpellEffect effect, Player caster)
         {
             Data = data;
             Effect = effect;
+            _caster = caster;
         }
 
         public void OnImpact(Projectile projectile, Collider other, Vector3 hitPoint)
         {
-            Destroy(projectile.gameObject);
-            if (other && other.TryGetComponent(out Player player) && player != _caster)
+            if (other && other.TryGetComponent(out Player player))
             {
-                Effect.Apply(player.Stats);
+                if (player != _caster)
+                {
+                    Effect.Apply(player.Stats);
+                }
+                else
+                {
+                    return;
+                }
             }
 
             if (Data.ShakesOnImpact)
@@ -33,7 +40,7 @@ namespace Fighters.Match.Spells
                 Shaker.Shake(Data.ShakeStrength, Data.ShakeDuration);
             }
 
-            //all spells should be able to make hit effects
+            //TODO: all spells should be able to make hit effects
             if (Data is DamageData damageData && damageData.HitEffect)
             {
                 var hitEffect = new GameObject("HitEffect", typeof(VisualEffect), typeof(HitEffect));
@@ -41,6 +48,8 @@ namespace Fighters.Match.Spells
                 hitEffect.transform.position = hitPoint;
                 hitEffect.GetComponent<VisualEffect>().visualEffectAsset = damageData.HitEffect;
             }
+
+            Destroy(projectile.gameObject);
         }
     }
 }
