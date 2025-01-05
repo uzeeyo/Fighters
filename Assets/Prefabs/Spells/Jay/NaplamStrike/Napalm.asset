@@ -78,3 +78,4 @@ MonoBehaviour:
   _buffType: 1
   _buffDuration: 10
   _hPPS: 1
+  _buffVFX: {fileID: 0}

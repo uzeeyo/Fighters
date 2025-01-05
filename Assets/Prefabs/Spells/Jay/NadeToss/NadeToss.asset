@@ -15,10 +15,10 @@ MonoBehaviour:
   _name: Grenade Toss
   _description: 
   _animationName: ThrowNade
-  _manaCost: 5
+  _manaCost: 1
   _icon: {fileID: 21300000, guid: 1fe04e32901cd4240b345bd80845e0fc, type: 3}
   _cooldown: 2
-  _castTime: 0.6666667
+  _castTime: 0.26666668
   _prefab: {fileID: 7224300792301486350, guid: 2506af1d51ed5624dbfe3540d6d18d5c, type: 3}
   _travelTime: 0.5
   _hasCastingVFX: 0

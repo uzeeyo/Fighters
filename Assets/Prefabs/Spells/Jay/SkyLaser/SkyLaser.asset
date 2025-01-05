@@ -18,7 +18,7 @@ MonoBehaviour:
   _manaCost: 0
   _icon: {fileID: 0}
   _cooldown: 1
-  _castTime: 0.9
+  _castTime: 0.35
   _prefab: {fileID: 7073661747438798055, guid: 6ee951bfcd4e8134cbd8ca9782ecf9de, type: 3}
   _travelTime: 0
   _hasCastingVFX: 0

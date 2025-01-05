@@ -24,7 +24,9 @@ MonoBehaviour:
   m_Label: Spawn System
   m_Data: {fileID: 8926484042661614529}
   m_InputFlowSlot:
-  - link: []
+  - link:
+    - context: {fileID: 8926484042661614562}
+      slotIndex: 0
   - link: []
   m_OutputFlowSlot:
   - link:
@@ -1456,8 +1458,10 @@ MonoBehaviour:
   m_InputFlowSlot:
   - link: []
   m_OutputFlowSlot:
-  - link: []
-  eventName: OnCast
+  - link:
+    - context: {fileID: 114023846229194376}
+      slotIndex: 0
+  eventName: OnLaunch
 --- !u!114 &8926484042661614563
 MonoBehaviour:
   m_ObjectHideFlags: 0
