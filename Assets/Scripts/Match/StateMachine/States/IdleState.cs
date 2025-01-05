@@ -18,7 +18,7 @@ namespace Fighters.Match
         {
             _timeSinceEnter = 0f;
             _timeToAction = Random.Range(0.5f, 2f);
-            _chanceToAttack = Random.Range(0f, 0.2f);
+            _chanceToAttack = Random.Range(0f, 0.4f);
         }
 
         public void Exit()

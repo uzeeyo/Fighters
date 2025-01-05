@@ -5,6 +5,12 @@ namespace Fighters.Match.Spells
 {
     public class Projectile : SpellVisual
     {
+        public enum RotationMode
+        {
+            None,
+            FollowVelocity
+        }
+        
         private Spell _spell;
         private Tile _targetTile;
 
@@ -23,14 +29,13 @@ namespace Fighters.Match.Spells
         public void MoveToTile(Tile tile)
         {
             _targetTile = tile;
-            MoveToPosition(tile.transform.position);
+            MoveToPosition(tile.transform.position, RotationMode.FollowVelocity);
         }
 
-        public async void MoveToPosition(Vector3 targetPosition)
+        public async void MoveToPosition(Vector3 targetPosition, RotationMode rotationMode = RotationMode.None)
         {
             float timer = 0;
             var originalPosition = transform.position;
-
             while (gameObject && timer < _spell.Data.TravelTime)
             {
                 timer += Time.deltaTime;
@@ -40,6 +45,8 @@ namespace Fighters.Match.Spells
                     originalPosition + (targetPosition - originalPosition) * distancePercentage;
                 newPosition.y += _spell.Data.VerticalCurve.Evaluate(percentage);
                 newPosition.x += _spell.Data.HorizontalCurve.Evaluate(percentage);
+                
+                if (rotationMode == RotationMode.FollowVelocity) transform.forward = (newPosition - transform.position).normalized;
                 transform.position = newPosition;
 
                 try
@@ -57,10 +64,10 @@ namespace Fighters.Match.Spells
                 _targetTile.ChangeState(_spell.Data);
             }
 
-            var alteredPosition = targetPosition;
-            alteredPosition.y += 0.5f;
+            var hitPosition = targetPosition;
+            hitPosition.y += 0.5f;
 
-            _spell.OnImpact(this, null, alteredPosition);
+            _spell.OnImpact(this, null, hitPosition);
         }
     }
 }

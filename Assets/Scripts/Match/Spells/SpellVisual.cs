@@ -17,7 +17,7 @@ namespace Fighters.Match.Spells
         {
             transform.rotation = rotation;
             transform.position = position;
-            _visualEffect.SendEvent("OnTarget");
+            _visualEffect?.SendEvent("OnTarget");
         }
     }
 }

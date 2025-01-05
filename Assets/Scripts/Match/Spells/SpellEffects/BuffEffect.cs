@@ -1,6 +1,7 @@
 using Fighters.Buffs;
 using Fighters.Match.Players;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Fighters.Match.Spells
 {
@@ -11,11 +12,13 @@ namespace Fighters.Match.Spells
             Duration = buffData.BuffDuration;
             BuffType = buffData.BuffType;
             Icon = buffData.Icon;
+            _vfxAsset = buffData.BuffVFX;
         }
 
         private float _timeStarted;
         
         protected PlayerStats _playerStats;
+        protected VisualEffectAsset _vfxAsset;
 
         public BuffType BuffType { get; private set; }
         public float Duration { get; }
